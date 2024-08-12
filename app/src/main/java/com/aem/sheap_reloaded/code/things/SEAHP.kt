@@ -1,7 +1,8 @@
-package com.aem.sheap_reloaded.objects
+package com.aem.sheap_reloaded.code.things
 
 import android.content.Context
-import android.util.Log
+import com.aem.sheap_reloaded.R
+import com.aem.sheap_reloaded.code.objects.Project
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
@@ -9,6 +10,54 @@ import java.io.DataOutputStream
 
 class SEAHP() {
     private val save = Save()
+
+    fun setProject(setProject: Project, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_project_tittle),
+            Project().toByteArray(setProject),
+            context.getString(R.string.alias_project))
+    }
+
+    fun getProject(context: Context): Project {
+        val project = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_project_tittle),
+            context.getString(R.string.alias_project))
+        return if (project != null) Project().toProject(project)
+        else Project()
+    }
+
+    fun setStatus(isEdit: Boolean, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_project_edit),
+            booleanToByteArray(isEdit),
+            context.getString(R.string.alias_edit))
+    }
+
+    fun getStatus(context: Context): Boolean{
+        val isEdit = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_project_edit),
+            context.getString(R.string.alias_edit))
+        return byteArrayToBoolean(isEdit!!)
+    }
+
+    private fun booleanToByteArray(value: Boolean): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        DataOutputStream(outputStream).use {
+            it.writeBoolean(value)
+        }
+        return outputStream.toByteArray()
+    }
+
+    private fun byteArrayToBoolean(byteArray: ByteArray): Boolean {
+        val inputStream = ByteArrayInputStream(byteArray)
+        return DataInputStream(inputStream).use {
+            it.readBoolean()
+        }
+    }
 }
 
 /*
@@ -75,39 +124,6 @@ class ConfigProject {
         else Matrix()
     }
 
-    fun setProject(setProject: Project, context: Context){
-        save.saveOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_project_tittle),
-            Project().toByteArray(setProject),
-            context.getString(R.string.alias_project))
-    }
-
-    fun getProject(context: Context): Project {
-        val project = save.readOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_project_tittle),
-            context.getString(R.string.alias_project))
-        return if (project != null) Project().toProject(project)
-        else Project()
-    }
-
-    fun setStatus(isEdit: Boolean, context: Context){
-        save.saveOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_project_edit),
-            booleanToByteArray(isEdit),
-            context.getString(R.string.alias_edit))
-    }
-
-    fun getStatus(context: Context): Boolean{
-        val isEdit = save.readOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_project_edit),
-            context.getString(R.string.alias_edit))
-        return byteArrayToBoolean(isEdit!!)
-    }
-
     fun setConnect(connection: Boolean, context: Context){
         save.saveTempFile(context, context.getString(R.string.alias_online), booleanToByteArray(connection))
     }
@@ -117,21 +133,6 @@ class ConfigProject {
         Log.d("Files", "Leer archivo Connection: $isConnect")
         return if (isConnect == null)  false
         else byteArrayToBoolean(isConnect)
-    }
-
-    private fun booleanToByteArray(value: Boolean): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        DataOutputStream(outputStream).use {
-            it.writeBoolean(value)
-        }
-        return outputStream.toByteArray()
-    }
-
-    private fun byteArrayToBoolean(byteArray: ByteArray): Boolean {
-        val inputStream = ByteArrayInputStream(byteArray)
-        return DataInputStream(inputStream).use {
-            it.readBoolean()
-        }
     }
 }
 * */

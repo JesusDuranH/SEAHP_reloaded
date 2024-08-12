@@ -1,8 +1,10 @@
-package com.aem.sheap_reloaded.objects
+package com.aem.sheap_reloaded.code.objects
 
 import android.content.Context
 import android.util.Log
 import com.aem.sheap_reloaded.R
+import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -15,7 +17,6 @@ open class User(val user: String,
                 val pass: String
 ): Serializable {
     //
-
     constructor(): this ("","","", "")
     constructor(user: String): this(user, "","","")
     constructor(user: String, pass: String): this(user,"","",pass)
@@ -118,7 +119,7 @@ open class User(val user: String,
             context.getString(R.string.alias_user))
     }
 
-    private fun get(context: Context): User{
+    private fun get(context: Context): User {
         val userOnByte = save.readOnFile(context,
             context.getString(R.string.save_folder),
             context.getString(R.string.save_user_online_tittle),

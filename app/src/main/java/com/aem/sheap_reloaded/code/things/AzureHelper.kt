@@ -1,6 +1,9 @@
-package com.aem.sheap_reloaded.objects
+package com.aem.sheap_reloaded.code.things
 
 import android.util.Log
+import com.aem.sheap_reloaded.code.objects.Participant
+import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.User
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
@@ -212,33 +215,14 @@ class AzureHelper {
             callback(User())
         }
     }
-}
-
-/*
-import com.aem.seahp.code.types.Alternative
-import com.aem.seahp.code.types.Criteria
-import com.aem.seahp.code.types.Element
-import com.aem.seahp.code.types.Matrix
-import com.aem.seahp.code.types.Participant
-import com.aem.seahp.code.types.Project
-
-
-class AzureHelper {
-    //
-
 
     fun insertProject(project: Project){
         //
         val sql = "INSERT INTO ${TABLE_PROYECT[0]} (${TABLE_PROYECT[1]},${TABLE_PROYECT[2]},${TABLE_PROYECT[3]}) " +
                 "VALUES (?, ?, ?)"
-        //
-        val sqltx = "INSERT INTO ${TABLE_PROYECT[0]} (${TABLE_PROYECT[1]},${TABLE_PROYECT[2]},${TABLE_PROYECT[3]}) " +
-                "VALUES (${project.idProject}, ${project.nameProject}, ${project.descriptionProject})"
         Log.d("DB", sql)
-        //
         try {
             val conn = getConnection()
-            Log.d("DB", "Inicio Registro Proyecto")
             val statement: PreparedStatement = conn.prepareStatement(sql)
             statement.setLong(1, project.idProject)
             statement.setString(2, project.nameProject)
@@ -247,10 +231,10 @@ class AzureHelper {
             statement.close()
         } catch (ex: SQLException){
             //
-            ex.printStackTrace()
+            Log.d("DB", "insertProject SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
             //
-            e.printStackTrace()
+            Log.d("DB", "insertProject Exception: " + e.printStackTrace())
         }
     }
 
@@ -258,8 +242,7 @@ class AzureHelper {
         //
         val sql = "SELECT * FROM ${TABLE_PROYECT[0]} WHERE ${TABLE_PROYECT[1]} = ?"
         //
-        val sqltx = "SELECT * FROM ${TABLE_PROYECT[0]} WHERE ${TABLE_PROYECT[1]} = $project"
-        Log.d("DB", sqltx)
+        Log.d("DB", sql)
         //
         try {
             getConnection().use { conn ->
@@ -271,16 +254,15 @@ class AzureHelper {
                             val id = rs.getLong(TABLE_PROYECT[1])
                             val name = rs.getString(TABLE_PROYECT[2])
                             val desc = rs.getString(TABLE_PROYECT[3])
-
                             searchProject = Project(id, name, desc)
-                            Log.d("DB", searchProject.toString())
                         }
+                        Log.d("DB", "getProjectByID: $searchProject")
                         callback(searchProject)
                     }
                 }
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            Log.d("DB", "getProjectByID Exception: " + e.printStackTrace())
             callback(Project())
         }
     }
@@ -288,8 +270,6 @@ class AzureHelper {
     fun updateProjectByID(project: Project){
         //
         val sql = "UPDATE ${TABLE_PROYECT[0]} SET ${TABLE_PROYECT[2]} = ? , ${TABLE_PROYECT[3]} = ? " +
-                "WHERE ${TABLE_PROYECT[1]} = ?"
-        val sqltx = "UPDATE ${TABLE_PROYECT[0]} SET ${TABLE_PROYECT[2]} = ? , ${TABLE_PROYECT[3]} = ? " +
                 "WHERE ${TABLE_PROYECT[1]} = ?"
         Log.d("DB", sql)
         try {
@@ -299,11 +279,11 @@ class AzureHelper {
                     statement.setString(2, project.descriptionProject)
                     statement.setLong(3, project.idProject)
                     val i = statement.executeUpdate()
-                    Log.d("DB", "Filas afectadas: $i")
+                    Log.d("DB", "updateProjectByID Row: $i")
                 }
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            Log.d("DB", "updateProjectByID Exception: " + e.printStackTrace())
         }
     }
 
@@ -311,10 +291,9 @@ class AzureHelper {
         //
         val sql = "INSERT INTO ${TABLE_PARTICIPANT[0]} (${TABLE_PARTICIPANT[1]},${TABLE_PARTICIPANT[2]},${TABLE_PARTICIPANT[3]}) " +
                 "VALUES (?, ?, ?)"
+        Log.d("DB", sql)
         try {
             val conn = getConnection()
-            Log.d("DB", "Inicio Registro Participante")
-            Log.d("DB", sql)
             val statement: PreparedStatement = conn.prepareStatement(sql)
             statement.setLong(1, participant.project.idProject)
             statement.setString(2, participant.user.user)
@@ -323,14 +302,59 @@ class AzureHelper {
             statement.close()
         } catch (ex: SQLException){
             //
-            ex.printStackTrace()
+            Log.d("DB", "insertParticipant SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
             //
-            e.printStackTrace()
+            Log.d("DB", "insertParticipant Exception: " + e.printStackTrace())
         }
     }
 
-    fun getParticipantsByUser(user: User, callback: (List<Participant>) -> Unit){
+    fun updateParticipant(participant: Participant){
+        //
+        val sql = "UPDATE ${TABLE_PARTICIPANT[0]} SET ${TABLE_PARTICIPANT[3]} = ? WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
+        Log.d("DB", sql)
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    statement.setInt(1, participant.type)
+                    statement.setLong(2, participant.project.idProject)
+                    statement.setString(3, participant.user.user)
+                    val i = statement.executeUpdate()
+                    Log.d("DB", "updateParticipant Row: $i")
+                }
+            }
+        } catch (ex: SQLException){
+            //
+            Log.d("DB", "updateParticipant SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            //
+            Log.d("DB", "updateParticipant Exception: " + e.printStackTrace())
+        }
+    }
+
+    fun deleteParticipant(participant: Participant){
+        //
+        val sql = "DELETE FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
+        Log.d("DB", sql)
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    statement.setLong(1, participant.project.idProject)
+                    statement.setString(2, participant.user.user)
+                    val i = statement.executeUpdate()
+                    Log.d("DB", "deleteParticipant Row: $i")
+                }
+            }
+        } catch (ex: SQLException){
+            //
+            Log.d("DB", "deleteParticipant SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            //
+            Log.d("DB", "deleteParticipant Exception: " + e.printStackTrace())
+        }
+    }
+
+    fun getParticipantByUser(user: User, callback: (List<Participant>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[2]} = ?"
         Log.d("DB", sql)
@@ -340,65 +364,34 @@ class AzureHelper {
                 conn.prepareStatement(sql).use { statement ->
                     statement.setString(1, user.user)
                     statement.executeQuery().use { rs ->
-                        var searchProject = Project()
-                        while (rs.next()) {
-                            val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
-                            val id_us = rs.getString(TABLE_PARTICIPANT[2])
-                            val type = rs.getInt(TABLE_PARTICIPANT[3])
-
-                            getUserByUser(id_us) {newUser ->
-                                getProjectByID(id_pr){proj ->
-                                    val searchParticipant = Participant(newUser, proj, type)
+                        getUserByID(user.user){getUser ->
+                            while (rs.next()) {
+                                val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
+                                val id_us = rs.getString(TABLE_PARTICIPANT[2])
+                                val type = rs.getInt(TABLE_PARTICIPANT[3])
+                                getProjectByID(id_pr){getProject ->
+                                    val searchParticipant = Participant(getUser, getProject, type)
                                     participants.add(searchParticipant)
-                                    Log.d("DB", searchProject.toString())
                                 }
                             }
                         }
+                        Log.d("DB", "getParticipantByUser: $participants")
                         callback(participants)
                     }
                 }
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(mutableListOf())
+        } catch (ex: SQLException){
+            //
+            Log.d("DB", "getParticipantByUser SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            //
+            Log.d("DB", "getParticipantByUser Exception: " + e.printStackTrace())
         }
     }
 
-    fun getParticipantsByProject(project: Long, callback: (List<Participant>) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ?"
-        Log.d("DB", sql)
-        val participants = mutableListOf<Participant>()
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, project)
-                    statement.executeQuery().use { rs ->
-                        var searchProject = Project()
-                        while (rs.next()) {
-                            val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
-                            val id_us = rs.getString(TABLE_PARTICIPANT[2])
-                            val type = rs.getInt(TABLE_PARTICIPANT[3])
-
-                            getUserByUser(id_us) {newUser ->
-                                getProjectByID(id_pr){proj ->
-                                    val searchParticipant = Participant(newUser, proj, type)
-                                    participants.add(searchParticipant)
-                                    Log.d("DB", searchProject.toString())
-                                }
-                            }
-                        }
-                        callback(participants)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(mutableListOf())
-        }
-    }
-
-    fun getParticipantByUserWhereIsAdmin(project: Project, user: User, callback: (Participant) -> Unit){
+    //A falta de un mejor nombre, se queda asi
+    //Checa si el usuario en el proyecto es administrador o no
+    fun getParticipantIsAdminInThis(project: Project, user: User, callback: (Participant) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} " +
                 "WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ? AND ${TABLE_PARTICIPANT[3]} = 2"
@@ -414,61 +407,72 @@ class AzureHelper {
                             val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
                             val id_us = rs.getString(TABLE_PARTICIPANT[2])
                             val type = rs.getInt(TABLE_PARTICIPANT[3])
-
-                            getUserByUser(id_us) {newUser ->
-                                getProjectByID(id_pr){proj ->
-                                    participant = Participant(newUser, proj, type)
-                                    Log.d("DB", participant.toString())
-                                }
-                            }
+                            participant = Participant(user, project, type)
+                            Log.d("DB", "getParticipantIsAdminInThis: $participant")
                         }
                         callback(participant)
                     }
                 }
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
+        } catch (ex: SQLException){
+            //
+            Log.d("DB", "getParticipantIsAdminInThis SQLException: " + ex.printStackTrace())
+            callback(Participant())
+        } catch (e: Exception) {
+            //
+            Log.d("DB", "getParticipantIsAdminInThis Exception: " + e.printStackTrace())
             callback(Participant())
         }
     }
 
-    fun updateParticipant(participant: Participant){
+    fun getParticipantsByProject(project: Long, callback: (List<Participant>) -> Unit){
         //
-        val sql = "UPDATE ${TABLE_PARTICIPANT[0]} SET ${TABLE_PARTICIPANT[3]} = ? WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
+        val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ?"
         Log.d("DB", sql)
+        val participants = mutableListOf<Participant>()
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
-                    statement.setInt(1, participant.type)
-                    statement.setLong(2, participant.project.idProject)
-                    statement.setString(3, participant.user.user)
-                    val i = statement.executeUpdate()
-                    Log.d("DB", "Filas afectadas: $i")
+                    statement.setLong(1, project)
+                    statement.executeQuery().use { rs ->
+                        getProjectByID(project){getProject ->
+                            while (rs.next()) {
+                                val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
+                                val id_us = rs.getString(TABLE_PARTICIPANT[2])
+                                val type = rs.getInt(TABLE_PARTICIPANT[3])
+                                getUserByID(id_us){getUser ->
+                                    val searchParticipant = Participant(getUser, getProject, type)
+                                    participants.add(searchParticipant)
+                                }
+                            }
+                        }
+                        Log.d("DB", "getParticipantsByProject: $participants")
+                        callback(participants)
+                    }
                 }
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
+        } catch (ex: SQLException){
+            //
+            Log.d("DB", "getParticipantsByProject SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
+        } catch (e: Exception) {
+            //
+            Log.d("DB", "getParticipantsByProject Exception: " + e.printStackTrace())
+            callback(mutableListOf())
         }
     }
+}
 
-    fun deleteParticipant(participant: Participant){
-        //
-        val sql = "DELETE FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
-        Log.d("DB", sql)
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, participant.project.idProject)
-                    statement.setString(2, participant.user.user)
-                    val i = statement.executeUpdate()
-                    Log.d("DB", "Filas afectadas: $i")
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-    }
+/*
+import com.aem.seahp.code.types.Alternative
+import com.aem.seahp.code.types.Criteria
+import com.aem.seahp.code.types.Element
+import com.aem.seahp.code.types.Matrix
+import com.aem.seahp.code.types.Participant
 
+
+class AzureHelper {
+    //
     fun insertAlternative(alternative: Alternative){
         //
         val sql = "INSERT INTO ${TABLE_ALTERNATIVE[0]} (${TABLE_ALTERNATIVE[1]},${TABLE_ALTERNATIVE[2]},${TABLE_ALTERNATIVE[3]},${TABLE_ALTERNATIVE[4]}) " +

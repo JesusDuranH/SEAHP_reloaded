@@ -1,4 +1,4 @@
-package com.aem.sheap_reloaded.objects
+package com.aem.sheap_reloaded.code.things
 
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
@@ -30,7 +30,6 @@ class Cipher() {
                 setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 setRandomizedEncryptionRequired(false)
             }
-
             keyGenerator.init(builder.build())
             keyGenerator.generateKey()
         } else keyStore.getKey(alias, null) as SecretKey

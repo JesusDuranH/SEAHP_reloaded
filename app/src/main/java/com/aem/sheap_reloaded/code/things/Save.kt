@@ -1,4 +1,4 @@
-package com.aem.sheap_reloaded.objects
+package com.aem.sheap_reloaded.code.things
 
 import android.Manifest
 import android.content.Context
@@ -77,17 +77,17 @@ class Save {
         //
         //val file = File.createTempFile(tittle, null, context.cacheDir)
         val file = File(context.cacheDir, tittle)
-        Log.d("Save", "Guardar archivo Temporal: $file, $content")
+        Log.d("Save", "Save Temporal File: $file, $content")
         file.writeBytes(content)
     }
 
     fun readTempFile(context: Context, tittle: String): ByteArray?{
         //
         val file = File(context.cacheDir, tittle)
-        Log.d("Save", "Leer archivo Temporal: $file")
+        Log.d("Save", "Read Temporal File: $file")
         return if (file.exists()){
             //
-            Log.d("Save", "Archivo Existe: ${file.exists()}")
+            Log.d("Save", "File Exist: ${file.exists()}")
             file.readBytes()
         } else null
     }
@@ -95,16 +95,15 @@ class Save {
     fun deleteTempFile(context: Context, tittle: String){
         //
         val file = File(context.cacheDir, tittle)
-        Log.d("Save", "archivo: $file")
+        Log.d("Save", "File: $file")
         if (file.exists()){
             //
             try {
                 file.delete()
-                Log.d("Save", "Eliminado alv: ${file.exists()}")
+                Log.d("Save", "Delete: ${file.exists()}")
             } catch (ex: Exception) {
-                Log.d("Save", "Error al eliminar: ${ex.printStackTrace()}")
+                Log.d("Save", "Error Delete: ${ex.printStackTrace()}")
             }
         }
     }
-
 }

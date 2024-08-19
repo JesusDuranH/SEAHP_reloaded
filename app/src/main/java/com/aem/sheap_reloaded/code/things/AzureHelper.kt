@@ -1,6 +1,9 @@
 package com.aem.sheap_reloaded.code.things
 
 import android.util.Log
+import com.aem.sheap_reloaded.code.objects.Alternative
+import com.aem.sheap_reloaded.code.objects.Criteria
+import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.User
@@ -42,15 +45,15 @@ class AzureHelper {
         "sub_cr",
         "id_project")
     private val TABLE_MATRIX = arrayOf(
-        "matriz",
-        "matrix_id",
-        "name_mat",
-        "description_mat",
-        "row_mat",
-        "column_mat",
-        "us_user",
-        "id_project",
-        "us_type")
+        "matriz",       //0
+        "matrix_id",    //1
+        "name_mat",     //2
+        "description_mat",//3
+        "row_mat",      //4
+        "column_mat",   //5
+        "us_user",      //6
+        "id_project",   //7
+        "us_type")      //8
     private val TABLE_ELEMENT = arrayOf(
         "elemento",
         "id_matrix",
@@ -66,19 +69,18 @@ class AzureHelper {
         try {
             Thread {
                 try {
-                    //
                     getConnection()
                     Log.d("DB", "getConnection: Success")
                 } catch (ex: SQLException){
-                    //
-                    Log.d("DB", "Thread SQLException: " + ex.printStackTrace())
+                    Log.d("DB", "connect Thread SQLException: " + ex.printStackTrace())
                 } catch (e: Exception) {
-                    //
-                    Log.d("DB", "Thread Exception: " + e.printStackTrace())
+                    Log.d("DB", "connect Thread Exception: " + e.printStackTrace())
                 }
             }.start()
+        } catch (ex: SQLException){
+            Log.d("DB", "connect SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
-            Log.d("DB", "Exception: " + e.printStackTrace())
+            Log.d("DB", "connect Exception: " + e.printStackTrace())
         }
     }
 
@@ -86,7 +88,7 @@ class AzureHelper {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver")
         } catch (ex: ClassNotFoundException) {
-            println("Error al registrar el driver: $ex")
+            println("Error al registrar el driver de conexion: $ex")
         }
 
         //Azure
@@ -112,7 +114,7 @@ class AzureHelper {
         //
         val sql = "INSERT INTO ${TABLE_USER[0]} (${TABLE_USER[1]},${TABLE_USER[2]},${TABLE_USER[3]},${TABLE_USER[4]}) " +
                 "VALUES (?, ?, ?, ?)"
-        Log.d("DB", "Insert User: $sql")
+        Log.d("AzureDB", "Insert User: $sql")
         try {
             val conn = getConnection()
             val statement: PreparedStatement = conn.prepareStatement(sql)
@@ -122,19 +124,18 @@ class AzureHelper {
             statement.setString(4, user.pass)
             statement.executeUpdate()
             statement.close()
+            Log.d("AzureDB", "insertUser: $user")
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "insertUser SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "insertUser SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "insertUser Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "insertUser Exception: " + e.printStackTrace())
         }
     }
 
     fun getAllUsers(callback: (List<User>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_USER[0]}"
-        Log.d("DB", "get All Users: $sql")
+        Log.d("AzureDB", "getAllUsers: $sql")
         val users = mutableListOf<User>()
         try {
             getConnection().use { conn ->
@@ -144,18 +145,19 @@ class AzureHelper {
                             val user = rs.getString(TABLE_USER[1])
                             val name = rs.getString(TABLE_USER[2])
                             val mail = rs.getString(TABLE_USER[3])
-                            val pass = ""
-
-                            val searchUser = User(user, name, mail, pass)
+                            val searchUser = User(user, name, mail, "")
                             users.add(searchUser)
                         }
-                        Log.d("DB", "get All Users: $users")
+                        Log.d("AzureDB", "getAllUsers: $users")
                         callback(users)
                     }
                 }
             }
-        } catch (ex: SQLException) {
-            Log.d("DB", "getAllUsers SQLException: " + ex.printStackTrace())
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getAllUsers SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getAllUsers Exception: " + e.printStackTrace())
             callback(mutableListOf())
         }
     }
@@ -163,7 +165,7 @@ class AzureHelper {
     fun getUserByID(user: String, callback: (User) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_USER[0]} WHERE ${TABLE_USER[1]} = ?"
-        Log.d("DB", "get User By ID: $sql")
+        Log.d("AzureDB", "getUserByID: $sql")
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
@@ -177,13 +179,16 @@ class AzureHelper {
                             val pass = rs.getString(TABLE_USER[4])
                             loginUser = User(checkUser, name, mail, pass)
                         }
-                        Log.d("DB", "Get by ID: $loginUser")
+                        Log.d("AzureDB", "getUserByID: $loginUser")
                         callback(loginUser)
                     }
                 }
             }
-        } catch (e: SQLException) {
-            Log.d("DB", "getUserByUser SQLException: " + e.printStackTrace())
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getUserByUser SQLException: " + ex.printStackTrace())
+            callback(User())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getUserByUser Exception: " + e.printStackTrace())
             callback(User())
         }
     }
@@ -191,7 +196,7 @@ class AzureHelper {
     fun getUserByMail(mail: String, callback: (User) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_USER[0]} WHERE ${TABLE_USER[3]} = ?"
-        Log.d("DB", "get User By Mail: $sql")
+        Log.d("AzureDB", "getUserByMail: $sql")
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
@@ -205,13 +210,16 @@ class AzureHelper {
                             val pass = ""
                             loginUser = User(user, name, getMail, pass)
                         }
-                        Log.d("DB", "get User By Mail: $loginUser")
+                        Log.d("AzureDB", "getUserByMail: $loginUser")
                         callback(loginUser)
                     }
                 }
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getUserByMail SQLException: " + ex.printStackTrace())
+            callback(User())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getUserByMail Exception: " + e.printStackTrace())
             callback(User())
         }
     }
@@ -220,7 +228,7 @@ class AzureHelper {
         //
         val sql = "INSERT INTO ${TABLE_PROYECT[0]} (${TABLE_PROYECT[1]},${TABLE_PROYECT[2]},${TABLE_PROYECT[3]}) " +
                 "VALUES (?, ?, ?)"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "insertProject: $sql")
         try {
             val conn = getConnection()
             val statement: PreparedStatement = conn.prepareStatement(sql)
@@ -229,12 +237,11 @@ class AzureHelper {
             statement.setString(3, project.descriptionProject)
             statement.executeUpdate()
             statement.close()
+            Log.d("AzureDB", "insertProject: $project")
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "insertProject SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "insertProject SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "insertProject Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "insertProject Exception: " + e.printStackTrace())
         }
     }
 
@@ -242,7 +249,7 @@ class AzureHelper {
         //
         val sql = "SELECT * FROM ${TABLE_PROYECT[0]} WHERE ${TABLE_PROYECT[1]} = ?"
         //
-        Log.d("DB", sql)
+        Log.d("AzureDB", "getProjectByID: $sql")
         //
         try {
             getConnection().use { conn ->
@@ -256,13 +263,16 @@ class AzureHelper {
                             val desc = rs.getString(TABLE_PROYECT[3])
                             searchProject = Project(id, name, desc)
                         }
-                        Log.d("DB", "getProjectByID: $searchProject")
+                        Log.d("AzureDB", "getProjectByID: $searchProject")
                         callback(searchProject)
                     }
                 }
             }
-        } catch (e: SQLException) {
-            Log.d("DB", "getProjectByID Exception: " + e.printStackTrace())
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getProjectByID SQLException: " + ex.printStackTrace())
+            callback(Project())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getProjectByID Exception: " + e.printStackTrace())
             callback(Project())
         }
     }
@@ -271,7 +281,7 @@ class AzureHelper {
         //
         val sql = "UPDATE ${TABLE_PROYECT[0]} SET ${TABLE_PROYECT[2]} = ? , ${TABLE_PROYECT[3]} = ? " +
                 "WHERE ${TABLE_PROYECT[1]} = ?"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "updateProjectByID: $sql")
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
@@ -279,11 +289,14 @@ class AzureHelper {
                     statement.setString(2, project.descriptionProject)
                     statement.setLong(3, project.idProject)
                     val i = statement.executeUpdate()
-                    Log.d("DB", "updateProjectByID Row: $i")
+                    Log.d("AzureDB", "updateProjectByID Row: $i")
+                    Log.d("AzureDB", "updateProjectByID: $project")
                 }
             }
-        } catch (e: SQLException) {
-            Log.d("DB", "updateProjectByID Exception: " + e.printStackTrace())
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "updateProjectByID SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "updateProjectByID Exception: " + e.printStackTrace())
         }
     }
 
@@ -291,7 +304,7 @@ class AzureHelper {
         //
         val sql = "INSERT INTO ${TABLE_PARTICIPANT[0]} (${TABLE_PARTICIPANT[1]},${TABLE_PARTICIPANT[2]},${TABLE_PARTICIPANT[3]}) " +
                 "VALUES (?, ?, ?)"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "insertParticipant: $sql")
         try {
             val conn = getConnection()
             val statement: PreparedStatement = conn.prepareStatement(sql)
@@ -300,19 +313,18 @@ class AzureHelper {
             statement.setInt(3, participant.type)
             statement.executeUpdate()
             statement.close()
+            Log.d("AzureDB", "insertParticipant: $participant")
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "insertParticipant SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "insertParticipant SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "insertParticipant Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "insertParticipant Exception: " + e.printStackTrace())
         }
     }
 
     fun updateParticipant(participant: Participant){
         //
         val sql = "UPDATE ${TABLE_PARTICIPANT[0]} SET ${TABLE_PARTICIPANT[3]} = ? WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "updateParticipant: $sql")
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
@@ -320,14 +332,13 @@ class AzureHelper {
                     statement.setLong(2, participant.project.idProject)
                     statement.setString(3, participant.user.user)
                     val i = statement.executeUpdate()
-                    Log.d("DB", "updateParticipant Row: $i")
+                    Log.d("AzureDB", "updateParticipant Row: $i")
+                    Log.d("AzureDB", "updateParticipant: $participant")
                 }
             }
         } catch (ex: SQLException){
-            //
             Log.d("DB", "updateParticipant SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
-            //
             Log.d("DB", "updateParticipant Exception: " + e.printStackTrace())
         }
     }
@@ -335,57 +346,55 @@ class AzureHelper {
     fun deleteParticipant(participant: Participant){
         //
         val sql = "DELETE FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "deleteParticipant: $sql")
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
                     statement.setLong(1, participant.project.idProject)
                     statement.setString(2, participant.user.user)
                     val i = statement.executeUpdate()
-                    Log.d("DB", "deleteParticipant Row: $i")
+                    Log.d("AzureDB", "deleteParticipant Row: $i")
+                    Log.d("AzureDB", "deleteParticipant: $participant")
                 }
             }
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "deleteParticipant SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "deleteParticipant SQLException: " + ex.printStackTrace())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "deleteParticipant Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "deleteParticipant Exception: " + e.printStackTrace())
         }
     }
 
     fun getParticipantByUser(user: User, callback: (List<Participant>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[2]} = ?"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "getParticipantByUser: $sql")
         val participants = mutableListOf<Participant>()
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
-                    statement.setString(1, user.user)
-                    statement.executeQuery().use { rs ->
-                        getUserByID(user.user){getUser ->
+                    getUserByID(user.user){getUser ->
+                        statement.setString(1, getUser.user)
+                        statement.executeQuery().use { rs ->
                             while (rs.next()) {
-                                val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
-                                val id_us = rs.getString(TABLE_PARTICIPANT[2])
+                                val idProject = rs.getLong(TABLE_PARTICIPANT[1])
                                 val type = rs.getInt(TABLE_PARTICIPANT[3])
-                                getProjectByID(id_pr){getProject ->
+                                getProjectByID(idProject){getProject ->
                                     val searchParticipant = Participant(getUser, getProject, type)
                                     participants.add(searchParticipant)
                                 }
                             }
                         }
-                        Log.d("DB", "getParticipantByUser: $participants")
+                        Log.d("AzureDB", "getParticipantByUser: $participants")
                         callback(participants)
                     }
                 }
             }
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "getParticipantByUser SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "getParticipantByUser SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "getParticipantByUser Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "getParticipantByUser Exception: " + e.printStackTrace())
+            callback(mutableListOf())
         }
     }
 
@@ -395,7 +404,7 @@ class AzureHelper {
         //
         val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} " +
                 "WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ? AND ${TABLE_PARTICIPANT[3]} = 2"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "getParticipantIsAdminInThis: $sql")
         var participant = Participant()
         try {
             getConnection().use { conn ->
@@ -403,24 +412,20 @@ class AzureHelper {
                     statement.setLong(1, project.idProject)
                     statement.setString(2, user.user)
                     statement.executeQuery().use { rs ->
-                        while (rs.next()) {
-                            val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
-                            val id_us = rs.getString(TABLE_PARTICIPANT[2])
+                        if (rs.next()) {
                             val type = rs.getInt(TABLE_PARTICIPANT[3])
                             participant = Participant(user, project, type)
-                            Log.d("DB", "getParticipantIsAdminInThis: $participant")
+                            Log.d("AzureDB", "getParticipantIsAdminInThis: $participant")
                         }
                         callback(participant)
                     }
                 }
             }
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "getParticipantIsAdminInThis SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "getParticipantIsAdminInThis SQLException: " + ex.printStackTrace())
             callback(Participant())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "getParticipantIsAdminInThis Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "getParticipantIsAdminInThis Exception: " + e.printStackTrace())
             callback(Participant())
         }
     }
@@ -428,37 +433,288 @@ class AzureHelper {
     fun getParticipantsByProject(project: Long, callback: (List<Participant>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ?"
-        Log.d("DB", sql)
+        Log.d("AzureDB", "getParticipantsByProject: $sql")
         val participants = mutableListOf<Participant>()
         try {
             getConnection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, project)
-                    statement.executeQuery().use { rs ->
-                        getProjectByID(project){getProject ->
+                    getProjectByID(project){getProject ->
+                        statement.setLong(1, getProject.idProject)
+                        statement.executeQuery().use { rs ->
                             while (rs.next()) {
-                                val id_pr = rs.getLong(TABLE_PARTICIPANT[1])
-                                val id_us = rs.getString(TABLE_PARTICIPANT[2])
+                                val idUser = rs.getString(TABLE_PARTICIPANT[2])
                                 val type = rs.getInt(TABLE_PARTICIPANT[3])
-                                getUserByID(id_us){getUser ->
+                                getUserByID(idUser){getUser ->
                                     val searchParticipant = Participant(getUser, getProject, type)
                                     participants.add(searchParticipant)
                                 }
                             }
                         }
-                        Log.d("DB", "getParticipantsByProject: $participants")
+                        Log.d("AzureDB", "getParticipantsByProject: $participants")
                         callback(participants)
                     }
                 }
             }
         } catch (ex: SQLException){
-            //
-            Log.d("DB", "getParticipantsByProject SQLException: " + ex.printStackTrace())
+            Log.d("AzureDB", "getParticipantsByProject SQLException: " + ex.printStackTrace())
             callback(mutableListOf())
         } catch (e: Exception) {
-            //
-            Log.d("DB", "getParticipantsByProject Exception: " + e.printStackTrace())
+            Log.d("AzureDB", "getParticipantsByProject Exception: " + e.printStackTrace())
             callback(mutableListOf())
+        }
+    }
+
+    fun insertCriteria(criteria: Criteria){
+        //
+        val sql = "INSERT INTO ${TABLE_CRITERIA[0]} (${TABLE_CRITERIA[1]},${TABLE_CRITERIA[2]}," +
+                "${TABLE_CRITERIA[3]},${TABLE_CRITERIA[4]},${TABLE_CRITERIA[5]}) " +
+                "VALUES (?, ?, ?, ?, ?)"
+        Log.d("AzureDB", "insertCriteria: $sql")
+        try {
+            val conn = getConnection()
+            val statement: PreparedStatement = conn.prepareStatement(sql)
+            statement.setLong(1, criteria.idCriteria)
+            statement.setString(2, criteria.nameCriteria)
+            statement.setString(3, criteria.descriptionCriteria)
+            if (criteria.subCriteria != null) statement.setLong(4, criteria.subCriteria)
+            else statement.setObject(4, null)
+            statement.setLong(5, criteria.idProject)
+            statement.executeUpdate()
+            statement.close()
+            Log.d("AzureDB", "insertCriteria: $criteria")
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "insertCriteria SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "insertCriteria Exception: " + e.printStackTrace())
+        }
+    }
+
+    fun getCriteriaByID(criteria: Long, project: Long, callback: (Criteria) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_CRITERIA[0]} WHERE ${TABLE_CRITERIA[1]} = ? AND ${TABLE_CRITERIA[5]} = ?"
+        Log.d("AzureDB", "getCriteriaByID: $sql")
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project){getProject ->
+                        statement.setLong(1, criteria)
+                        statement.setLong(2, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchCriteria = Criteria()
+                            if (rs.next()) {
+                                val id = rs.getLong(TABLE_CRITERIA[1])
+                                val name = rs.getString(TABLE_CRITERIA[2])
+                                val desc = rs.getString(TABLE_CRITERIA[3])
+                                val sub = rs.getLong(TABLE_CRITERIA[4])
+                                searchCriteria = Criteria(id, name, desc, sub,
+                                    getProject.idProject, getProject.nameProject, getProject.descriptionProject)
+                            }
+                            Log.d("AzureDB", "getCriteriaByID: $searchCriteria")
+                            callback(searchCriteria)
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getCriteriaByID SQLException: " + ex.printStackTrace())
+            callback(Criteria())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getCriteriaByID Exception: " + e.printStackTrace())
+            callback(Criteria())
+        }
+    }
+
+    fun getCriteriaByProject(project: Long, callback: (List<Criteria>) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_CRITERIA[0]} WHERE ${TABLE_CRITERIA[5]} = ?"
+        Log.d("AzureDB", "getCriteriaByProject: $sql")
+        val criteria = mutableListOf<Criteria>()
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project){getProject ->
+                        statement.setLong(1, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchCriteria: Criteria
+                            while (rs.next()) {
+                                val id = rs.getLong(TABLE_CRITERIA[1])
+                                val name = rs.getString(TABLE_CRITERIA[2])
+                                val desc = rs.getString(TABLE_CRITERIA[3])
+                                val sub = rs.getLong(TABLE_CRITERIA[4])
+                                searchCriteria = Criteria(id, name, desc, sub,
+                                    getProject.idProject, getProject.nameProject, getProject.descriptionProject)
+                                criteria.add(searchCriteria)
+                            }
+                            Log.d("AzureDB", "getCriteriaByProject: $criteria")
+                            callback(criteria)
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getCriteriaByProject SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getCriteriaByProject Exception: " + e.printStackTrace())
+            callback(mutableListOf())
+        }
+    }
+
+    fun insertAlternative(alternative: Alternative){
+        //
+        val sql = "INSERT INTO ${TABLE_ALTERNATIVE[0]} (${TABLE_ALTERNATIVE[1]},${TABLE_ALTERNATIVE[2]},${TABLE_ALTERNATIVE[3]},${TABLE_ALTERNATIVE[4]}) " +
+                "VALUES (?, ?, ?, ?)"
+        Log.d("AzureDB", "insertAlternative: $sql")
+        try {
+            val conn = getConnection()
+            val statement: PreparedStatement = conn.prepareStatement(sql)
+            statement.setLong(1, alternative.idAlternative)
+            statement.setString(2, alternative.nameAlternative)
+            statement.setString(3, alternative.descriptionAlternative)
+            statement.setLong(4, alternative.idProject)
+            statement.executeUpdate()
+            statement.close()
+            Log.d("AzureDB", "insertAlternative: $alternative")
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "insertAlternative SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "insertAlternative Exception: " + e.printStackTrace())
+        }
+    }
+
+    fun getAlternativeByID(alternative: Long, project: Long, callback: (Alternative) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_ALTERNATIVE[0]} WHERE ${TABLE_ALTERNATIVE[1]} = ? AND ${TABLE_ALTERNATIVE[4]} = ?"
+        Log.d("AzureDB", "getAlternativeByID: $sql")
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project){getProject ->
+                        statement.setLong(1, alternative)
+                        statement.setLong(2, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchAlternative = Alternative()
+                            if (rs.next()) {
+                                val id = rs.getLong(TABLE_ALTERNATIVE[1])
+                                val name = rs.getString(TABLE_ALTERNATIVE[2])
+                                val desc = rs.getString(TABLE_ALTERNATIVE[3])
+                                searchAlternative = Alternative(id, name, desc,
+                                    getProject.idProject, getProject.nameProject, getProject.descriptionProject)
+                            }
+                            Log.d("AzureDB", "getAlternativeByID: $searchAlternative")
+                            callback(searchAlternative)
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException) {
+            Log.d("AzureDB", "getAlternativeByID SQLException: " + ex.printStackTrace())
+            callback(Alternative())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getAlternativeByID Exception: " + e.printStackTrace())
+            callback(Alternative())
+        }
+    }
+
+    fun getAlternativesByProject(project: Project, callback: (List<Alternative>) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_ALTERNATIVE[0]} WHERE ${TABLE_ALTERNATIVE[4]} = ?"
+        Log.d("AzureDB", "getAlternativesByProject: $sql")
+        val alternatives = mutableListOf<Alternative>()
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project.idProject){getProject ->
+                        statement.setLong(1, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchAlternative: Alternative
+                            while (rs.next()) {
+                                val id = rs.getLong(TABLE_ALTERNATIVE[1])
+                                val name = rs.getString(TABLE_ALTERNATIVE[2])
+                                val desc = rs.getString(TABLE_ALTERNATIVE[3])
+                                searchAlternative = Alternative(id, name, desc,
+                                    getProject.idProject, getProject.nameProject, getProject.descriptionProject)
+                                alternatives.add(searchAlternative)
+                            }
+                            Log.d("AzureDB", "getAlternativesByProject: $alternatives")
+                            callback(alternatives)
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getAlternativesByProject SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getAlternativesByProject Exception: " + e.printStackTrace())
+            callback(mutableListOf())
+        }
+    }
+
+    fun insertMatrix(matrix: Matrix){
+        //
+        val sql = "INSERT INTO ${TABLE_MATRIX[0]} (${TABLE_MATRIX[1]},${TABLE_MATRIX[2]}," +
+                "${TABLE_MATRIX[3]},${TABLE_MATRIX[4]},${TABLE_MATRIX[5]},${TABLE_MATRIX[6]}," +
+                "${TABLE_MATRIX[7]},${TABLE_MATRIX[8]}) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        Log.d("AzureDB", "insertMatrix: $sql")
+        try {
+            val conn = getConnection()
+            val statement: PreparedStatement = conn.prepareStatement(sql)
+            statement.setLong(1, matrix.idMatrix)
+            statement.setString(2, matrix.nameMatrix)
+            statement.setString(3, matrix.descriptionMatrix)
+            statement.setInt(4, matrix.rowMax)
+            statement.setInt(5, matrix.columnMax)
+            statement.setString(6, matrix.user.user)
+            statement.setLong(7, matrix.project.idProject)
+            statement.setInt(8, matrix.type)
+            statement.executeUpdate()
+            statement.close()
+            Log.d("AzureDB", "insertMatrix: $matrix")
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "insertMatrix SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "insertMatrix Exception: " + e.printStackTrace())
+        }
+    }
+
+    fun getMatrixByID(project: Long, matrix: Long, callback: (Matrix) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[1]} = ? AND ${TABLE_MATRIX[7]} = ?"
+        Log.d("AzureDB", "getMatrixByID: $sql")
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project){getProject ->
+                        statement.setLong(1, matrix)
+                        statement.setLong(2, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchMatrix = Matrix()
+                            while (rs.next()) {
+                                val id = rs.getLong(TABLE_MATRIX[1])
+                                val name = rs.getString(TABLE_MATRIX[2])
+                                val desc = rs.getString(TABLE_MATRIX[3])
+                                val row = rs.getInt(TABLE_MATRIX[4])
+                                val column = rs.getInt(TABLE_MATRIX[5])
+                                val idUser = rs.getString(TABLE_MATRIX[6])
+                                val type = rs.getInt(TABLE_MATRIX[8])
+                                getUserByID(idUser){user ->
+                                    searchMatrix = Matrix(id, name, desc, row, column, user, getProject, type)
+                                }
+                            }
+                            Log.d("AzureDB", "getMatrixByID $searchMatrix")
+                            callback(searchMatrix)
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getMatrixByID SQLException: " + ex.printStackTrace())
+            callback(Matrix())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getMatrixByID Exception: " + e.printStackTrace())
+            callback(Matrix())
         }
     }
 }
@@ -473,257 +729,6 @@ import com.aem.seahp.code.types.Participant
 
 class AzureHelper {
     //
-    fun insertAlternative(alternative: Alternative){
-        //
-        val sql = "INSERT INTO ${TABLE_ALTERNATIVE[0]} (${TABLE_ALTERNATIVE[1]},${TABLE_ALTERNATIVE[2]},${TABLE_ALTERNATIVE[3]},${TABLE_ALTERNATIVE[4]}) " +
-                "VALUES (?, ?, ?, ?)"
-        try {
-            val conn = getConnection()
-            Log.d("DB", "Inicio Registro Alternativa")
-            Log.d("DB", sql)
-            val statement: PreparedStatement = conn.prepareStatement(sql)
-            statement.setLong(1, alternative.idAlternative)
-            statement.setString(2, alternative.nameAlternative)
-            statement.setString(3, alternative.descriptionAlternative)
-            statement.setLong(4, alternative.idProject)
-            statement.executeUpdate()
-            statement.close()
-        } catch (ex: SQLException){
-            //
-            ex.printStackTrace()
-        } catch (e: Exception) {
-            //
-            e.printStackTrace()
-        }
-    }
-
-    fun getAlternativesByProject(project: Project, callback: (List<Alternative>) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_ALTERNATIVE[0]} WHERE ${TABLE_ALTERNATIVE[4]} = ?"
-        Log.d("DB", sql)
-        val alternatives = mutableListOf<Alternative>()
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, project.idProject)
-                    statement.executeQuery().use { rs ->
-                        var searchAlternative = Alternative()
-                        while (rs.next()) {
-                            val id = rs.getLong(TABLE_ALTERNATIVE[1])
-                            val name = rs.getString(TABLE_ALTERNATIVE[2])
-                            val desc = rs.getString(TABLE_ALTERNATIVE[3])
-                            val id_pr = rs.getLong(TABLE_ALTERNATIVE[4])
-
-                            getProjectByID(id_pr){project ->
-                                searchAlternative = Alternative(id, name, desc,
-                                    project.idProject, project.nameProject, project.descriptionProject)
-                                alternatives.add(searchAlternative)
-                                Log.d("DB", searchAlternative.toString())
-                            }
-                        }
-                        callback(alternatives)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(mutableListOf())
-        }
-    }
-
-    fun getAlternativeByID(alternative: Long, project: Long, callback: (Alternative) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_ALTERNATIVE[0]} WHERE ${TABLE_ALTERNATIVE[1]} = ? AND ${TABLE_ALTERNATIVE[4]} = ?"
-        Log.d("DB", sql)
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, alternative)
-                    statement.setLong(2, project)
-                    statement.executeQuery().use { rs ->
-                        var searchAlternative = Alternative()
-                        if (rs.next()) {
-                            val id = rs.getLong(TABLE_ALTERNATIVE[1])
-                            val name = rs.getString(TABLE_ALTERNATIVE[2])
-                            val desc = rs.getString(TABLE_ALTERNATIVE[3])
-                            val id_pr = rs.getLong(TABLE_ALTERNATIVE[4])
-
-                            getProjectByID(id_pr){project ->
-                                searchAlternative = Alternative(id, name, desc,
-                                    project.idProject, project.nameProject, project.descriptionProject)
-                                Log.d("DB", searchAlternative.toString())
-                            }
-                        }
-                        callback(searchAlternative)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(Alternative())
-        }
-    }
-
-    fun insertCriteria(criteria: Criteria){
-        //
-        val sql = "INSERT INTO ${TABLE_CRITERIA[0]} (${TABLE_CRITERIA[1]},${TABLE_CRITERIA[2]}," +
-                "${TABLE_CRITERIA[3]},${TABLE_CRITERIA[4]},${TABLE_CRITERIA[5]}) " +
-                "VALUES (?, ?, ?, ?, ?)"
-        try {
-            val conn = getConnection()
-            Log.d("DB", "Inicio Registro Criterio")
-            Log.d("DB", sql)
-            val statement: PreparedStatement = conn.prepareStatement(sql)
-            statement.setLong(1, criteria.idCriteria)
-            statement.setString(2, criteria.nameCriteria)
-            statement.setString(3, criteria.descriptionCriteria)
-            if (criteria.subCriteria != null) statement.setLong(4, criteria.subCriteria)
-            else statement.setObject(4, null)
-            statement.setLong(5, criteria.idProject)
-            statement.executeUpdate()
-            statement.close()
-        } catch (ex: SQLException){
-            //
-            ex.printStackTrace()
-        } catch (e: Exception) {
-            //
-            e.printStackTrace()
-        }
-    }
-
-    fun getCriteriasByProject(project: Project, callback: (List<Criteria>) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_CRITERIA[0]} WHERE ${TABLE_CRITERIA[5]} = ?"
-        Log.d("DB", sql)
-        val criterias = mutableListOf<Criteria>()
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, project.idProject)
-                    statement.executeQuery().use { rs ->
-                        var searchPCriteria = Criteria()
-                        while (rs.next()) {
-                            val id = rs.getLong(TABLE_CRITERIA[1])
-                            val name = rs.getString(TABLE_CRITERIA[2])
-                            val desc = rs.getString(TABLE_CRITERIA[3])
-                            val sub = rs.getLong(TABLE_CRITERIA[4])
-                            val id_pr = rs.getLong(TABLE_CRITERIA[5])
-
-                            searchPCriteria = Criteria(id, name, desc, sub,
-                                project.idProject, project.nameProject, project.descriptionProject)
-                            criterias.add(searchPCriteria)
-                            Log.d("DB", searchPCriteria.toString())
-                        }
-                        callback(criterias)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(mutableListOf())
-        }
-    }
-
-    fun getCriteriaByID(criteria: Long, project: Long, callback: (Criteria) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_CRITERIA[0]} WHERE ${TABLE_CRITERIA[1]} = ? AND ${TABLE_CRITERIA[5]} = ?"
-        Log.d("DB", sql)
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, criteria)
-                    statement.setLong(2, project)
-                    statement.executeQuery().use { rs ->
-                        var searchPCriteria = Criteria()
-                        if (rs.next()) {
-                            val id = rs.getLong(TABLE_CRITERIA[1])
-                            val name = rs.getString(TABLE_CRITERIA[2])
-                            val desc = rs.getString(TABLE_CRITERIA[3])
-                            val sub = rs.getLong(TABLE_CRITERIA[4])
-                            val id_pr = rs.getLong(TABLE_CRITERIA[5])
-
-                            getProjectByID(id_pr){project ->
-                                searchPCriteria = Criteria(id, name, desc, sub,
-                                    project.idProject, project.nameProject, project.descriptionProject)
-                                Log.d("DB", searchPCriteria.toString())
-                            }
-                        }
-                        callback(searchPCriteria)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(Criteria())
-        }
-    }
-
-    fun insertMatrix(matrix: Matrix){
-        //
-        val sql = "INSERT INTO ${TABLE_MATRIX[0]} (${TABLE_MATRIX[1]},${TABLE_MATRIX[2]}," +
-                "${TABLE_MATRIX[3]},${TABLE_MATRIX[4]},${TABLE_MATRIX[5]},${TABLE_MATRIX[6]}," +
-                "${TABLE_MATRIX[7]},${TABLE_MATRIX[8]}) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        try {
-            val conn = getConnection()
-            Log.d("DB", "Inicio Registro Matriz")
-            Log.d("DB", sql)
-            val statement: PreparedStatement = conn.prepareStatement(sql)
-            statement.setLong(1, matrix.idMatrix)
-            statement.setString(2, matrix.nameMatrix)
-            statement.setString(3, matrix.descriptionMatrix)
-            statement.setInt(4, matrix.rowMax)
-            statement.setInt(5, matrix.columnMax)
-            statement.setString(6, matrix.user.user)
-            statement.setLong(7, matrix.project.idProject)
-            statement.setInt(8, matrix.type)
-            statement.executeUpdate()
-            statement.close()
-        } catch (ex: SQLException){
-            //
-            ex.printStackTrace()
-        } catch (e: Exception) {
-            //
-            e.printStackTrace()
-        }
-    }
-
-    fun getMatrixByID(project: Long, matrix: Long, callback: (Matrix) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[1]} = ? AND ${TABLE_MATRIX[7]} = ?"
-        Log.d("DB", sql)
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, matrix)
-                    statement.setLong(2, project)
-                    statement.executeQuery().use { rs ->
-                        var searchMatrix = Matrix()
-                        while (rs.next()) {
-                            val id = rs.getLong(TABLE_MATRIX[1])
-                            val name = rs.getString(TABLE_MATRIX[2])
-                            val desc = rs.getString(TABLE_MATRIX[3])
-                            val row = rs.getInt(TABLE_MATRIX[4])
-                            val column = rs.getInt(TABLE_MATRIX[5])
-                            val us_us = rs.getString(TABLE_MATRIX[6])
-                            val id_pr = rs.getLong(TABLE_MATRIX[7])
-                            val type = rs.getInt(TABLE_MATRIX[8])
-
-                            getProjectByID(id_pr){project ->
-                                getUserByUser(us_us){user ->
-                                    searchMatrix = Matrix(id, name, desc, row, column, user, project, type)
-                                }
-                            }
-                        }
-                        callback(searchMatrix)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(Matrix())
-        }
-    }
 
     fun getMatrixsByProject(project: Project, callback: (List<Matrix>) -> Unit){
         //

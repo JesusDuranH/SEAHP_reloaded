@@ -38,10 +38,9 @@ open class User(val user: String,
     fun login(user: String, pass: String, context: Context): Int{
         //
         val ret: Int
-        val loginUs = User(user, pass)
         var loginUser = User()
         val threadLogin = Thread {
-            AzureHelper().getUserByID(loginUs.user) { login ->
+            AzureHelper().getUserByID(user) { login ->
                 loginUser = login
             }
         }.apply {

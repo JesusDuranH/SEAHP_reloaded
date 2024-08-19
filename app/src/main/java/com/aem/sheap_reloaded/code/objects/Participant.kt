@@ -93,15 +93,3 @@ open class Participant(val user: User,
         return "Participant(\n $user, \n$project, \n$type)"
     }
 }
-
-/*
-import com.aem.seahp.code.dbFiles.AzureHelper
-import com.aem.seahp.code.dbFiles.SEAHPDBHelper
-
-open class Participant(val user: User,
-                       val project: Project,
-                       val type: Int
-) {
-
-}
-* */

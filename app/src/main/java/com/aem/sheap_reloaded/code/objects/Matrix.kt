@@ -31,106 +31,89 @@ open class Matrix(val idMatrix: Long,
         AzureHelper().insertMatrix(newMatrix)
         return newMatrix
     }
-/*
 
-    fun listOfMatrixByProjectOnline(project: Project): List<Matrix> {
+    fun listByProjectM(project: Project): List<Matrix> {
         //
         var dataList = mutableListOf<Matrix>()
-
         val threadListMatrix = Thread {
-            AzureHelper().getMatrixsByProject(project){ list ->
+            AzureHelper().getMatrixByProject(project){ list ->
                 dataList = list.toMutableList()
             }
         }.apply {
             start()
             join()
         }
-
         return dataList
     }
 
-    fun matrixCriteriaAlternativeOnline(
+    fun criteriaAlternative(
         user: User,
         project: Project
     ): Matrix {
         //
-        var mat = Matrix()
-        val listCriteria = Criteria().listOfCriteriaByProjectOnline(project)
-        val x = listCriteria.size
-
-        val listAlternative = Alternative().listOfAlternativeByProjectOnline(project)
-        val y = listAlternative.size
-
+        var matrix = Matrix()
+        val x = Criteria().listByProject(project).size
+        val y = Alternative().listByProject(project).size
         val name = "Criteria - Alternative | Project: ${project.nameProject}"
         val desc = "Criteria - Alternative Evaluation Matrix with $x Criteria " +
                 "and $y Alternatives"
-
         val threadMatrix = Thread {
-            //
-            mat = createMatrixOnline(user, project, x, y, name, desc,1)
+            matrix = create(user, project, x, y, name, desc,1)
         }.apply {
             start()
             join()
         }
-        return mat
+        return matrix
     }
 
-    fun matrixCriteriaCriteriaOnline(
+    fun criteriaCriteria(
         user: User,
         project: Project
     ): Matrix {
         //
-        var mat = Matrix()
-        val listCriteria = Criteria().listOfCriteriaByProjectOnline(project)
-        val x = listCriteria.size
-
+        var matrix = Matrix()
+        val x = Criteria().listByProject(project).size
         val name = "Criteria - Criteria | Project: ${project.nameProject}"
         val desc = "Criteria - Criteria Evaluation Matrix with $x Criteria and Alternatives"
         val threadMatrix = Thread {
             //
-            mat = createMatrixOnline(user, project, x, x, name, desc,2)
+            matrix = create(user, project, x, x, name, desc,2)
         }.apply {
             start()
             join()
         }
-        return mat
+        return matrix
     }
 
-    fun matrixAlternativeAlternativeOnline(
+    fun alternativeAlternative(
         user: User,
         project: Project
     ): List<Matrix> {
         //
-        val listCriteria = Criteria().listOfCriteriaByProjectOnline(project)
-
-        val listAlternative = Alternative().listOfAlternativeByProjectOnline(project)
-        val y = listAlternative.size
+        val listCriteria = Criteria().listByProject(project)
+        val y = Alternative().listByProject(project).size
 
         val list = mutableListOf<Matrix>()
         var count: Long = 3
-
         for (item in listCriteria){
             val name = "Alternative - Alternative by ${item.nameCriteria} | Project: ${project.nameProject}"
             val desc = "Alternative - Alternative Evaluation Matrix by ${item.nameCriteria} " +
                     "with $y Rows and Columns"
-            var mat = Matrix()
-
+            var matrix = Matrix()
             val threadMatrix = Thread {
-                //
-                mat = createMatrixOnline(user, project, y, y, name, desc,count)
+                matrix = create(user, project, y, y, name, desc,count)
             }.apply {
                 start()
                 join()
             }
-
-            list.add(mat)
+            list.add(matrix)
             count++
         }
-
         val result = list
-
         return result
     }
+/*
+
 
     fun setDefaultScaleOnline(matrix: Matrix, rowElement: List<Element>, columnElement: List<Element>, user: User){
         //

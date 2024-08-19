@@ -717,6 +717,47 @@ class AzureHelper {
             callback(Matrix())
         }
     }
+
+    fun getMatrixByProject(project: Project, callback: (List<Matrix>) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[7]} = ?"
+        Log.d("AzureDB", "getMatrixByProject: $sql")
+        val matrixs = mutableListOf<Matrix>()
+        try {
+            getConnection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project.idProject){getProject ->
+                        statement.setLong(1, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchMatrix: Matrix
+                            while (rs.next()) {
+                                val id = rs.getLong(TABLE_MATRIX[1])
+                                val name = rs.getString(TABLE_MATRIX[2])
+                                val desc = rs.getString(TABLE_MATRIX[3])
+                                val row = rs.getInt(TABLE_MATRIX[4])
+                                val column = rs.getInt(TABLE_MATRIX[5])
+                                val idUser = rs.getString(TABLE_MATRIX[6])
+                                val type = rs.getInt(TABLE_MATRIX[8])
+                                getUserByID(idUser){getUser ->
+                                    searchMatrix = Matrix(id, name, desc, row, column, getUser, project, type)
+                                    matrixs.add(searchMatrix)
+                                    Log.d("AzureDB", searchMatrix.toString())
+                                }
+                            }
+                            Log.d("AzureDB", "getMatrixByProject: $matrixs")
+                            callback(matrixs)
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("AzureDB", "getMatrixByProject SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
+        } catch (e: Exception) {
+            Log.d("AzureDB", "getMatrixByProject Exception: " + e.printStackTrace())
+            callback(mutableListOf())
+        }
+    }
 }
 
 /*
@@ -729,46 +770,6 @@ import com.aem.seahp.code.types.Participant
 
 class AzureHelper {
     //
-
-    fun getMatrixsByProject(project: Project, callback: (List<Matrix>) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[7]} = ?"
-        Log.d("DB", sql)
-        val matrixs = mutableListOf<Matrix>()
-        try {
-            getConnection().use { conn ->
-                conn.prepareStatement(sql).use { statement ->
-                    statement.setLong(1, project.idProject)
-                    statement.executeQuery().use { rs ->
-                        var searchMatrix = Matrix()
-                        while (rs.next()) {
-                            val id = rs.getLong(TABLE_MATRIX[1])
-                            val name = rs.getString(TABLE_MATRIX[2])
-                            val desc = rs.getString(TABLE_MATRIX[3])
-                            val row = rs.getInt(TABLE_MATRIX[4])
-                            val column = rs.getInt(TABLE_MATRIX[5])
-                            val us_us = rs.getString(TABLE_MATRIX[6])
-                            val id_pr = rs.getLong(TABLE_MATRIX[7])
-                            val type = rs.getInt(TABLE_MATRIX[8])
-
-                            getProjectByID(id_pr){project ->
-                                getUserByUser(us_us){user ->
-                                    searchMatrix = Matrix(id, name, desc, row, column, user, project, type)
-                                    matrixs.add(searchMatrix)
-                                    Log.d("DB", searchMatrix.toString())
-                                }
-                            }
-                        }
-                        callback(matrixs)
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(mutableListOf())
-        }
-    }
-
     fun insertElement(element: Element){
         //
         val sql = "INSERT INTO ${TABLE_ELEMENT[0]} (${TABLE_ELEMENT[1]},${TABLE_ELEMENT[2]}," +

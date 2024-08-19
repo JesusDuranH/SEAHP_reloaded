@@ -41,7 +41,7 @@ class Alternative(val idAlternative: Long,
         return newAlternative
     }
 
-    fun listProject(project: Project): List<Alternative>{
+    fun listByProject(project: Project): List<Alternative>{
         //
         var dataList = mutableListOf<Alternative>()
 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.user.login.LoginFragment"
+    >
+
+    <TextView
+        android:id="@+id/text_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/login_textinput_layout_id_user"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:nextFocusDown="@id/login_textinput_edittext_pass"
+        app:helperText="@string/login_user_helper"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/login_textinput_edittext_id_user"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="no"
+            android:hint="@string/user_id"
+            android:inputType="text"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_textinput_layout_pass"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:helperText="@string/login_pass_helper"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_textinput_edittext_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="no"
+                android:hint="@string/user_pass"
+                android:inputType="textPassword"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.aem.sheap_reloaded.code.things.ShowPass
+            android:id="@+id/login_on_off_pass"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_toggle_off"
+            android:contentDescription="@string/button_off"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:tint="@color/color_state_list"
+            android:scaleType="fitCenter"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/login_button_enter"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/menu_account_login"
+        />
+
+</LinearLayout>

@@ -29,8 +29,8 @@ open class User(val user: String,
         val threadInsertUser = Thread {
             AzureHelper().insertUser(newUser)
         }.apply {
-            join()
             start()
+            join()
         }
         return newUser
     }
@@ -71,7 +71,7 @@ open class User(val user: String,
             join()
         }
         ret = loginUser != User()
-        Log.d("User", "Exist User: $ret")
+        Log.d("seahp_User", "heExist: $ret")
         return ret
     }
 
@@ -90,7 +90,7 @@ open class User(val user: String,
         }
 
         ret = loginUser != User()
-        Log.d("User", "Mail Exist: $ret")
+        Log.d("seahp_User", "mailExist: $ret")
         return ret
     }
 

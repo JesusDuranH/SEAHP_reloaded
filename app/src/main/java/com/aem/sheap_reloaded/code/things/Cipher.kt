@@ -3,8 +3,10 @@ package com.aem.sheap_reloaded.code.things
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.util.Log
 import android.widget.Toast
 import org.bouncycastle.jce.provider.BouncyCastleProvider
+import java.io.Serializable
 import java.security.KeyStore
 import java.security.Security
 import javax.crypto.Cipher
@@ -12,7 +14,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
-class Cipher() {
+class Cipher(): Serializable {
 
     private fun getKey(alias: String): SecretKey {
         val keyStore = KeyStore.getInstance("AndroidKeyStore")
@@ -42,6 +44,7 @@ class Cipher() {
                 "${KeyProperties.BLOCK_MODE_CBC}/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")
         cipher.init(Cipher.ENCRYPT_MODE, key)
         val iv = cipher.iv
+        Log.d("seahp_Cipher", "cipher")
         return iv + cipher.doFinal(data)
     }
 
@@ -53,6 +56,7 @@ class Cipher() {
                 "${KeyProperties.BLOCK_MODE_CBC}/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")
         val ivSpec = IvParameterSpec(getIV)
         cipher.init(Cipher.DECRYPT_MODE, key, ivSpec)
+        Log.d("seahp_Cipher", "deCipher")
         return cipher.doFinal(cleanData)
     }
 

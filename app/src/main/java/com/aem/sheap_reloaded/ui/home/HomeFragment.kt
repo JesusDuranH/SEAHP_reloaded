@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.aem.sheap_reloaded.databinding.FragmentHomeBinding
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Project
@@ -121,8 +122,8 @@ class HomeFragment : Fragment() {
     private fun buttonOperation(){
         val profile: FloatingActionButton = binding.homeButtonProfile
         profile.setOnClickListener {
-            //if (login) findNavController().navigate(R.id.action_nav_home_to_profile)
-            //else findNavController().navigate(R.id.action_nav_home_to_login_sign_up)
+            if (login) //findNavController().navigate(R.id.action_nav_home_to_profile)
+            else findNavController().navigate(R.id.action_nav_home_to_login_sign_up)
         }
 
         val projectList: Button = binding.homeButtonProject

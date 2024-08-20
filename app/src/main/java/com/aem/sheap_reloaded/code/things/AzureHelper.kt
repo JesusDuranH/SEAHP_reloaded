@@ -219,7 +219,7 @@ class AzureHelper {
                             val pass = ""
                             loginUser = User(user, name, getMail, pass)
                         }
-                        Log.d("AzureDB", "getUserByMail: $loginUser")
+                        Log.d("seahp_AzureDB", "getUserByMail: $loginUser")
                         callback(loginUser)
                     }
                 }
@@ -753,7 +753,7 @@ class AzureHelper {
                                     val type = rs.getInt(TABLE_MATRIX[8])
                                     searchMatrix = Matrix(id, name, desc, row, column, getUser, getProject, type)
                                 }
-                                Log.d("AzureDB", "getMatrixByIDnUser $searchMatrix")
+                                Log.d("seahp_AzureDB", "getMatrixByIDnUser $searchMatrix")
                                 callback(searchMatrix)
                             }
                         }

@@ -122,7 +122,7 @@ class HomeFragment : Fragment() {
     private fun buttonOperation(){
         val profile: FloatingActionButton = binding.homeButtonProfile
         profile.setOnClickListener {
-            if (login) //findNavController().navigate(R.id.action_nav_home_to_profile)
+            if (login) findNavController().navigate(R.id.action_nav_home_to_profile)
             else findNavController().navigate(R.id.action_nav_home_to_login_sign_up)
         }
 

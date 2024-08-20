@@ -110,7 +110,7 @@ open class User(val user: String,
         return listUser
     }
 
-    private fun set(setUser: User, context: Context){
+    fun set(setUser: User, context: Context){
         save.saveOnFile(context,
             context.getString(R.string.save_folder),
             context.getString(R.string.save_user_online_tittle),
@@ -118,7 +118,7 @@ open class User(val user: String,
             context.getString(R.string.alias_user))
     }
 
-    private fun get(context: Context): User {
+    fun get(context: Context): User {
         val userOnByte = save.readOnFile(context,
             context.getString(R.string.save_folder),
             context.getString(R.string.save_user_online_tittle),

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.user.profile.ProfileFragment"
+    >
+
+    <TextView
+        android:id="@+id/text_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/profile_textview_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:text="@string/user_user"
+        />
+
+    <TextView
+        android:id="@+id/profile_textview_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:text="@string/user_name"
+        />
+
+    <TextView
+        android:id="@+id/profile_textview_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:text="@string/user_email"
+        />
+
+    <TextView
+        android:id="@+id/profile_textview_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:text="@string/user_pass_last_change"
+        />
+
+    <Button
+        android:id="@+id/profile_button_edit"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/button_edit"
+        />
+
+    <Button
+        android:id="@+id/profile_button_logout"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/button_logout"
+        />
+
+</LinearLayout>

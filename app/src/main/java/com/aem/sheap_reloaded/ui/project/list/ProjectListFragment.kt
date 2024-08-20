@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Participant
@@ -107,7 +108,7 @@ class ProjectListFragment: Fragment() {
     private fun buttonOperation(){
         val create: FloatingActionButton = binding.projectListButtonCreate
         create.setOnClickListener {
-            //findNavController().navigate(R.id.action_nav_project_list_to_create)
+            findNavController().navigate(R.id.action_nav_project_list_to_create)
         }
     }
 

@@ -55,6 +55,18 @@
         android:label="@string/menu_project_list"
         tools:layout="@layout/fragment_project_list"
         >
+        <action
+            android:id="@+id/action_nav_project_list_to_create"
+            app:destination="@id/nav_project_create"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create"
+        android:name="com.aem.sheap_reloaded.ui.project.create.ProjectCreateFragment"
+        android:label="@string/menu_project_create"
+        tools:layout="@layout/fragment_project_create"
+        >
     </fragment>
 
 

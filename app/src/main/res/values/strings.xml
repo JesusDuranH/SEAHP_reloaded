@@ -1,13 +1,164 @@
 <resources>
-    <string name="app_name">SHEAP_reloaded</string>
+    <string name="app_name">SEAHP</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+
+    <string name="nav_header_title">SEAHP</string>
+    <string name="nav_header_subtitle">Sistema De Evaluación AHP (Analytic Hierarchy Process)</string>
     <string name="nav_header_desc">Navigation header</string>
+
     <string name="action_settings">Settings</string>
 
+    <string name="menu_info">Info</string>
     <string name="menu_home">Home</string>
+    <string name="menu_loading">Loading, please wait…</string>
+
+    <string name="fundamental_scale_1">Equally Preferred</string>
+    <string name="fundamental_scale_2">Equally to Moderately Preferred</string>
+    <string name="fundamental_scale_3">Moderately Preferred</string>
+    <string name="fundamental_scale_4">Moderately to Strongly Preferred</string>
+    <string name="fundamental_scale_5">Strongly Preferred</string>
+    <string name="fundamental_scale_6">Strongly to Very Strongly Preferred</string>
+    <string name="fundamental_scale_7">Very Strongly Preferred</string>
+    <string name="fundamental_scale_8">Very to Extremely Strongly Preferred</string>
+    <string name="fundamental_scale_9">Extremely Preferred</string>
+
+    <string name="fundamental_scale_option_a">Option A</string>
+    <string name="fundamental_scale_option_b">Option B</string>
+
+    <string name="menu_account">Account</string>
+    <string name="menu_account_profile">Profile</string>
+    <string name="menu_account_sign_up">Sign Up</string>
+    <string name="menu_account_login">Login</string>
+    <string name="menu_account_login_sign_up">Login / Sign Up</string>
+
+    <string name="menu_project">Project</string>
+    <string name="menu_project_list">List</string>
+    <string name="menu_project_create">Create</string>
+    <string name="menu_project_edit">Edit</string>
+    <string name="menu_project_remove">Remove</string>
+    <string name="menu_project_users">Users</string>
+
+    <string name="menu_assess">Assess</string>
+    <string name="menu_assess_perform">Perform</string>
+    <string name="menu_assess_result">Result</string>
+
+    <string name="error">Error</string>
+    <string name="error_empty">Empty</string>
+
+    <string name="error_user">Invalid User</string>
+    <string name="error_user_oc">User Already Exists</string>
+    <string name="error_name">Invalid User Name</string>
+    <string name="error_mail">Invalid Mail</string>
+    <string name="error_mail_oc">Mail Already Exists</string>
+    <string name="error_pass">Invalid Password</string>
+    <string name="error_other_pass">Incorrect Password</string>
+    <string name="error_between_pass">Chose The Same Password</string>
+
+    <string name="error_project">Invalid Project</string>
+    <string name="error_matrix">Invalid Matrix</string>
+
+    <string name="error_project_name">Invalid Project Name</string>
+    <string name="error_project_desc">Invalid Project Description</string>
+
+    <string name="error_read">Cannot be read</string>
+    <string name="error_write">Cannot be write</string>
+    <string name="error_save_write">Error saving</string>
+
+    <string name="login_true">Login Successful</string>
+    <string name="login_user_helper">Nombre de Usuario Unico (4-25)&#10;aA-zZ | 0-9</string>
+    <string name="login_pass_helper">3 Letras Mayusculas / minusculas&#10;3 Numeros&#10;3 Caracteres Especiales</string>
+
+    <string name="sing_up_user_helper">Nombre de Usuario Unico (4-25)&#10;aA-zZ | 0-9</string>
+    <string name="sing_up_name_helper">Nombre dentro de la App (1-50)&#10;aA-zZ</string>
+    <string name="sing_up_mail_helper">ejemplo@dominio.com</string>
+    <string name="sing_up_pass_helper">3 Letras Mayusculas / minusculas&#10;3 Numeros&#10;3 Caracteres Especiales</string>
+    <string name="sing_up_pass_2_helper">Repite la misma contraseña</string>
+
+    <string name="save_folder">Data</string>
+    <string name="save_user_online_tittle">OnlineUser</string>
+    <string name="save_user_offline_tittle">OfflineUser</string>
+    <string name="save_project_tittle">Project</string>
+    <string name="save_project_edit">Edit</string>
+    <string name="save_matrix">Matrix</string>
+    <string name="save_Element">Element</string>
+    <string name="save_ElementB">ElementB</string>
+
+    <string name="alias_user">Users</string>
+    <string name="alias_project">Projects</string>
+    <string name="alias_edit">Edits</string>
+    <string name="alias_matrix">Matrix</string>
+    <string name="alias_element">Element</string>
+    <string name="alias_elementB">ElementB</string>
+    <string name="alias_online">connection.ars</string>
+
+    <string name="button_save">Save</string>
+    <string name="button_logout">Logout</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_create">Create</string>
+    <string name="button_finish">Finish</string>
+    <string name="button_next">Next</string>
+    <string name="button_add">Add</string>
+    <string name="button_search">Search</string>
+    <string name="button_on">On</string>
+    <string name="button_off">Off</string>
+
+    <string name="project_id">ID Project</string>
+    <string name="project_name">Project Name</string>
+    <string name="project_description">Project Description (Optional)</string>
+    <string name="project_n_criteria">Project n Criteria</string>
+    <string name="project_name_criteria">Project Name Criteria</string>
+    <string name="project_criteria">Project Criteria</string>
+    <string name="project_n_alternative">Project n Alternative</string>
+    <string name="project_name_alternative">Project Name Alternative</string>
+    <string name="project_alternative">Project Alternative</string>
+    <string name="project_select_assess">Select Assess</string>
+    <string name="project_assess_alternative">Assess Alternative</string>
+    <string name="project_assess_criteria">Assess Criteria</string>
+    <string name="project_assess_criteria_alternative">Assess Criteria - Alternative</string>
+    <string name="project_users">Project Users</string>
+
+    <string name="criteria_name">Criteria Name</string>
+    <string name="criteria_desc">Criteria Description (Optional)</string>
+    <string name="criteria_sub">Sub-Criteria</string>
+    <string name="criteria_value">Criteria Value</string>
+
+    <string name="alternative_name">Alternative Name</string>
+    <string name="alternative_desc">Alternative Description (Optional)</string>
+
+    <string name="user_id">ID User</string>
+    <string name="user_user">User</string>
+    <string name="user_name">Name</string>
+    <string name="user_email">E-mail</string>
+    <string name="user_pass">Password</string>
+    <string name="user_confirm_pass">Confirm Password</string>
+    <string name="user_pass_last_change">Last Change Password</string>
+
+    <string name="participant_type">Type</string>
+
+    <string name="matrix_criteria_alternative">Criteria Alternative</string>
+
+    <string name="home_mode">Mode</string>
+    <string name="home_mode_online">Online</string>
+    <string name="home_mode_offline">Offline</string>
+    <string name="home_mode_connecting">Connecting</string>
+    <string name="home_user_welcome_0">Welcome, login or Register -></string>
+    <string name="home_user_welcome_1">Welcome back: </string>
+    <string name="home_last_project_default">Name \nDescription</string>
+    <string name="home_last_project_false">Nothing to see</string>
+
+    <string name="project_list_screen">Current Project\'s</string>
+    <string name="project_name_helper">Nombre de Proyecto (5-25)&#10;aA-zZ | 0-9</string>
+    <string name="project_desc_helper">Descripcion de Proyecto (0-50)&#10;aA-zZ | 0-9</string>
+
+    <string name="user_power_na">No Participante</string>
+    <string name="user_power_0">Participante</string>
+    <string name="user_power_1">Editor</string>
+    <string name="user_power_2">Administrador</string>
+    <string name="user_power_no_access">No Access</string>
+
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 </resources>

@@ -80,6 +80,10 @@
             app:destination="@id/nav_project_create_alternative"
             />
         <action
+            android:id="@+id/action_nav_project_edit_to_project_users"
+            app:destination="@id/nav_project_create_users"
+            />
+        <action
             android:id="@+id/action_nav_project_edit_to_project_list"
             app:destination="@id/nav_project_list"
             />
@@ -131,9 +135,35 @@
         tools:layout="@layout/fragment_project_create_alternative"
         >
         <action
+            android:id="@+id/action_nav_project_create_alternative_to_create_users"
+            app:destination="@id/nav_project_create_users"
+            app:popUpTo="@id/nav_project_create_alternative"
+            app:popUpToInclusive="true"
+            />
+        <action
             android:id="@+id/action_nav_project_create_alternative_to_project_edit"
             app:destination="@id/nav_project_edit"
             app:popUpTo="@id/nav_project_create_alternative"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create_users"
+        android:name="com.aem.sheap_reloaded.ui.project.create.participant.ParticipantFragment"
+        android:label="Create users"
+        tools:layout="@layout/fragment_project_create_participant"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_users_to_list_finish"
+            app:destination="@id/nav_project_list"
+            app:popUpTo="@id/nav_project_create_users"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_nav_project_create_users_to_project_edit"
+            app:destination="@id/nav_project_edit"
+            app:popUpTo="@id/nav_project_create_users"
             app:popUpToInclusive="true"
             />
     </fragment>

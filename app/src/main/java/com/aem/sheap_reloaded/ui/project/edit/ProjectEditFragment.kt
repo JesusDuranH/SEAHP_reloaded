@@ -131,7 +131,7 @@ class ProjectEditFragment: Fragment() {
                 findNavController().navigate(R.id.action_nav_project_edit_to_project_criteria)
             }
             projectEditButtonUsers.setOnClickListener {
-                //findNavController().navigate(R.id.action_nav_project_edit_to_project_users)
+                findNavController().navigate(R.id.action_nav_project_edit_to_project_users)
             }
             projectEditButtonDelete.isEnabled = false
             projectEditButtonDelete.setOnClickListener {

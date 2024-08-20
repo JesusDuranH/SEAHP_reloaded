@@ -56,7 +56,6 @@ class HomeFragment : Fragment() {
         }
 
         getConnection()
-        buttonOperation()
 
         return root
     }
@@ -96,9 +95,11 @@ class HomeFragment : Fragment() {
                     login = User().login(user.user, user.pass, context) == 3 //Consulta a DB
                     if (!login) user = User()                           //Procesar la Info
                 }
+                Log.d("seahp_HomeFragment", "setVar: login = $login")
+
             }
             catch (e: Exception){
-                Log.d("seahp_HomeFragment", "setVar: user = null\n${e.message}")
+                Log.d("seahp_HomeFragment", "setVar: login = null\n${e.message}")
                 User()
             }
             try {
@@ -107,6 +108,7 @@ class HomeFragment : Fragment() {
                     val exist = Project().getByID(project.idProject)
                     if (exist != Project()) lastProject = true
                 }
+                Log.d("seahp_HomeFragment", "setVar: project = $project")
             }
             catch (e: Exception) {
                 Log.d("seahp_HomeFragment", "setVar: project = null\n${e.message}")
@@ -114,7 +116,8 @@ class HomeFragment : Fragment() {
             }
             withContext(Dispatchers.Main){
                 if (login) binding.textHomeUser.text = getString(R.string.home_user_welcome_1) + user.user // Resultado
-                loading.dismiss()                                 //Termina Loading
+                loading.dismiss() //Termina Loading
+                buttonOperation()
             }
         }
     }
@@ -129,7 +132,7 @@ class HomeFragment : Fragment() {
         val projectList: Button = binding.homeButtonProject
         if (!login) projectList.isEnabled = false
         projectList.setOnClickListener {
-            //findNavController().navigate(R.id.action_nav_home_to_project_list)
+            findNavController().navigate(R.id.action_nav_home_to_project_list)
         }
 
         val lastProjectButton: Button = binding.homeButtonLastProject

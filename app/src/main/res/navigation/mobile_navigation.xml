@@ -19,6 +19,10 @@
             android:id="@+id/action_nav_home_to_profile"
             app:destination="@id/nav_account_profile"
             />
+        <action
+            android:id="@+id/action_nav_home_to_project_list"
+            app:destination="@id/nav_project_list"
+            />
     </fragment>
 
     <fragment
@@ -43,6 +47,14 @@
             android:id="@+id/action_nav_profile_to_home_logout"
             app:destination="@id/nav_home"
             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_list"
+        android:name="com.aem.sheap_reloaded.ui.project.list.ProjectListFragment"
+        android:label="@string/menu_project_list"
+        tools:layout="@layout/fragment_project_list"
+        >
     </fragment>
 
 

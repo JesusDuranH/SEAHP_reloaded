@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import com.aem.sheap_reloaded.R
 
 class LoadingDialogFragment: DialogFragment() {
-
+    //
     companion object {
         private const val ARG_MESSAGE = "arg_message"
 

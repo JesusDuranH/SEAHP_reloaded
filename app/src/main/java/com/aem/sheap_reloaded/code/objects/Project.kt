@@ -69,7 +69,6 @@ open class Project( val idProject : Long,
     }
 
     override fun toString(): String {
-        //return "\nProyecto = Nombre: $nameProject | Descripcion: $descriptionProject | id: $idProject"
         return "Project($idProject, \"$nameProject\", \"$descriptionProject\")"
     }
 

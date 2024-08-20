@@ -1,11 +1,6 @@
 package com.aem.sheap_reloaded.code.objects
 
-import android.util.Log
 import com.aem.sheap_reloaded.code.things.AzureHelper
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -95,13 +90,13 @@ open class Matrix(val idMatrix: Long,
 
         val list = mutableListOf<Matrix>()
         var count: Long = 3
-        for (item in listCriteria){
+        for (item in listCriteria) {
             val name = "Alternative - Alternative by ${item.nameCriteria} | Project: ${project.nameProject}"
             val desc = "Alternative - Alternative Evaluation Matrix by ${item.nameCriteria} " +
                     "with $y Rows and Columns"
             var matrix = Matrix()
             val threadMatrix = Thread {
-                matrix = create(user, project, y, y, name, desc,count)
+                matrix = create(user, project, y, y, name, desc, count)
             }.apply {
                 start()
                 join()
@@ -109,8 +104,23 @@ open class Matrix(val idMatrix: Long,
             list.add(matrix)
             count++
         }
-        val result = list
-        return result
+        return list
+    }
+
+    fun toByteArray(matrix: Matrix): ByteArray {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        val objectOutputStream = ObjectOutputStream(byteArrayOutputStream)
+        objectOutputStream.writeObject(matrix)
+        return byteArrayOutputStream.toByteArray()
+    }
+
+    fun toMatrix(byteArray: ByteArray): Matrix {
+        return ObjectInputStream(ByteArrayInputStream(byteArray)).readObject() as Matrix
+    }
+
+    override fun toString(): String {
+        return "Matrix($idMatrix, \"$nameMatrix\", \"$descriptionMatrix\", $rowMax, $columnMax, " +
+                "${project.idProject}, \"${project.nameProject}\", \"${project.descriptionProject}\"), \n"
     }
 /*
 
@@ -206,19 +216,5 @@ open class Matrix(val idMatrix: Long,
         return listColumnElement
     }
 
-    fun toByteArray(matrix: Matrix): ByteArray {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        val objectOutputStream = ObjectOutputStream(byteArrayOutputStream)
-        objectOutputStream.writeObject(matrix)
-        return byteArrayOutputStream.toByteArray()
-    }
-
-    fun toMatrix(byteArray: ByteArray): Matrix {
-        return ObjectInputStream(ByteArrayInputStream(byteArray)).readObject() as Matrix
-    }
-
-    override fun toString(): String {
-        return "Matrix($idMatrix, \"$nameMatrix\", \"$descriptionMatrix\", $rowMax, $columnMax, " +
-                "${project.idProject}, \"${project.nameProject}\", \"${project.descriptionProject}\"), \n"
-    }*/
+    */
 }

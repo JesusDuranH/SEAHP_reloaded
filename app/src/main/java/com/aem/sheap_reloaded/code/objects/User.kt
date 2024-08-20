@@ -159,7 +159,6 @@ open class User(val user: String,
     }
 
     override fun toString(): String {
-        //return "Usuario: $user | Nombre: $name | Mail: $mail | Pass: $pass"
         return "User(\"$user\", \"$name\", \"$mail\", \"$pass\")"
     }
 

@@ -35,13 +35,13 @@ class ProjectListRecyclerViewAdapter (private val participants: List<Participant
                             Toast.LENGTH_SHORT).show()
                     } else {
                         SEAHP().setStatus(true, context)
-                        SEAHP().setProject(dataProject, context)
+                        Project().set(dataProject, context)
                         //Navigation.findNavController(view).navigate(R.id.action_nav_project_list_to_edit)
                     }
                 }
 
                 root.setOnClickListener {
-                    SEAHP().setProject(dataProject, root.context)
+                    Project().set(dataProject, root.context)
                     //Navigation.findNavController(view).navigate(R.id.action_nav_project_list_to_assess)
                 }
             }

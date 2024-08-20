@@ -63,9 +63,23 @@
 
     <fragment
         android:id="@+id/nav_project_create"
-        android:name="com.aem.sheap_reloaded.ui.project.create.ProjectCreateFragment"
+        android:name="com.aem.sheap_reloaded.ui.project.create.project.ProjectCreateFragment"
         android:label="@string/menu_project_create"
         tools:layout="@layout/fragment_project_create"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_to_create_criteria"
+            app:destination="@+id/nav_project_create_criteria"
+            app:popUpTo="@id/nav_project_create"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create_criteria"
+        android:name="com.aem.sheap_reloaded.ui.project.create.criteria.CriteriaFragment"
+        android:label="Create Criteria"
+        tools:layout="@layout/fragment_project_create_criteria"
         >
     </fragment>
 

@@ -103,7 +103,7 @@ class HomeFragment : Fragment() {
                 User()
             }
             try {
-                project = configProject.getProject(context)
+                project = Project().get(context)
                 if (project != Project()){
                     val exist = Project().getByID(project.idProject)
                     if (exist != Project()) lastProject = true

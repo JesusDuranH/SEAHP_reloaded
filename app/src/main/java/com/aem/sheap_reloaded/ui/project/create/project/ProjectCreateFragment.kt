@@ -1,13 +1,11 @@
-package com.aem.sheap_reloaded.ui.project.create
+package com.aem.sheap_reloaded.ui.project.create.project
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -109,12 +107,12 @@ class ProjectCreateFragment: Fragment() {
                     val newParticipant = withContext(Dispatchers.IO){
                         Participant().create(user, newProject, 2)
                     }
-                    configProject.setProject(newProject, requireContext())
+                    Project().set(newProject, requireContext())
                     withContext(Dispatchers.Main) {
                         loadingDialog.dismiss()
                         clearText(projectCreateTextinputEdittextName)
                         clearText(projectCreateTextinputEdittextDescription)
-                        //findNavController().navigate(R.id.action_nav_project_create_to_create_criteria)
+                        findNavController().navigate(R.id.action_nav_project_create_to_create_criteria)
                     }
                 }
             }

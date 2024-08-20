@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.project.create.ProjectCreateFragment"
+    tools:context=".ui.project.create.project.ProjectCreateFragment"
     >
 
     <TextView

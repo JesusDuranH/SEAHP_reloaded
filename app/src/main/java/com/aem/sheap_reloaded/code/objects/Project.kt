@@ -1,6 +1,9 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.content.Context
+import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -14,6 +17,8 @@ open class Project( val idProject : Long,
 ): Serializable {
     //
     constructor(): this(0, "",null)
+
+    private val save = Save()
 
     fun create(name: String, desc: String?): Project{
         //
@@ -55,6 +60,23 @@ open class Project( val idProject : Long,
             join()
         }
         return dataProject
+    }
+
+    fun set(setProject: Project, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_project_tittle),
+            Project().toByteArray(setProject),
+            context.getString(R.string.alias_project))
+    }
+
+    fun get(context: Context): Project {
+        val project = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_project_tittle),
+            context.getString(R.string.alias_project))
+        return if (project != null) Project().toProject(project)
+        else Project()
     }
 
     fun toByteArray(project: Project): ByteArray {

@@ -12,22 +12,7 @@ import java.io.DataOutputStream
 class SEAHP() {
     private val save = Save()
 
-    fun setProject(setProject: Project, context: Context){
-        save.saveOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_project_tittle),
-            Project().toByteArray(setProject),
-            context.getString(R.string.alias_project))
-    }
 
-    fun getProject(context: Context): Project {
-        val project = save.readOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_project_tittle),
-            context.getString(R.string.alias_project))
-        return if (project != null) Project().toProject(project)
-        else Project()
-    }
 
     fun setStatus(isEdit: Boolean, context: Context){
         save.saveOnFile(context,

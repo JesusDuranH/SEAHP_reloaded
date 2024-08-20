@@ -3,6 +3,7 @@ package com.aem.sheap_reloaded.code.things
 import android.content.Context
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.User
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
@@ -42,6 +43,23 @@ class SEAHP() {
             context.getString(R.string.save_project_edit),
             context.getString(R.string.alias_edit))
         return byteArrayToBoolean(isEdit!!)
+    }
+
+    fun setUser(setUser: User, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_user_online_tittle),
+            setUser.toByteArray(setUser),
+            context.getString(R.string.alias_user))
+    }
+
+    fun getUser(context: Context): User{
+        val userOnByte = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_user_online_tittle),
+            context.getString(R.string.alias_user))
+        return if (userOnByte == null) User()
+        else User().toUser(userOnByte)
     }
 
     private fun booleanToByteArray(value: Boolean): ByteArray {

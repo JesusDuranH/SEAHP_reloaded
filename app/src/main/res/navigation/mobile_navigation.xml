@@ -56,9 +56,34 @@
         tools:layout="@layout/fragment_project_list"
         >
         <action
+            android:id="@+id/action_nav_project_list_to_edit"
+            app:destination="@id/nav_project_edit"
+            />
+        <action
             android:id="@+id/action_nav_project_list_to_create"
             app:destination="@id/nav_project_create"
             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_edit"
+        android:name="com.aem.sheap_reloaded.ui.project.edit.ProjectEditFragment"
+        android:label="@string/menu_project_edit"
+        tools:layout="@layout/fragment_project_edit"
+        >
+        <action
+            android:id="@+id/action_nav_project_edit_to_project_criteria"
+            app:destination="@id/nav_project_create_criteria"
+            />
+        <action
+            android:id="@+id/action_nav_project_edit_to_project_list"
+            app:destination="@id/nav_project_list"
+            />
+        <action
+            android:id="@+id/action_nav_project_edit_to_list_delete"
+            app:destination="@id/nav_project_list"
+            />
+
     </fragment>
 
     <fragment
@@ -81,6 +106,12 @@
         android:label="Create Criteria"
         tools:layout="@layout/fragment_project_create_criteria"
         >
+        <action
+            android:id="@+id/action_nav_project_create_criteria_to_project_edit"
+            app:destination="@id/nav_project_edit"
+            app:popUpTo="@id/nav_project_create_criteria"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
 

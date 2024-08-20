@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Participant
@@ -36,7 +37,7 @@ class ProjectListRecyclerViewAdapter (private val participants: List<Participant
                     } else {
                         SEAHP().setStatus(true, context)
                         Project().set(dataProject, context)
-                        //Navigation.findNavController(view).navigate(R.id.action_nav_project_list_to_edit)
+                        Navigation.findNavController(view).navigate(R.id.action_nav_project_list_to_edit)
                     }
                 }
 

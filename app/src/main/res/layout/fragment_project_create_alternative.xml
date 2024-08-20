@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.project.create.criteria.CriteriaFragment"
+    tools:context=".ui.project.create.alternative.AlternativeFragment"
     >
 
     <LinearLayout
@@ -17,7 +17,7 @@
         >
 
         <TextView
-            android:id="@+id/text_project_create_criteria"
+            android:id="@+id/text_project_create_alternative"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -29,7 +29,7 @@
             />
 
         <Button
-            android:id="@+id/project_create_criteria_button_next"
+            android:id="@+id/project_create_alternative_button_next"
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,8 +45,8 @@
         android:layout_weight="1"
         >
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/project_create_criteria_recyclerView"
-            tools:listitem="@layout/item_criteria"
+            android:id="@+id/project_create_alternative_recyclerView"
+            tools:listitem="@layout/item_alternative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -59,7 +59,7 @@
         >
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/project_create_criteria_textinput_layout_name"
+            android:id="@+id/project_create_alternative_textinput_layout_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,11 +67,11 @@
             app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/project_create_criteria_textinput_edittext_name"
+                android:id="@+id/project_create_alternative_textinput_edittext_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:autofillHints="no"
-                android:hint="@string/criteria_name"
+                android:hint="@string/alternative_name"
                 android:inputType="text"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -83,7 +83,7 @@
             >
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_create_criteria_textinput_layout_desc"
+                android:id="@+id/project_create_alternative_textinput_layout_desc"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -92,17 +92,17 @@
                 app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 >
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/project_create_criteria_textinput_edittext_desc"
+                    android:id="@+id/project_create_alternative_textinput_edittext_desc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:autofillHints="no"
-                    android:hint="@string/criteria_desc"
+                    android:hint="@string/alternative_desc"
                     android:inputType="text"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/project_create_criteria_button_add"
+                android:id="@+id/project_create_alternative_button_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/button_add"

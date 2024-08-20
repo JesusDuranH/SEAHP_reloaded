@@ -125,7 +125,7 @@ class ProjectEditFragment: Fragment() {
                 }
             }
             projectEditButtonAlternative.setOnClickListener {
-                //findNavController().navigate(R.id.action_nav_project_edit_to_project_alternative)
+                findNavController().navigate(R.id.action_nav_project_edit_to_project_alternative)
             }
             projectEditButtonCriteria.setOnClickListener {
                 findNavController().navigate(R.id.action_nav_project_edit_to_project_criteria)

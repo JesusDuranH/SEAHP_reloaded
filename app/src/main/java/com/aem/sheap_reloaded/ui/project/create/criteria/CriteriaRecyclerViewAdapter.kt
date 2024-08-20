@@ -8,13 +8,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Criteria
-import com.aem.sheap_reloaded.databinding.ItemCriteriaAlternativeBinding
+import com.aem.sheap_reloaded.databinding.ItemCriteriaBinding
 
 class CriteriaRecyclerViewAdapter (private val criteria: List<Criteria>):
     RecyclerView.Adapter<CriteriaRecyclerViewAdapter.CriteriaHolder>(){
         //
         inner class CriteriaHolder (val view:View): RecyclerView.ViewHolder(view){
-            val binding = ItemCriteriaAlternativeBinding.bind(view)
+            val binding = ItemCriteriaBinding.bind(view)
 
             fun render(criteria: Criteria){
                 with(binding){
@@ -44,7 +44,7 @@ class CriteriaRecyclerViewAdapter (private val criteria: List<Criteria>):
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CriteriaHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return CriteriaHolder(layoutInflater.inflate(
-            R.layout.item_criteria_alternative, parent, false))
+            R.layout.item_criteria, parent, false))
     }
 
     override fun getItemCount(): Int = criteria.size

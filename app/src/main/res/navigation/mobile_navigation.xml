@@ -76,6 +76,10 @@
             app:destination="@id/nav_project_create_criteria"
             />
         <action
+            android:id="@+id/action_nav_project_edit_to_project_alternative"
+            app:destination="@id/nav_project_create_alternative"
+            />
+        <action
             android:id="@+id/action_nav_project_edit_to_project_list"
             app:destination="@id/nav_project_list"
             />
@@ -107,9 +111,29 @@
         tools:layout="@layout/fragment_project_create_criteria"
         >
         <action
+            android:id="@+id/action_nav_project_create_criteria_to_create_alternative"
+            app:destination="@id/nav_project_create_alternative"
+            app:popUpTo="@id/nav_project_create_criteria"
+            app:popUpToInclusive="true"
+            />
+        <action
             android:id="@+id/action_nav_project_create_criteria_to_project_edit"
             app:destination="@id/nav_project_edit"
             app:popUpTo="@id/nav_project_create_criteria"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create_alternative"
+        android:name="com.aem.sheap_reloaded.ui.project.create.alternative.AlternativeFragment"
+        android:label="Create Alternative"
+        tools:layout="@layout/fragment_project_create_alternative"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_alternative_to_project_edit"
+            app:destination="@id/nav_project_edit"
+            app:popUpTo="@id/nav_project_create_alternative"
             app:popUpToInclusive="true"
             />
     </fragment>

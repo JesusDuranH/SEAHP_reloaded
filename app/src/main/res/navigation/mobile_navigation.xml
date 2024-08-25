@@ -9,17 +9,164 @@
         android:id="@+id/nav_home"
         android:name="com.aem.sheap_reloaded.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home"
+        >
+        <action
+            android:id="@+id/action_nav_home_to_login_sign_up"
+            app:destination="@id/nav_account_login_signup"
+            />
+        <action
+            android:id="@+id/action_nav_home_to_profile"
+            app:destination="@id/nav_account_profile"
+            />
+        <action
+            android:id="@+id/action_nav_home_to_project_list"
+            app:destination="@id/nav_project_list"
+            />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.aem.sheap_reloaded.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_account_login_signup"
+        android:name="com.aem.sheap_reloaded.ui.user.container.UserContainerFragment"
+        android:label="@string/menu_account_login_sign_up"
+        tools:layout="@layout/fragment_user_container"
+        >
+        <action
+            android:id="@+id/action_nav_account_login_signup_to_home"
+            app:popUpTo="@id/nav_home"
+            />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.aem.sheap_reloaded.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_account_profile"
+        android:name="com.aem.sheap_reloaded.ui.user.profile.ProfileFragment"
+        android:label="@string/menu_account_profile"
+        tools:layout="@layout/fragment_user_profile"
+        >
+        <action
+            android:id="@+id/action_nav_profile_to_home_logout"
+            app:destination="@id/nav_home"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_list"
+        android:name="com.aem.sheap_reloaded.ui.project.list.ProjectListFragment"
+        android:label="@string/menu_project_list"
+        tools:layout="@layout/fragment_project_list"
+        >
+        <action
+            android:id="@+id/action_nav_project_list_to_edit"
+            app:destination="@id/nav_project_edit"
+            />
+        <action
+            android:id="@+id/action_nav_project_list_to_create"
+            app:destination="@id/nav_project_create"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_edit"
+        android:name="com.aem.sheap_reloaded.ui.project.edit.ProjectEditFragment"
+        android:label="@string/menu_project_edit"
+        tools:layout="@layout/fragment_project_edit"
+        >
+        <action
+            android:id="@+id/action_nav_project_edit_to_project_criteria"
+            app:destination="@id/nav_project_create_criteria"
+            />
+        <action
+            android:id="@+id/action_nav_project_edit_to_project_alternative"
+            app:destination="@id/nav_project_create_alternative"
+            />
+        <action
+            android:id="@+id/action_nav_project_edit_to_project_users"
+            app:destination="@id/nav_project_create_users"
+            />
+        <action
+            android:id="@+id/action_nav_project_edit_to_project_list"
+            app:destination="@id/nav_project_list"
+            />
+        <action
+            android:id="@+id/action_nav_project_edit_to_list_delete"
+            app:destination="@id/nav_project_list"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create"
+        android:name="com.aem.sheap_reloaded.ui.project.create.project.ProjectCreateFragment"
+        android:label="@string/menu_project_create"
+        tools:layout="@layout/fragment_project_create"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_to_create_criteria"
+            app:destination="@+id/nav_project_create_criteria"
+            app:popUpTo="@id/nav_project_create"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create_criteria"
+        android:name="com.aem.sheap_reloaded.ui.project.create.criteria.CriteriaFragment"
+        android:label="Create Criteria"
+        tools:layout="@layout/fragment_project_create_criteria"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_criteria_to_create_alternative"
+            app:destination="@id/nav_project_create_alternative"
+            app:popUpTo="@id/nav_project_create_criteria"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_nav_project_create_criteria_to_project_edit"
+            app:destination="@id/nav_project_edit"
+            app:popUpTo="@id/nav_project_create_criteria"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create_alternative"
+        android:name="com.aem.sheap_reloaded.ui.project.create.alternative.AlternativeFragment"
+        android:label="Create Alternative"
+        tools:layout="@layout/fragment_project_create_alternative"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_alternative_to_create_users"
+            app:destination="@id/nav_project_create_users"
+            app:popUpTo="@id/nav_project_create_alternative"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_nav_project_create_alternative_to_project_edit"
+            app:destination="@id/nav_project_edit"
+            app:popUpTo="@id/nav_project_create_alternative"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_create_users"
+        android:name="com.aem.sheap_reloaded.ui.project.create.participant.ParticipantFragment"
+        android:label="Create users"
+        tools:layout="@layout/fragment_project_create_participant"
+        >
+        <action
+            android:id="@+id/action_nav_project_create_users_to_list_finish"
+            app:destination="@id/nav_project_list"
+            app:popUpTo="@id/nav_project_create_users"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_nav_project_create_users_to_project_edit"
+            app:destination="@id/nav_project_edit"
+            app:popUpTo="@id/nav_project_create_users"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+
 </navigation>

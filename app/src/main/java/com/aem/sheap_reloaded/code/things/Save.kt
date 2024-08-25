@@ -12,8 +12,9 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 import java.io.InputStreamReader
+import java.io.Serializable
 
-class Save {
+class Save: Serializable {
     private val config = Cipher()
 
     fun saveOnFile(context: Context, folder: String, tittle: String, content: ByteArray, alias: String){
@@ -30,7 +31,9 @@ class Save {
 
                 bufferedWriter.write(data64)
                 bufferedWriter.close()
+                Log.d("seahp_Save", "saveOnFile: $tittle")
             } catch (e: Exception) {
+                Log.d("seahp_Save", "saveOnFile: ${e.printStackTrace()}")
                 config.showMe(context, context.getString(R.string.error_save_write))
                 e.message?.let { config.showMe(context, it) }
             }
@@ -39,6 +42,7 @@ class Save {
             context.openFileOutput(tittle, Context.MODE_PRIVATE)?.use {
                 //
                 it.write(data64.toByteArray())
+                Log.d("seahp_Save", "saveOnFile: $tittle")
             }
         }
     }
@@ -49,14 +53,15 @@ class Save {
             try {
                 val directoryApp = File(context.getExternalFilesDir(null), folder)
                 if (!directoryApp.exists()) directoryApp.mkdir()
-
                 val file = File(directoryApp, tittle)
                 val cipher64 = file.readText()
                 val cipher = Base64.decode(cipher64)
+                Log.d("seahp_Save", "readOnFile: $tittle")
                 config.deCipher(cipher, alias)
             } catch (e: Exception){
                 config.showMe(context, context.getString(R.string.error_read) +
                         "${e.message}")
+                Log.d("seahp_Save", "readOnFile: ${e.printStackTrace()}")
                 null
             }
         }
@@ -67,6 +72,7 @@ class Save {
                 val reader = BufferedReader(InputStreamReader(it))
                 val cipher64 = reader.readLine()
                 val cipher = Base64.decode(cipher64)
+                Log.d("seahp_Save", "readOnFile: $tittle")
                 red = config.deCipher(cipher, alias)
             }
             red

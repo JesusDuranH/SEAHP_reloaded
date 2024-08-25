@@ -43,6 +43,19 @@ class Criteria(val idCriteria: Long,
         return newCriteria
     }
 
+    fun getByID(idCriteria: Long, project: Long): Criteria{
+        var criteria = Criteria()
+        val threadIDCriteria = Thread{
+            AzureHelper().getCriteriaByID(idCriteria, project){ getCriteria ->
+                criteria = getCriteria
+            }
+        }.apply {
+            start()
+            join()
+        }
+        return criteria
+    }
+
     fun listByProject(project: Project): List<Criteria>{
         //
         var dataList = mutableListOf<Criteria>()

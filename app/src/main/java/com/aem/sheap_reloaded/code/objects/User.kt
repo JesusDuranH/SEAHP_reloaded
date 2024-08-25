@@ -29,8 +29,8 @@ open class User(val user: String,
         val threadInsertUser = Thread {
             AzureHelper().insertUser(newUser)
         }.apply {
-            join()
             start()
+            join()
         }
         return newUser
     }
@@ -71,7 +71,7 @@ open class User(val user: String,
             join()
         }
         ret = loginUser != User()
-        Log.d("User", "Exist User: $ret")
+        Log.d("seahp_User", "heExist: $ret")
         return ret
     }
 
@@ -90,7 +90,7 @@ open class User(val user: String,
         }
 
         ret = loginUser != User()
-        Log.d("User", "Mail Exist: $ret")
+        Log.d("seahp_User", "mailExist: $ret")
         return ret
     }
 
@@ -110,7 +110,7 @@ open class User(val user: String,
         return listUser
     }
 
-    private fun set(setUser: User, context: Context){
+    fun set(setUser: User, context: Context){
         save.saveOnFile(context,
             context.getString(R.string.save_folder),
             context.getString(R.string.save_user_online_tittle),
@@ -118,7 +118,7 @@ open class User(val user: String,
             context.getString(R.string.alias_user))
     }
 
-    private fun get(context: Context): User {
+    fun get(context: Context): User {
         val userOnByte = save.readOnFile(context,
             context.getString(R.string.save_folder),
             context.getString(R.string.save_user_online_tittle),

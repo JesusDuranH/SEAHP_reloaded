@@ -27,7 +27,7 @@ open class Matrix(val idMatrix: Long,
         return newMatrix
     }
 
-    fun listByProjectM(project: Project): List<Matrix> {
+    /*fun listByProjectM(project: Project): List<Matrix> {
         //
         var dataList = mutableListOf<Matrix>()
         val threadListMatrix = Thread {
@@ -39,7 +39,7 @@ open class Matrix(val idMatrix: Long,
             join()
         }
         return dataList
-    }
+    }*/
 
     fun criteriaAlternative(
         user: User,

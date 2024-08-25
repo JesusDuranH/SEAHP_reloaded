@@ -95,7 +95,7 @@ class TextConfig (private val context: Context) {
         editText.setText("")
     }
 
-    fun viewPass(button: ShowPassButton, editText: EditText, context: Context, view: View?) {
+    fun viewPass(button: ShowPass, editText: EditText, context: Context, view: View?) {
         button.setOnTouchListener { _, event ->
             with(button) {
                 when (event.action) {

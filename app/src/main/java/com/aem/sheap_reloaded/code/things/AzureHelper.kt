@@ -56,15 +56,15 @@ class AzureHelper {
         "id_project",   //7
         "us_type")      //8
     private val TABLE_ELEMENT = arrayOf(
-        "elemento",
-        "id_matrix",
-        "id_project",
-        "us_user",
-        "row_ele",
-        "column_ele",
-        "name_ele",
-        "description_ele",
-        "scale_ele")
+        "elemento",     //0
+        "id_matrix",    //1
+        "id_project",   //2
+        "us_user",      //3
+        "row_ele",      //4
+        "column_ele",   //5
+        "name_ele",     //6
+        "description_ele",  //7
+        "scale_ele")        //8
 
     fun getConnection(): Boolean{
         var connect: Boolean = false
@@ -688,7 +688,7 @@ class AzureHelper {
         }
     }
 
-    fun getMatrixListByID(project: Long, matrix: Long, callback: (List<Matrix>) -> Unit){
+    /*fun getMatrixListByID(project: Long, matrix: Long, callback: (List<Matrix>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[1]} = ? AND ${TABLE_MATRIX[7]} = ?"
         Log.d("seahp_AzureDB", "getMatrixListByID: $sql")
@@ -727,36 +727,36 @@ class AzureHelper {
             Log.d("seahp_AzureDB", "getMatrixListByID Exception: " + e.printStackTrace())
             callback(mutableListOf())
         }
-    }
+    }*/
 
-    fun getMatrixByIDnUser(project: Project, matrix: Matrix, user: User, callback: (Matrix) -> Unit){
+    fun getMatrixByID(project: Project, matrix: Matrix, callback: (Matrix) -> Unit){
         //
-        val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[1]} = ? AND ${TABLE_MATRIX[6]} = ?" +
-                "${TABLE_MATRIX[7]} AND = ?"
+        val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[1]} = ?" +
+                "AND ${TABLE_MATRIX[7]} = ?"
         Log.d("seahp_AzureDB", "getMatrixByIDnUser: $sql")
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
                     getProjectByID(project.idProject){getProject ->
-                        getUserByID(user.user){getUser ->
-                            statement.setLong(1, matrix.idMatrix)
-                            statement.setString(2, getUser.user)
-                            statement.setLong(3, getProject.idProject)
-                            statement.executeQuery().use { rs ->
-                                var searchMatrix = Matrix()
-                                while (rs.next()) {
-                                    val id = rs.getLong(TABLE_MATRIX[1])
-                                    val name = rs.getString(TABLE_MATRIX[2])
-                                    val desc = rs.getString(TABLE_MATRIX[3])
-                                    val row = rs.getInt(TABLE_MATRIX[4])
-                                    val column = rs.getInt(TABLE_MATRIX[5])
-                                    val type = rs.getInt(TABLE_MATRIX[8])
+                        statement.setLong(1, matrix.idMatrix)
+                        statement.setLong(2, getProject.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchMatrix = Matrix()
+                            while (rs.next()) {
+                                val id = rs.getLong(TABLE_MATRIX[1])
+                                val name = rs.getString(TABLE_MATRIX[2])
+                                val desc = rs.getString(TABLE_MATRIX[3])
+                                val row = rs.getInt(TABLE_MATRIX[4])
+                                val column = rs.getInt(TABLE_MATRIX[5])
+                                val user = rs.getString(TABLE_MATRIX[6])
+                                val type = rs.getInt(TABLE_MATRIX[8])
+                                getUserByID(user){getUser ->
                                     searchMatrix = Matrix(id, name, desc, row, column, getUser, getProject, type)
-                                }
-                                Log.d("seahp_AzureDB", "getMatrixByIDnUser $searchMatrix")
-                                callback(searchMatrix)
                             }
+                            Log.d("seahp_AzureDB", "getMatrixByIDnUser $searchMatrix")
+                            callback(searchMatrix)
                         }
+                    }
                     }
                 }
             }
@@ -769,7 +769,7 @@ class AzureHelper {
         }
     }
 
-    fun getAllMatrixByProject(project: Project, callback: (List<Matrix>) -> Unit){
+    fun getMatrixListByProject(project: Project, callback: (List<Matrix>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_MATRIX[0]} WHERE ${TABLE_MATRIX[7]} = ?"
         Log.d("seahp_AzureDB", "getMatrixByProject: $sql")
@@ -874,26 +874,28 @@ class AzureHelper {
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
-                    getMatrixByIDnUser(project, matrix, user){getMatrix ->
-                        statement.setLong(1, getMatrix.idMatrix)
-                        statement.setLong(2, getMatrix.project.idProject)
-                        statement.setString(3, getMatrix.user.user)
-                        statement.executeQuery().use { rs ->
-                            var searchElement: Element
-                            while (rs.next()) {
-                                val row = rs.getInt(TABLE_ELEMENT[4])
-                                val col = rs.getInt(TABLE_ELEMENT[5])
-                                val name = rs.getString(TABLE_ELEMENT[6])
-                                val desc = rs.getString(TABLE_ELEMENT[7])
-                                val scale = rs.getDouble(TABLE_ELEMENT[8])
-                                searchElement = Element(col, row, name, desc, scale,
-                                    getMatrix.idMatrix, getMatrix.nameMatrix, getMatrix.descriptionMatrix,
-                                    getMatrix.rowMax, getMatrix.columnMax, getMatrix.user, getMatrix.project,
-                                    getMatrix.type)
-                                elements.add(searchElement)
+                    getMatrixByID(project, matrix){getMatrix ->
+                        getUserByID(user.user){getUser ->
+                            statement.setLong(1, getMatrix.idMatrix)
+                            statement.setLong(2, getMatrix.project.idProject)
+                            statement.setString(3, getUser.user)
+                            statement.executeQuery().use { rs ->
+                                var searchElement: Element
+                                while (rs.next()) {
+                                    val row = rs.getInt(TABLE_ELEMENT[4])
+                                    val col = rs.getInt(TABLE_ELEMENT[5])
+                                    val name = rs.getString(TABLE_ELEMENT[6])
+                                    val desc = rs.getString(TABLE_ELEMENT[7])
+                                    val scale = rs.getDouble(TABLE_ELEMENT[8])
+                                    searchElement = Element(col, row, name, desc, scale,
+                                        getMatrix.idMatrix, getMatrix.nameMatrix, getMatrix.descriptionMatrix,
+                                        getMatrix.rowMax, getMatrix.columnMax, getMatrix.user, getMatrix.project,
+                                        getMatrix.type)
+                                    elements.add(searchElement)
+                                }
+                                Log.d("seahp_AzureDB", "getMatrixByID: $elements")
+                                callback(elements)
                             }
-                            Log.d("seahp_AzureDB", "getMatrixByID: $elements")
-                            callback(elements)
                         }
                     }
                 }

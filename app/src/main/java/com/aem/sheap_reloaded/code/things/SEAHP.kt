@@ -12,8 +12,6 @@ import java.io.DataOutputStream
 class SEAHP() {
     private val save = Save()
 
-
-
     fun setStatus(isEdit: Boolean, context: Context){
         save.saveOnFile(context,
             context.getString(R.string.save_folder),
@@ -110,22 +108,7 @@ class ConfigProject {
         else Element()
     }
 
-    fun setMatrix(setMatrix: Matrix, context: Context){
-        save.saveOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_matrix),
-            setMatrix.toByteArray(setMatrix),
-            context.getString(R.string.alias_matrix))
-    }
 
-    fun getMatrix(context: Context): Matrix{
-        val matrix = save.readOnFile(context,
-            context.getString(R.string.save_folder),
-            context.getString(R.string.save_matrix),
-            context.getString(R.string.alias_matrix))
-        return if (matrix != null) Matrix().toMatrix(matrix)
-        else Matrix()
-    }
 
     fun setConnect(connection: Boolean, context: Context){
         save.saveTempFile(context, context.getString(R.string.alias_online), booleanToByteArray(connection))

@@ -1,6 +1,9 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.content.Context
+import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -17,8 +20,10 @@ open class Matrix(val idMatrix: Long,
                   type: Int
 ) : Participant(user, project, type), Serializable {
     //
+    private val save = Save()
     constructor(): this (0,"",null,0,0,
         User(),Project(),3)
+
 
     private fun create(user: User, project: Project, x: Int, y: Int,
                         name:String, desc:String, id: Long): Matrix{
@@ -27,11 +32,11 @@ open class Matrix(val idMatrix: Long,
         return newMatrix
     }
 
-    /*fun listByProjectM(project: Project): List<Matrix> {
+    fun listByProjectM(project: Project): List<Matrix> {
         //
         var dataList = mutableListOf<Matrix>()
         val threadListMatrix = Thread {
-            AzureHelper().getMatrixByProject(project){ list ->
+            AzureHelper().getMatrixListByProject(project){ list ->
                 dataList = list.toMutableList()
             }
         }.apply {
@@ -39,7 +44,7 @@ open class Matrix(val idMatrix: Long,
             join()
         }
         return dataList
-    }*/
+    }
 
     fun criteriaAlternative(
         user: User,
@@ -105,6 +110,23 @@ open class Matrix(val idMatrix: Long,
             count++
         }
         return list
+    }
+
+    fun set(setMatrix: Matrix, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_matrix),
+            Matrix().toByteArray(setMatrix),
+            context.getString(R.string.alias_matrix))
+    }
+
+    fun get(context: Context): Matrix{
+        val matrix = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_matrix),
+            context.getString(R.string.alias_matrix))
+        return if (matrix != null) Matrix().toMatrix(matrix)
+        else Matrix()
     }
 
     fun toByteArray(matrix: Matrix): ByteArray {

@@ -920,8 +920,9 @@ class AzureHelper {
         //
         val sql = "SELECT * FROM ${TABLE_ELEMENT[0]} " +
                 "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? "
-        Log.d("DB", sql)
+        Log.d("seahp_AzureDB", "getAllElementsOnMatrix: $sql")
         val elements = mutableListOf<Element>()
+        var userList = mutableListOf<User>()
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
@@ -931,15 +932,22 @@ class AzureHelper {
                         statement.executeQuery().use { rs ->
                             var searchElement: Element
                             while (rs.next()) {
+                                val us_us = rs.getString(TABLE_ELEMENT[3])
                                 val row_el = rs.getLong(TABLE_ELEMENT[4])
                                 val col_ele = rs.getLong(TABLE_ELEMENT[5])
                                 val name = rs.getString(TABLE_ELEMENT[6])
                                 val desc = rs.getString(TABLE_ELEMENT[7])
                                 val scale = rs.getDouble(TABLE_ELEMENT[8])
 
+                                var temp = userList.find { it.user == us_us }
+                                if (temp == null) getUserByID(us_us){getUser ->
+                                    userList.add(getUser)
+                                    temp = getUser
+                                }
+
                                 searchElement = Element(col_ele, row_el, name, desc, scale,
                                     getMatrix.idMatrix, getMatrix.nameMatrix, getMatrix.descriptionMatrix,
-                                    getMatrix.rowMax, getMatrix.columnMax, User(), getMatrix.project,
+                                    getMatrix.rowMax, getMatrix.columnMax, temp!!, getMatrix.project,
                                     getMatrix.type)
                                 elements.add(searchElement)
                             }

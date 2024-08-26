@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aem.sheap_reloaded.R
+import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Participant
@@ -39,7 +40,6 @@ class GroupResultFragment: Fragment() {
     private lateinit var matrix: Matrix
     private lateinit var config: Cipher
     private lateinit var project: Project
-    private lateinit var userElement: MutableList<Element>
     private lateinit var allElement: MutableList<Element>
     private lateinit var configProject: SEAHP
     private lateinit var participants: MutableList<Participant>
@@ -109,35 +109,15 @@ class GroupResultFragment: Fragment() {
             val isAdmin = Participant().isAdminInThis(user, project)
             val admin = (isAdmin != Participant())
             Log.d("seahp_ResultFragment", "set admin = $admin")
-            userElement =  Element().getAllElementOnMatrix(matrix, project).toMutableList()
-            /*if (admin){
-                allElement = Element().getAllAssessElementOnMatrixOnline(matrix, project).toMutableList()
-                val element = mutableListOf<Element>()
-                for (item in allElement){
-                    if (item.user.user == user.user) element.add(item)
-                }
-                userElement = element
-            } else {
-                userElement =  Element().getElementAllMatrixByUser(matrix, project, user).toMutableList()
-            }*/
+            allElement =  Element().getAllElementOnMatrix(matrix, project).toMutableList()
+            participants = Participant().listByProject(project).toMutableList()
+            val criteria = Criteria().listByProject(project)
 
             withContext(Dispatchers.Main){
                 //
                 loadingDialog.dismiss()
-                /*binding.textMaths.text =
-                    if (isAdmin) {
-                        "Grupo: \n${Maths().mediaGeometrica(allElement, participants).text}\n" +
-                                "Individual: \n${Maths().consistencyRatio(userElement).text}\n"
-                    }
-                    else  {
-                        Maths().consistencyRatio(userElement).text
-                    }*/
-                graphic(Maths().consistencyRatio(userElement), cakeIsTrue, "Preferencia Grupal")
+                graphic(Maths().mediaGeometrica(allElement, participants, criteria), cakeIsTrue, "Preferencia Grupal")
                 cakeIsTrue.visibility = View.VISIBLE
-                /*if (isAdmin) {
-                    graphic(Maths().mediaGeometrica(allElement, participants), cakeIsTrue, "Preferencia Grupal")
-                    cakeIsTrue.visibility = View.VISIBLE
-                }*/
             }
         }
     }

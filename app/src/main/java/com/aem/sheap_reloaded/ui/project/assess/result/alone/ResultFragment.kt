@@ -39,9 +39,7 @@ class ResultFragment: Fragment() {
     private lateinit var config: Cipher
     private lateinit var project: Project
     private lateinit var userElement: MutableList<Element>
-    private lateinit var allElement: MutableList<Element>
     private lateinit var configProject: SEAHP
-    private lateinit var participants: MutableList<Participant>
     private lateinit var cakeIsLie: PieChart
 
     private var _binding: FragmentAssessResultBinding? = null
@@ -109,34 +107,11 @@ class ResultFragment: Fragment() {
             val admin = (isAdmin != Participant())
             Log.d("seahp_ResultFragment", "set admin = $admin")
             userElement =  Element().getAllElementOnMatrixByUser(matrix, project, user).toMutableList()
-            /*if (admin){
-                allElement = Element().getAllAssessElementOnMatrixOnline(matrix, project).toMutableList()
-                val element = mutableListOf<Element>()
-                for (item in allElement){
-                    if (item.user.user == user.user) element.add(item)
-                }
-                userElement = element
-            } else {
-                userElement =  Element().getElementAllMatrixByUser(matrix, project, user).toMutableList()
-            }*/
-
             withContext(Dispatchers.Main){
                 //
                 loadingDialog.dismiss()
-                /*binding.textMaths.text =
-                    if (isAdmin) {
-                        "Grupo: \n${Maths().mediaGeometrica(allElement, participants).text}\n" +
-                                "Individual: \n${Maths().consistencyRatio(userElement).text}\n"
-                    }
-                    else  {
-                        Maths().consistencyRatio(userElement).text
-                    }*/
                 graphic(Maths().consistencyRatio(userElement), cakeIsLie, "Preferencia Individual")
                 cakeIsLie.visibility = View.VISIBLE
-                /*if (isAdmin) {
-                    graphic(Maths().mediaGeometrica(allElement, participants), cakeIsTrue, "Preferencia Grupal")
-                    cakeIsTrue.visibility = View.VISIBLE
-                }*/
             }
         }
     }

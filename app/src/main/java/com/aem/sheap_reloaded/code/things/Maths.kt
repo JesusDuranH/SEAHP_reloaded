@@ -168,8 +168,8 @@ class Maths {
         for (x in criteriaList){
             for (y in criteriaList){
                 val assess = mutableListOf<Double>()
-                for (p in 1..nParticipant){
-                    val search = allElements.find { it.xElement == x.idCriteria && it.yElement == y.idCriteria && it.user.user == participant[p-1].user.user }
+                for (p in participant){
+                    val search = allElements.find { it.xElement == x.idCriteria && it.yElement == y.idCriteria && it.user.user == p.user.user }
                     if (search?.scaleElement != null && search.scaleElement != 0.0){
                         //
                         assess.add(search.scaleElement)

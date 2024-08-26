@@ -34,7 +34,7 @@ class Alternative(val idAlternative: Long,
                 start()
                 join()
             }
-        } while (isFree == Alternative())
+        } while (isFree != Alternative())
         val newAlternative = Alternative(newID, name, desc,
             project.idProject, project.nameProject, project.descriptionProject)
         AzureHelper().insertAlternative(newAlternative)
@@ -69,6 +69,6 @@ class Alternative(val idAlternative: Long,
     }
 
     override fun toString(): String {
-        return "Alternative ($idAlternative, \"$nameAlternative\", \"$descriptionAlternative\", $idProject)"
+        return "\nAlternative ($idAlternative, \"$nameAlternative\", \"$descriptionAlternative\", $idProject)"
     }
 }

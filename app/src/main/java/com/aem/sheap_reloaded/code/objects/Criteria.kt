@@ -36,7 +36,7 @@ class Criteria(val idCriteria: Long,
                 start()
                 join()
             }
-        } while (isFree == Criteria())
+        } while (isFree != Criteria())
         val newCriteria = Criteria(newID, name, desc, idSub,
             project.idProject, project.nameProject, project.descriptionProject)
         AzureHelper().insertCriteria(newCriteria)
@@ -83,6 +83,6 @@ class Criteria(val idCriteria: Long,
     }
 
     override fun toString(): String {
-        return "Criteria ($idCriteria, \"$nameCriteria\", \"$descriptionCriteria\", $subCriteria, $idProject)"
+        return "\nCriteria ($idCriteria, \"$nameCriteria\", \"$descriptionCriteria\", $subCriteria, $idProject)"
     }
 }

@@ -129,10 +129,10 @@ class CriteriaFragment: Fragment() {
         val isEdit = configProject.getStatus(requireContext())
         val next = binding.projectCreateCriteriaButtonNext
         next.setOnClickListener {
-            /*if (isEdit) findNavController().navigate(R.id.action_nav_project_create_criteria_to_project_edit,
+            if (isEdit) findNavController().navigate(R.id.action_nav_project_create_criteria_to_project_edit,
                 null,
                 NavOptions.Builder().setPopUpTo(R.id.nav_project_edit,true).build())
-            else findNavController().navigate(R.id.action_nav_project_create_criteria_to_create_alternative)*/
+            else findNavController().navigate(R.id.action_nav_project_create_criteria_to_create_alternative)
         }
         val add = binding.projectCreateCriteriaButtonAdd
         add.setOnClickListener {

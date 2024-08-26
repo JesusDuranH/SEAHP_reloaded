@@ -23,6 +23,10 @@
             android:id="@+id/action_nav_home_to_project_list"
             app:destination="@id/nav_project_list"
             />
+        <action
+            android:id="@+id/action_nav_home_to_nav_matrix_last_project"
+            app:destination="@id/nav_matrix_list"
+            />
     </fragment>
 
     <fragment
@@ -62,6 +66,10 @@
         <action
             android:id="@+id/action_nav_project_list_to_create"
             app:destination="@id/nav_project_create"
+            />
+        <action
+            android:id="@+id/action_nav_project_list_to_matrix_list"
+            app:destination="@id/nav_matrix_list"
             />
     </fragment>
 
@@ -166,6 +174,14 @@
             app:popUpTo="@id/nav_project_create_users"
             app:popUpToInclusive="true"
             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_matrix_list"
+        android:name="com.aem.sheap_reloaded.ui.project.matrix.MatrixFragment"
+        android:label="@string/menu_assess"
+        tools:layout="@layout/fragment_assess_matrix"
+        >
     </fragment>
 
 

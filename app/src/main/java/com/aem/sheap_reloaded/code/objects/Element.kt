@@ -7,8 +7,8 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
 
-class Element(val xElement: Int,
-              val yElement: Int,
+class Element(val xElement: Long,
+              val yElement: Long,
               val nameElement: String,
               val descriptionElement: String?,
               val scaleElement: Double?,
@@ -36,7 +36,7 @@ class Element(val xElement: Int,
         0, "", null, 0, 0, User(), Project(), 0
     )
 
-    fun create(x: Int, y:Int, name: String, desc: String?, scale: Double? = null,
+    fun create(x: Long, y:Long, name: String, desc: String?, scale: Double? = null,
                             matrix: Matrix, project: Project, user: User, type: Int = matrix.type): Element{
         //
         val newElement = Element(x, y, name, desc, scale,
@@ -69,6 +69,20 @@ class Element(val xElement: Int,
         return updateScale
     }
 
+    fun toEvaluate(matrix: Matrix, project: Project, user: User, xElement: Element, yElement: Element): Element{
+        //
+        var evaluate = Element()
+        val threadEvaluateElements = Thread{
+            AzureHelper().getOneElementToEvaluateOnMatrix(matrix, project, user, xElement, yElement){element ->
+                evaluate = element
+            }
+        }.apply {
+            start()
+            join()
+        }
+        return evaluate
+    }
+
     fun getElementAllMatrixByUser(
         matrix: Matrix,
         project: Project,
@@ -99,8 +113,8 @@ class Element(val xElement: Int,
     }
 
     override fun toString(): String {
-        return "Element($xElement, $yElement, \"$nameElement\", $scaleElement, " +
-                "$idMatrix, $nameMatrix, ${user.user}, ${project.nameProject})\n"
+        return "\nElement($xElement, $yElement, \"$nameElement\", $scaleElement, " +
+                "$idMatrix, $nameMatrix, ${user.user}, ${project.nameProject})"
     }
 }
 

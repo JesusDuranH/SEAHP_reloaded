@@ -10,7 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aem.sheap_reloaded.R
+import com.aem.sheap_reloaded.code.objects.Alternative
+import com.aem.sheap_reloaded.code.objects.Criteria
+import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
+import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
@@ -84,27 +88,26 @@ class MatrixFragment: Fragment() {
     private fun set(){
         //
         matrixList = emptyList<Matrix>().toMutableList()
-        Log.d("seahp_MatrixFragment", "set matrixList empty: $matrixList")
+        Log.d("seahp_MatrixFragment", "set matrixList initial empty: $matrixList")
 
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
         CoroutineScope(Dispatchers.IO).launch {
 
             matrixList = Matrix().listByProjectM(project).toMutableList()
-            Log.d("seahp_MatrixFragment", "set seatch matrixList: $matrixList")
+            Log.d("seahp_MatrixFragment", "set search matrixList: $matrixList")
             withContext(Dispatchers.Main){
                 setRecyclerView(matrixList)
             }
 
-            /*val i = setMatrix()
+            val i = setMatrix()
             if (i) {
-                val mList2 = Matrix().listOfMatrixByProjectOnline(project)
+                matrixList = Matrix().listByProjectM(project).toMutableList()
                 withContext(Dispatchers.Main){
-                    matrixList = mList2.toMutableList()
                     setRecyclerView(matrixList)
                 }
             }
-            Log.d("Etapa", "Segunda etapa = $matrixList \n SetMatrix = $i")*/
+            Log.d("Etapa", "Segunda etapa = $matrixList \n SetMatrix = $i")
 
             withContext(Dispatchers.Main){
                 loadingDialog.dismiss()
@@ -114,109 +117,64 @@ class MatrixFragment: Fragment() {
         Log.d("Matrix", "matrixList = $matrixList")
     }
 
-    private fun setRecyclerView(dataList: List<Matrix>){
-        //
-        binding.assessMatrixRecyclerViewName.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = MatrixRecyclerViewAdapter(dataList)
-        binding.assessMatrixRecyclerViewName.adapter = adapter
-    }
-}
-
-/*
-class AssessPerformFragment: Fragment() {
-
     private fun setMatrix(): Boolean{
         //
-        Log.d("Matrix", "matrixList = $matrixList")
         var isChange = false
+        val type = Participant().isAdminInThis(user, project).type
 
-        val mat = matrixList.find { it.idMatrix.toInt() == 1 }
         val mat_1 = matrixList.find { it.idMatrix.toInt() == 1 }
         val mat_2 = matrixList.find { it.idMatrix.toInt() == 2 }
-        val mat_3 = matrixList.find { it.idMatrix.toInt() == 3 }
+        //val mat_3 = matrixList.find { it.idMatrix.toInt() == 3 }
 
-        val matrix: Matrix = if (isOnline){
-            //
-            if (mat_3 == null){
-                if (mat_2 == null){
-                    if (mat_1 == null){
-                        createMatrixOnline(1)
-                        //createMatrixOnline(2)
-                        //createMatrixOnline(3)
-                        Log.d("Matrix", "Crate Matrix 1 with Data")
-                        isChange = true
-                    } else {
-                        //
-                        val element = Element().getElementOfCreateMatrixOnline(mat_1, project, user)
-                        val userValues = element.find { it.yElement == 0 && it.xElement == 0 }
-                        if (userValues == null){
-                            //
-                            for (item in matrixList) createValuesOnline(item)
-                            Log.d("Matrix", "Crate only Data 1")
-                            isChange = true
-                        } else Log.d("Matrix", "Don't create nothing 1")
-
-                    }
-                    //createMatrixOnline(1)
-                    createMatrixOnline(2)
-                    //createMatrixOnline(3)
-                    Log.d("Matrix", "Crate Matrix 2 with Data")
-                    isChange = true
-                } else {
-                    //
-                    val element = Element().getElementOfCreateMatrixOnline(mat_2, project, user)
-                    val userValues = element.find { it.yElement == 0 && it.xElement == 0 }
-                    if (userValues == null){
-                        //
-                        for (item in matrixList) createValuesOnline(item)
-                        Log.d("Matrix", "Crate only Data 2")
-                        isChange = true
-                    } else Log.d("Matrix", "Don't create nothing 2")
-                }
-                //createMatrixOnline(1)
-                //createMatrixOnline(2)
-                createMatrixOnline(3)
-                Log.d("Matrix", "Crate Matrix 3 with Data")
+        if (type == 2){
+            if (mat_1 == null){
+                Log.d("seahp_MatrixFragment", "setMatrix: Create Matrix & Values 1")
+                createValues(createMatrix(1))
                 isChange = true
-            } else {
-                //
-                val element = Element().getElementOfCreateMatrixOnline(mat_3, project, user)
-                val userValues = element.find { it.yElement == 0 && it.xElement == 0 }
-                if (userValues == null){
-                    //
-                    for (item in matrixList) createValuesOnline(item)
-                    Log.d("Matrix", "Crate only Data 3")
-                    isChange = true
-                } else Log.d("Matrix", "Don't create nothing 3")
             }
-
-            Matrix()
+            if (mat_2 == null){
+                Log.d("seahp_MatrixFragment", "setMatrix: Create Matrix & Values 2")
+                createValues(createMatrix(2))
+                isChange = true
+            }
         } else {
-            //
-            if (mat == null){
-                createMatrixOffline(1)
-                createMatrixOffline(2)
-                createMatrixOffline(3)
-                Log.d("Matrix", "Crate Matrix with Data")
-                isChange = true
-            } else {
-                val element = Element().getElementOAllMatrixOffline(mat, project, dbHelper)
-                val userValues = element.find { it.yElement == 0 && it.xElement == 0 && it.user == user }
-                if (userValues == null){
-                    //
-                    for (item in matrixList) createValuesOffline(item)
-                    Log.d("Matrix", "Crate only Data")
-                    isChange = true
-                } else Log.d("Matrix", "Don't create nothing")
-
+            if (mat_1 != null) {
+                Log.d("seahp_MatrixFragment", "setMatrix: Create Values 1")
+                val create = Element().toEvaluate(mat_1, project, user, Element(), Element())
+                if (create.nameElement == "") createValues(mat_1)
             }
-            Matrix()
+            if (mat_2 != null) {
+                Log.d("seahp_MatrixFragment", "setMatrix: Create Values 2")
+                val create = Element().toEvaluate(mat_2, project, user, Element(), Element())
+                if (create.nameElement == "") createValues(mat_2)
+            }
         }
-        //dataList.add(matrixCA)
+        Log.d("seahp_MatrixFragment", "setMatrix isChange: $isChange")
         return isChange
     }
 
-    private fun createValuesOnline(matrix: Matrix): Matrix{
+    private fun createMatrix(op: Int): Matrix{
+        //
+        val matrix = when (op) {
+            1 -> { //Criteria - Alternative
+                val mat = Matrix().criteriaAlternative(user, project)
+                mat
+            }
+            2 -> { //Criteria - Criteria
+                val mat = Matrix().criteriaCriteria(user, project)
+                mat
+            }
+            // Programar Alternativa-Alternativa por criterio
+            /*3 -> {
+                //GG
+            }*/
+
+            else -> Matrix()
+        }
+        return matrix
+    }
+
+    private fun createValues(matrix: Matrix): Matrix{
         //
         val mat = Matrix(matrix.idMatrix, matrix.nameMatrix, matrix.descriptionMatrix,
             matrix.rowMax, matrix.columnMax, user, project, matrix.type)
@@ -224,7 +182,7 @@ class AssessPerformFragment: Fragment() {
             1 -> {
                 val threadElement = Thread {
                     //
-                    val element = Element().createElementOnline(0,0,"Table Create",null,
+                    val element = Element().create(0,0,"Table Create",null,
                         0.0,mat, mat.project, mat.user)
                 }.apply {
                     start()
@@ -232,14 +190,14 @@ class AssessPerformFragment: Fragment() {
                 }
                 mat
             }
-            else ->{
+            2 ->{
                 //
-                val row = Matrix().getRowsOnline(mat, project)
-                Matrix().setDefaultScaleOnline(mat, row, row, user)
+                val row = Criteria().listByProject(project)
+                Matrix().setDefaultScaleCriteriaCriteria(mat, row, user)
 
                 val threadElement = Thread {
                     //
-                    val element = Element().createElementOnline(0,0,"Table Create",null,
+                    val element = Element().create(0,0,"Table Create",null,
                         0.0,mat, mat.project, mat.user)
                 }.apply {
                     start()
@@ -247,129 +205,16 @@ class AssessPerformFragment: Fragment() {
                 }
                 mat
             }
+            else -> Matrix()
         }
         return mat
     }
 
-    private fun createValuesOffline(matrix: Matrix): Matrix{
+    private fun setRecyclerView(dataList: List<Matrix>){
         //
-        val mat = Matrix(matrix.idMatrix, matrix.nameMatrix, matrix.descriptionMatrix,
-                        matrix.rowMax, matrix.columnMax, user, project, matrix.type)
-        val matII = when (mat.idMatrix.toInt()){
-            1 -> {
-                val element = Element().createElementOffline(0,0,"Table Create",null,
-                    0.0,mat, mat.project, mat.user, dbHelper)
-                mat
-            }
-            else ->{
-                //
-                val row = Matrix().getRowsOffline(mat, project, dbHelper)
-                Matrix().setDefaultScaleOffline(mat, row, row, user, dbHelper)
-                val element = Element().createElementOffline(0,0,"Table Create",null,
-                    0.0,mat, mat.project, mat.user, dbHelper)
-                mat
-            }
-        }
-        return mat
-    }
-
-    private fun createMatrixOnline(op: Int): Matrix{
-
-        var matrix = Matrix()
-        matrix = when (op) {
-            1 -> { //Criteria - Alternative
-                val mat = Matrix().matrixCriteriaAlternativeOnline(user, project)
-                val alternativeList = Alternative().listOfAlternativeByProjectOnline(project)
-                val criteriaList = Criteria().listOfCriteriaByProjectOnline(project)
-                val row = Matrix().criteriaLineOnline(criteriaList, mat, true, user)
-                val column = Matrix().alternativeLineOnline(alternativeList, mat, false, user)
-                val threadElement = Thread {
-                    //
-                    val element = Element().createElementOnline(0,0,"Table Create",null,
-                        0.0,mat, mat.project, mat.user)
-                }.apply {
-                    start()
-                    join()
-                }
-                mat
-            }
-            2 -> { //Criteria - Criteria
-                val mat = Matrix().matrixCriteriaCriteriaOnline(user, project)
-                val criteriaList = Criteria().listOfCriteriaByProjectOnline(project)
-                val row = Matrix().criteriaLineOnline(criteriaList, mat, true, user)
-                val column = Matrix().criteriaLineOnline(criteriaList, mat, false, user)
-                Matrix().setDefaultScaleOnline(mat, row, column, user)
-                val threadElement = Thread {
-                    //
-                    val element = Element().createElementOnline(0,0,"Table Create",null,
-                        0.0,mat, mat.project, mat.user)
-                }.apply {
-                    start()
-                    join()
-                }
-                mat
-            }
-            3 -> { //Alternative - Alternative
-                val alternativeMatrixList = Matrix().matrixAlternativeAlternativeOnline(user, project)
-                val alternativeList = Alternative().listOfAlternativeByProjectOnline(project)
-                for (item in alternativeMatrixList){
-                    val row = Matrix().alternativeLineOnline(alternativeList, item, true, user)
-                    val column = Matrix().alternativeLineOnline(alternativeList, item, false, user)
-                    Matrix().setDefaultScaleOnline(item, row, column, user)
-                    val threadElement = Thread {
-                        //
-                        val element = Element().createElementOnline(0,0,"Table Create",
-                            null, 0.0, item, item.project, item.user)
-                    }.apply {
-                        start()
-                        join()
-                    }
-                }
-                Matrix()
-            }
-
-            else -> Matrix()
-        }
-        return matrix
-        }
-
-    private fun createMatrixOffline(op: Int): Matrix{
-        val matrix = when (op){
-            1 -> { //Criteria - Alternative
-                val mat = Matrix().matrixCriteriaAlternativeOffline(user, project, dbHelper)
-                val alternativeList = Alternative().listOfAlternativeByProjectOffline(project, dbHelper)
-                val criteriaList = Criteria().listOfCriteriaByProjectOffline(project, dbHelper)
-                val row = Matrix().criteriaLineOffline(criteriaList, mat, true, user, dbHelper)
-                val column = Matrix().alternativeLineOffline(alternativeList, mat, false, user, dbHelper)
-                val element = Element().createElementOffline(0,0,"Table Create",null,
-                                                        0.0,mat, mat.project, mat.user, dbHelper)
-                mat
-            }
-            2 -> { //Criteria - Criteria
-                val mat = Matrix().matrixCriteriaCriteriaOffline(user, project, dbHelper)
-                val criteriaList = Criteria().listOfCriteriaByProjectOffline(project, dbHelper)
-                val row = Matrix().criteriaLineOffline(criteriaList, mat, true, user, dbHelper)
-                val column = Matrix().criteriaLineOffline(criteriaList, mat, false, user, dbHelper)
-                Matrix().setDefaultScaleOffline(mat, row, column, user, dbHelper)
-                val element = Element().createElementOffline(0,0,"Table Create",null,
-                    0.0,mat, mat.project, mat.user, dbHelper)
-                mat
-            }
-            3 -> { //Alternative - Alternative
-                val alternativeMatrixList = Matrix().matrixAlternativeAlternativeOffline(user, project, dbHelper)
-                val alternativeList = Alternative().listOfAlternativeByProjectOffline(project, dbHelper)
-                for (item in alternativeMatrixList){
-                    val row = Matrix().alternativeLineOffline(alternativeList, item, true, user, dbHelper)
-                    val column = Matrix().alternativeLineOffline(alternativeList, item, false, user, dbHelper)
-                    Matrix().setDefaultScaleOffline(item, row, column, user, dbHelper)
-                    val element = Element().createElementOffline(0,0,"Table Create",
-                        null, 0.0, item, item.project, item.user, dbHelper)
-                }
-                Matrix()
-            }
-            else -> Matrix()
-        }
-        return matrix
+        binding.assessMatrixRecyclerViewName.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = MatrixRecyclerViewAdapter(dataList)
+        binding.assessMatrixRecyclerViewName.adapter = adapter
     }
 
     override fun onDestroyView() {
@@ -377,4 +222,3 @@ class AssessPerformFragment: Fragment() {
         _binding = null
     }
 }
-* */

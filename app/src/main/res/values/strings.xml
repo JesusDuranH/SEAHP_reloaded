@@ -145,7 +145,7 @@
     <string name="home_mode_offline">Offline</string>
     <string name="home_mode_connecting">Connecting</string>
     <string name="home_user_welcome_0">Welcome, login or Register -></string>
-    <string name="home_user_welcome_1">Welcome back: </string>
+    <string name="home_user_welcome_1">Welcome: </string>
     <string name="home_last_project_default">Name \nDescription</string>
     <string name="home_last_project_false">Nothing to see</string>
 

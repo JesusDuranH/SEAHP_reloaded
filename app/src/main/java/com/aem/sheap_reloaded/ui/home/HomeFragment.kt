@@ -144,7 +144,7 @@ class HomeFragment : Fragment() {
             lastProjectButton.text = "${project.nameProject}\n$desc"
         }
         lastProjectButton.setOnClickListener {
-            //findNavController().navigate(R.id.action_nav_home_to_nav_assess_last_project)
+            findNavController().navigate(R.id.action_nav_home_to_nav_matrix_last_project)
         }
     }
 }

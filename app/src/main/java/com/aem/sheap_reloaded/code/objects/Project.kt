@@ -35,7 +35,7 @@ open class Project( val idProject : Long,
                 start()
                 join()
             }
-        } while (isFree == Project())
+        } while (isFree != Project())
         val newProject = Project(id, name, desc)
         AzureHelper().insertProject(newProject)
         return newProject
@@ -90,8 +90,26 @@ open class Project( val idProject : Long,
         return ObjectInputStream(ByteArrayInputStream(byteArray)).readObject() as Project
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Project) return false
+
+        if (idProject != other.idProject) return false
+        if (nameProject != other.nameProject) return false
+        if (descriptionProject != other.descriptionProject) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = idProject.hashCode()
+        result = 29 * result + nameProject.hashCode()
+        result = 29 * result + descriptionProject.hashCode()
+        return result
+    }
+
     override fun toString(): String {
-        return "Project($idProject, \"$nameProject\", \"$descriptionProject\")"
+        return "\nProject($idProject, $nameProject, $descriptionProject)"
     }
 
 }

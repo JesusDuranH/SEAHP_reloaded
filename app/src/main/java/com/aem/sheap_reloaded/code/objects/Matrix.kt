@@ -1,6 +1,7 @@
 package com.aem.sheap_reloaded.code.objects
 
 import android.content.Context
+import android.util.Log
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
 import com.aem.sheap_reloaded.code.things.Save
@@ -74,7 +75,7 @@ open class Matrix(val idMatrix: Long,
         var matrix = Matrix()
         val x = Criteria().listByProject(project).size
         val name = "Criteria - Criteria | Project: ${project.nameProject}"
-        val desc = "Criteria - Criteria Evaluation Matrix with $x Criteria and Alternatives"
+        val desc = "Criteria - Criteria Evaluation Matrix with $x Criteria"
         val threadMatrix = Thread {
             //
             matrix = create(user, project, x, x, name, desc,2)
@@ -112,6 +113,26 @@ open class Matrix(val idMatrix: Long,
         return list
     }
 
+    fun setDefaultScaleCriteriaCriteria
+                (matrix: Matrix, rowElement: List<Criteria>, user: User){
+        //
+        var name: String
+        val scale = 1.0
+        val desc = "Matriz : ${matrix.nameMatrix} | Proyecto: ${matrix.project.nameProject}"
+
+        for (i in 0 until matrix.rowMax){
+            name = "${rowElement[i].nameCriteria} - ${rowElement[i].nameCriteria}"
+            val threadElement = Thread {
+                //
+                Element().create(rowElement[i].idCriteria,rowElement[i].idCriteria,
+                                    name, desc, scale, matrix, matrix.project, user)
+            }.apply {
+                start()
+                join()
+            }
+        }
+    }
+
     fun set(setMatrix: Matrix, context: Context){
         save.saveOnFile(context,
             context.getString(R.string.save_folder),
@@ -141,29 +162,13 @@ open class Matrix(val idMatrix: Long,
     }
 
     override fun toString(): String {
-        return "Matrix($idMatrix, \"$nameMatrix\", \"$descriptionMatrix\", $rowMax, $columnMax, " +
-                "${project.idProject}, \"${project.nameProject}\", \"${project.descriptionProject}\"), \n"
+        return "\nMatrix($idMatrix, \"$nameMatrix\", \"$descriptionMatrix\", $rowMax, $columnMax, " +
+                "${project.idProject}, \"${project.nameProject}\", \"${project.descriptionProject}\")"
     }
 /*
 
 
-    fun setDefaultScaleOnline(matrix: Matrix, rowElement: List<Element>, columnElement: List<Element>, user: User){
-        //
-        var name: String
-        val scale = 1.0
-        val desc = "Matriz : ${matrix.nameMatrix} | Proyecto: ${matrix.project.nameProject}"
 
-        for (i in 0 until matrix.rowMax){
-            name = "${rowElement[i].nameElement} - ${columnElement[i].nameElement}"
-            val threadElement = Thread {
-                //
-                Element().createElementOnline(i+1,i+1,name, desc, scale, matrix, matrix.project, user)
-            }.apply {
-                start()
-                join()
-            }
-        }
-    }
 
     fun criteriaLineOnline(list: List<Criteria>, matrix: Matrix, row: Boolean, user: User): MutableList<Element> {
         //

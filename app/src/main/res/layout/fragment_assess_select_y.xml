@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.project.assess.select_x.SelectXFragment"
+    tools:context=".ui.project.assess.select_y.SelectYFragment"
     >
 
     <LinearLayout
@@ -19,22 +19,7 @@
             android:id="@+id/select_assess_alternative_recyclerView"
             tools:listitem="@layout/item_select"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-
-        <Button
-            android:id="@+id/select_assess_button_maths"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Maths"
-            />
-
-        <Button
-            android:id="@+id/select_assess_button_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_save"
+            android:layout_height="match_parent"
             />
 
     </LinearLayout>

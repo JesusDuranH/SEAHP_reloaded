@@ -1,10 +1,10 @@
-package com.aem.sheap_reloaded.ui.project.assess
+package com.aem.sheap_reloaded.ui.project.assess.select_x
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Alternative
@@ -31,7 +31,7 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                 alternativeButtonSelect.setOnClickListener {
                     Criteria().setX(criteria, root.context)
                     //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    //else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
+                    /*else */Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
                 }
                 root.setOnClickListener {
                     Toast.makeText(root.context,
@@ -49,9 +49,9 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                     ContextCompat.getColor(root.context, R.color.yellow))
                 else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))*/
                 alternativeButtonSelect.setOnClickListener {
-                    //Criteria().setX(criteria, root.context)
+                    Alternative().setX(alternative, root.context)
                     //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    //else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
+                    /*else*/ Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
                 }
                 root.setOnClickListener {
                     Toast.makeText(root.context,
@@ -72,7 +72,7 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
             parent, false))
     }
 
-    override fun getItemCount(): Int{
+    override fun getItemCount(): Int {
         var size = 0
         if (criteriaList == emptyList<Criteria>()) size = alternativeList.size
         if (alternativeList == emptyList<Alternative>()) size = criteriaList.size

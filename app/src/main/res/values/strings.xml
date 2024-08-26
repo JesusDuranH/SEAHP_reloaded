@@ -102,6 +102,7 @@
     <string name="alias_online">connection.ars</string>
 
     <string name="button_save">Save</string>
+    <string name="button_savenexit">Save n Exit</string>
     <string name="button_logout">Logout</string>
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>

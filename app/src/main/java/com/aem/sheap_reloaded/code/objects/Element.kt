@@ -78,7 +78,7 @@ class Element(val xElement: Long,
         return updateScale
     }
 
-    fun toEvaluate(matrix: Matrix, project: Project, user: User, xElement: Element, yElement: Element): Element{
+    fun toEvaluate(matrix: Matrix, project: Project, user: User, xElement: Long, yElement: Long): Element{
         //
         var evaluate = Element()
         val threadEvaluateElements = Thread{
@@ -142,6 +142,44 @@ class Element(val xElement: Long,
             context.getString(R.string.alias_elementY))
         return if (element != null) Element().toElement(element)
         else Element()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Element) return false
+
+        if (xElement != other.xElement) return false
+        if (yElement != other.yElement) return false
+        if (nameElement != other.nameElement) return false
+        if (descriptionElement != other.descriptionElement) return false
+        if (scaleElement != other.scaleElement) return false
+        if (idMatrix != other.idMatrix) return false
+        if (nameMatrix != other.nameMatrix) return false
+        if (descriptionMatrix != other.descriptionMatrix) return false
+        if (rowMax != other.rowMax) return false
+        if (columnMax != other.columnMax) return false
+        if (user != other.user) return false
+        if (project != other.project) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = nameElement.hashCode()
+        result = 29 * result + descriptionElement.hashCode()
+        result = 29 * result + scaleElement.hashCode()
+        result = 29 * result + xElement.hashCode()
+        result = 29 * result + yElement.hashCode()
+        result = 29 * result + idMatrix.hashCode()
+        result = 29 * result + nameMatrix.hashCode()
+        result = 29 * result + descriptionMatrix.hashCode()
+        result = 29 * result + rowMax.hashCode()
+        result = 29 * result + columnMax.hashCode()
+        result = 29 * result + user.hashCode()
+        result = 29 * result + project.hashCode()
+        result = 29 * result + type.hashCode()
+        return result
     }
 
     fun toByteArray(element: Element): ByteArray {

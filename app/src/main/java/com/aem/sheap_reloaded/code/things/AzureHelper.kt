@@ -870,7 +870,7 @@ class AzureHelper {
     }
 
     fun getOneElementToEvaluateOnMatrix(matrix: Matrix, project: Project, user: User,
-                                        xElement: Element, yElement: Element, callback: (Element) -> Unit){
+                                        xElement: Long, yElement: Long, callback: (Element) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_ELEMENT[0]} " +
                 "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? AND ${TABLE_ELEMENT[3]} = ? " +
@@ -884,8 +884,8 @@ class AzureHelper {
                             statement.setLong(1, getMatrix.idMatrix)
                             statement.setLong(2, getMatrix.project.idProject)
                             statement.setString(3, getUser.user)
-                            statement.setLong(4, yElement.yElement)
-                            statement.setLong(5, xElement.xElement)
+                            statement.setLong(4, yElement)
+                            statement.setLong(5, xElement)
                             statement.executeQuery().use { rs ->
                                 var searchElement = Element()
                                 if (rs.next()) {

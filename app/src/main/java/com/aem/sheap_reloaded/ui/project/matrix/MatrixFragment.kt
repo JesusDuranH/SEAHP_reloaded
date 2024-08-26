@@ -104,17 +104,14 @@ class MatrixFragment: Fragment() {
             if (i) {
                 matrixList = Matrix().listByProjectM(project).toMutableList()
                 withContext(Dispatchers.Main){
+                    Log.d("seahp_MatrixFragment", "set matrixList: $matrixList")
                     setRecyclerView(matrixList)
                 }
             }
-            Log.d("Etapa", "Segunda etapa = $matrixList \n SetMatrix = $i")
-
             withContext(Dispatchers.Main){
                 loadingDialog.dismiss()
             }
         }
-
-        Log.d("Matrix", "matrixList = $matrixList")
     }
 
     private fun setMatrix(): Boolean{
@@ -122,30 +119,30 @@ class MatrixFragment: Fragment() {
         var isChange = false
         val type = Participant().isAdminInThis(user, project).type
 
-        val mat_1 = matrixList.find { it.idMatrix.toInt() == 1 }
+        //val mat_1 = matrixList.find { it.idMatrix.toInt() == 1 }
         val mat_2 = matrixList.find { it.idMatrix.toInt() == 2 }
         //val mat_3 = matrixList.find { it.idMatrix.toInt() == 3 }
 
         if (type == 2){
-            if (mat_1 == null){
+            /*if (mat_1 == null){
                 Log.d("seahp_MatrixFragment", "setMatrix: Create Matrix & Values 1")
                 createValues(createMatrix(1))
                 isChange = true
-            }
+            }*/
             if (mat_2 == null){
                 Log.d("seahp_MatrixFragment", "setMatrix: Create Matrix & Values 2")
                 createValues(createMatrix(2))
                 isChange = true
             }
         } else {
-            if (mat_1 != null) {
+            /*if (mat_1 != null) {
                 Log.d("seahp_MatrixFragment", "setMatrix: Create Values 1")
                 val create = Element().toEvaluate(mat_1, project, user, Element(), Element())
                 if (create.nameElement == "") createValues(mat_1)
-            }
+            }*/
             if (mat_2 != null) {
                 Log.d("seahp_MatrixFragment", "setMatrix: Create Values 2")
-                val create = Element().toEvaluate(mat_2, project, user, Element(), Element())
+                val create = Element().toEvaluate(mat_2, project, user, 0, 0)
                 if (create.nameElement == "") createValues(mat_2)
             }
         }

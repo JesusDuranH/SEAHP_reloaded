@@ -13,11 +13,14 @@ import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
+import com.aem.sheap_reloaded.code.objects.Matrix
+import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.databinding.ItemSelectBinding
 
 class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                                   private val alternativeList: List<Alternative>,
-                                  //private val allElement: List<Element>
+                                    private val list: List<Element>
 ): RecyclerView.Adapter<SelectYRecyclerViewAdapter.SelectYHolder>() {
     //
     inner class SelectYHolder(val view: View): RecyclerView.ViewHolder(view){
@@ -28,18 +31,23 @@ class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
             with(binding){
                 //
                 alternativeButtonSelect.text = "${criteria.nameCriteria} (${criteria.idCriteria})"
-                /*if (nums[element.yElement-1][1] < element.columnMax) alternativeButtonSelect.setBackgroundColor(
-                    ContextCompat.getColor(root.context, R.color.yellow))
-                else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))*/
-                alternativeButtonSelect.setOnClickListener {
-                    Criteria().setY(criteria, root.context)
-                    //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    //else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
-                }
-                root.setOnClickListener {
-                    Toast.makeText(root.context,
-                        "Haz seleccionado a $criteria",
-                        Toast.LENGTH_SHORT).show()
+
+                val x = Criteria().getX(root.context)
+                if (x.idCriteria == criteria.idCriteria) alternativeButtonSelect.isEnabled = false
+                else {
+                    /*val user = User().get(root.context)
+                    val matrix = Matrix().get(root.context)
+                    val project = Project().get(root.context)
+                    val check = Element().toEvaluate(matrix, project, user, x.idCriteria, criteria.idCriteria)*/
+                    val check = list[position]
+                    if (check.scaleElement == 0.0) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+
+                    alternativeButtonSelect.setOnClickListener {
+                        Criteria().setY(criteria, root.context)
+                        //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
+                        /*else*/ Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
+                    }
                 }
             }
         }
@@ -48,49 +56,24 @@ class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
             with(binding){
                 //
                 alternativeButtonSelect.text = "${alternative.nameAlternative} (${alternative.nameAlternative})"
-                /*if (nums[element.yElement-1][1] < element.columnMax) alternativeButtonSelect.setBackgroundColor(
-                    ContextCompat.getColor(root.context, R.color.yellow))
-                else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))*/
-                alternativeButtonSelect.setOnClickListener {
-                    Alternative().setY(alternative, root.context)
-                    //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    //else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
-                }
-                root.setOnClickListener {
-                    Toast.makeText(root.context,
-                        "Haz seleccionado a $alternative",
-                        Toast.LENGTH_SHORT).show()
+                val x = Alternative().getX(root.context)
+                if (x.idAlternative == alternative.idAlternative) alternativeButtonSelect.isEnabled = false
+                else {
+                    /*val user = User().get(root.context)
+                    val matrix = Matrix().get(root.context)
+                    val project = Project().get(root.context)
+                    val check = Element().toEvaluate(matrix, project, user, x.idAlternative, alternative.idAlternative)*/
+                    val check = list[position]
+                    if (check.scaleElement == 0.0) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                    alternativeButtonSelect.setOnClickListener {
+                        Alternative().setY(alternative, root.context)
+                        //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
+                        /*else*/ Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
+                    }
                 }
             }
         }
-
-        /*fun render(elementB: Element, position: Int){
-            with(binding){
-                //
-                val elementA = ConfigProject().getElement(root.context)
-
-                val scale = allElement.find { it.xElement == elementB.xElement && it.yElement == elementA.yElement && it.idMatrix == elementB.idMatrix}
-                if (scale != null){
-                    if (elementB.xElement != elementA.yElement) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
-                } else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
-
-                alternativeButtonSelect.text = "${elementB.nameElement} (${elementB.xElement}, ${elementA.yElement})"
-
-                if ((position + 1) == elementA.yElement) alternativeButtonSelect.isEnabled = false
-
-                alternativeButtonSelect.setOnClickListener {
-                    //
-                    ConfigProject().setElementB(elementB, root.context)
-                    Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
-                }
-
-                root.setOnClickListener {
-                    Toast.makeText(root.context,
-                        "Haz seleccionado a $elementB",
-                        Toast.LENGTH_SHORT).show()
-                }
-            }
-        }*/
     }
 
     override fun onCreateViewHolder(

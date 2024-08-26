@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
+import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.User
@@ -95,8 +96,10 @@ class SelectYFragment: Fragment() {
         alternativeList = emptyList<Alternative>().toMutableList()
         Log.d("seahp_SelectYFragment", "set alternativeList initial empty: $alternativeList")
 
-        //var listItems: List<Element>
-        //val elementA = ConfigProject().getElement(requireContext())
+        var criteriaX: Criteria
+        var alternativeX: Alternative
+        val listOfValues = mutableListOf<Element>()
+
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
         CoroutineScope(Dispatchers.IO).launch {
@@ -104,28 +107,50 @@ class SelectYFragment: Fragment() {
                 1L ->{
                     Log.d("seahp_SelectYFragment", "set 1 alternativeList:")
                     alternativeList = Alternative().listByProject(project).toMutableList()
+                    criteriaX = Criteria().getX(requireContext())
+                    for (itemY in alternativeList){
+                        val check = Element().toEvaluate(matrix, project, user, criteriaX.idCriteria, itemY.idAlternative)
+                        listOfValues.add(check)
+                        Log.d("seahp_SelectYFragment", "set 1 check")
+                    }
+                    Log.d("seahp_SelectYFragment", "set 1 listOfValues: $listOfValues")
                 }
                 2L ->{
-                    Log.d("seahp_SelectXFragment", "set 2 criteriaList:")
+                    Log.d("seahp_SelectYFragment", "set 2 criteriaList:")
                     criteriaList = Criteria().listByProject(project).toMutableList()
+                    criteriaX = Criteria().getX(requireContext())
+                    for (itemY in criteriaList){
+                        val check = Element().toEvaluate(matrix, project, user, criteriaX.idCriteria, itemY.idCriteria)
+                        listOfValues.add(check)
+                        Log.d("seahp_SelectYFragment", "set 2 check")
+                    }
+                    Log.d("seahp_SelectYFragment", "set 2 listOfValues: $listOfValues")
                 }
                 else ->{
                     Log.d("seahp_SelectYFragment", "set 3 alternativeList:")
                     alternativeList = Alternative().listByProject(project).toMutableList()
+                    alternativeX = Alternative().getX(requireContext())
+                    for (itemY in alternativeList){
+                        val check = Element().toEvaluate(matrix, project, user, alternativeX.idAlternative, itemY.idAlternative)
+                        listOfValues.add(check)
+                        Log.d("seahp_SelectYFragment", "set 3 check")
+                    }
+                    Log.d("seahp_SelectYFragment", "set 3 listOfValues: $listOfValues")
                 }
             }
             withContext(Dispatchers.Main){
                 //
+                setRecyclerView(criteriaList, alternativeList, listOfValues)
                 loadingDialog.dismiss()
-                setRecyclerView(criteriaList, alternativeList)
             }
         }
     }
 
-    private fun setRecyclerView(criteriaList: List<Criteria>, alternativeList: List<Alternative>){
+    private fun setRecyclerView(criteriaList: List<Criteria>, alternativeList: List<Alternative>,
+                                listOfValues: List<Element>){
         //
         binding.selectAssessAlternativeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = SelectYRecyclerViewAdapter(criteriaList, alternativeList)
+        val adapter = SelectYRecyclerViewAdapter(criteriaList, alternativeList, listOfValues)
         binding.selectAssessAlternativeRecyclerView.adapter = adapter
     }
 

@@ -32,6 +32,8 @@
     <string name="menu_account_sign_up">Sign Up</string>
     <string name="menu_account_login">Login</string>
     <string name="menu_account_login_sign_up">Login / Sign Up</string>
+    <string name="menu_result_alone">User</string>
+    <string name="menu_result_group">Group</string>
 
     <string name="menu_project">Project</string>
     <string name="menu_project_list">List</string>

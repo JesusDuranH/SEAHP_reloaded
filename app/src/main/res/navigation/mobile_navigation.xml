@@ -202,6 +202,10 @@
             android:id="@+id/action_nav_project_select_assess_to_select_assess_2"
             app:destination="@id/nav_project_select_assess_y"
             />
+        <action
+            android:id="@+id/action_nav_project_select_assess_to_result"
+            app:destination="@id/nav_account_result"
+            />
     </fragment>
 
 
@@ -235,5 +239,13 @@
             app:popUpTo="@id/nav_project_assess_thing_thing"
             app:popUpToInclusive="true"
             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_account_result"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.result.container.ResultContainerFragment"
+        android:label="@string/menu_assess_result"
+        tools:layout="@layout/fragment_assess_container"
+        >
     </fragment>
 </navigation>

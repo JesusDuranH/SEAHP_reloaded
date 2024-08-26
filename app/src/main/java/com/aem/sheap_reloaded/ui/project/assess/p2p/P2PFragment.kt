@@ -146,8 +146,8 @@ class P2PFragment: Fragment() {
                     loadingDialog.dismiss()
                     if (itExist != Element()) setValue = itExist!!.scaleElement!!
                     Log.d("seahp_P2PFragment", "set setValue: $setValue")
-                    textOptionA.text = textX
-                    textOptionB.text = textY
+                    textOptionA.text = textY
+                    textOptionB.text = textX
                     setSeekBar(textView, textX, textY)
                 }
             }

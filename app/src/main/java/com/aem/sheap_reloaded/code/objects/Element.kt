@@ -1,6 +1,9 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.content.Context
+import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -29,6 +32,7 @@ class Element(val xElement: Long,
     project,
     type), Serializable {
     //
+    private val save = Save()
     constructor(): this (0,0,"","", 0.0,
         0,"",null,0,0, User(), Project(), 0)
 
@@ -42,7 +46,12 @@ class Element(val xElement: Long,
         val newElement = Element(x, y, name, desc, scale,
             matrix.idMatrix, matrix.nameMatrix, matrix.descriptionMatrix, matrix.rowMax, matrix.columnMax,
             user, project, type)
-        AzureHelper().insertElement(newElement)
+        val threadCreateElement = Thread {
+            AzureHelper().insertElement(newElement)
+        }.apply {
+            start()
+            join()
+        }
         return newElement
     }
 
@@ -99,6 +108,40 @@ class Element(val xElement: Long,
             join()
         }
         return dataList
+    }
+
+    fun setX(setElement: Element, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_ElementX),
+            setElement.toByteArray(setElement),
+            context.getString(R.string.alias_elementX))
+    }
+
+    fun getX(context: Context): Element{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_ElementX),
+            context.getString(R.string.alias_elementX))
+        return if (element != null) Element().toElement(element)
+        else Element()
+    }
+
+    fun setY(setElement: Element, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_ElementY),
+            setElement.toByteArray(setElement),
+            context.getString(R.string.alias_elementY))
+    }
+
+    fun getY(context: Context): Element{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_ElementY),
+            context.getString(R.string.alias_elementY))
+        return if (element != null) Element().toElement(element)
+        else Element()
     }
 
     fun toByteArray(element: Element): ByteArray {

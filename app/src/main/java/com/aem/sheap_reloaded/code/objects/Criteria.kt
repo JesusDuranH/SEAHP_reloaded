@@ -1,10 +1,14 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.content.Context
+import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.io.Serializable
 import kotlin.random.Random
 
 class Criteria(val idCriteria: Long,
@@ -14,8 +18,10 @@ class Criteria(val idCriteria: Long,
                idProject: Long,
                nameProject: String,
                descriptionProject: String? = null
-) : Project (idProject, nameProject, descriptionProject) {
+) : Project (idProject, nameProject, descriptionProject), Serializable {
     //
+    private val save = Save()
+
     constructor(): this (0, "", null, null, 0,
         "", null)
     constructor(idCriteria: Long, nameCriteria: String, descriptionCriteria: String?,
@@ -69,6 +75,40 @@ class Criteria(val idCriteria: Long,
         }
 
         return dataList
+    }
+
+    fun setX(setX: Criteria, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaX),
+            Criteria().toByteArray(setX),
+            context.getString(R.string.alias_criteriaX))
+    }
+
+    fun getX(context: Context): Criteria{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaX),
+            context.getString(R.string.alias_criteriaX))
+        return if (element != null) Criteria().toCriteria(element)
+        else Criteria()
+    }
+
+    fun setY(setY: Criteria, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaY),
+            Criteria().toByteArray(setY),
+            context.getString(R.string.alias_criteriaY))
+    }
+
+    fun getY(context: Context): Criteria{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaY),
+            context.getString(R.string.alias_criteriaY))
+        return if (element != null) Criteria().toCriteria(element)
+        else Criteria()
     }
 
     fun toByteArray(criteria: Criteria): ByteArray {

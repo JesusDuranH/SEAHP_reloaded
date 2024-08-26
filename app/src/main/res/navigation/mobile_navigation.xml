@@ -182,6 +182,22 @@
         android:label="@string/menu_assess"
         tools:layout="@layout/fragment_assess_matrix"
         >
+        <action
+            android:id="@+id/action_nav_assess_perform_to_select_assess"
+            app:destination="@id/nav_project_select_assess_x"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_select_assess_x"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.SelectXFragment"
+        android:label="@string/project_select_assess"
+        tools:layout="@layout/fragment_assess_select_x"
+        >
+        <action
+            android:id="@+id/action_nav_project_select_assess_to_assess_perform"
+            app:destination="@id/nav_matrix_list"
+            />
     </fragment>
 
 

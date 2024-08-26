@@ -82,15 +82,23 @@
     <string name="save_project_tittle">Project</string>
     <string name="save_project_edit">Edit</string>
     <string name="save_matrix">Matrix</string>
-    <string name="save_Element">Element</string>
-    <string name="save_ElementB">ElementB</string>
+    <string name="save_CriteriaX">CriteriaX</string>
+    <string name="save_CriteriaY">CriteriaY</string>
+    <string name="save_AlternativeX">AlternativeX</string>
+    <string name="save_AlternativeY">AlternativeY</string>
+    <string name="save_ElementX">Element</string>
+    <string name="save_ElementY">ElementB</string>
 
     <string name="alias_user">Users</string>
     <string name="alias_project">Projects</string>
     <string name="alias_edit">Edits</string>
     <string name="alias_matrix">Matrix</string>
-    <string name="alias_element">Element</string>
-    <string name="alias_elementB">ElementB</string>
+    <string name="alias_criteriaX">CriteriaX</string>
+    <string name="alias_criteriaY">CriteriaY</string>
+    <string name="alias_alternativeX">AlternativeX</string>
+    <string name="alias_alternativeY">AlternativeY</string>
+    <string name="alias_elementX">Element</string>
+    <string name="alias_elementY">ElementB</string>
     <string name="alias_online">connection.ars</string>
 
     <string name="button_save">Save</string>

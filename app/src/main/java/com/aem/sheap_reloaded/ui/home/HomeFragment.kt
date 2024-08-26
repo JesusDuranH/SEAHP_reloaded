@@ -90,7 +90,7 @@ class HomeFragment : Fragment() {
         loading.show(childFragmentManager, "seahp_loadingDialog") //Inicia Loading
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                user = configProject.getUser(context)
+                user = User().get(context)
                 if (user != User()){
                     login = User().login(user.user, user.pass, context) == 3 //Consulta a DB
                     if (!login) user = User()                           //Procesar la Info

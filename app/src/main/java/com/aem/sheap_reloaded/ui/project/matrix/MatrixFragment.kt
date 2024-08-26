@@ -180,29 +180,16 @@ class MatrixFragment: Fragment() {
             matrix.rowMax, matrix.columnMax, user, project, matrix.type)
         val matII = when (mat.idMatrix.toInt()){
             1 -> {
-                val threadElement = Thread {
-                    //
-                    val element = Element().create(0,0,"Table Create",null,
-                        0.0,mat, mat.project, mat.user)
-                }.apply {
-                    start()
-                    join()
-                }
+                val element = Element().create(0,0,"Table Create",null,
+                    0.0,mat, mat.project, mat.user)
                 mat
             }
             2 ->{
                 //
                 val row = Criteria().listByProject(project)
                 Matrix().setDefaultScaleCriteriaCriteria(mat, row, user)
-
-                val threadElement = Thread {
-                    //
-                    val element = Element().create(0,0,"Table Create",null,
-                        0.0,mat, mat.project, mat.user)
-                }.apply {
-                    start()
-                    join()
-                }
+                val element = Element().create(0,0,"Table Create",null,
+                    0.0,mat, mat.project, mat.user)
                 mat
             }
             else -> Matrix()

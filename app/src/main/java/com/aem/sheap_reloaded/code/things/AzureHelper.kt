@@ -915,6 +915,49 @@ class AzureHelper {
             callback(Element())
         }
     }
+
+    fun getAllElementsOnMatrix(matrix: Matrix, project: Project, callback: (List<Element>) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_ELEMENT[0]} " +
+                "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? "
+        Log.d("DB", sql)
+        val elements = mutableListOf<Element>()
+        try {
+            connection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getMatrixByID(project, matrix){getMatrix ->
+                        statement.setLong(1, getMatrix.idMatrix)
+                        statement.setLong(2, getMatrix.project.idProject)
+                        statement.executeQuery().use { rs ->
+                            var searchElement: Element
+                            while (rs.next()) {
+                                val row_el = rs.getLong(TABLE_ELEMENT[4])
+                                val col_ele = rs.getLong(TABLE_ELEMENT[5])
+                                val name = rs.getString(TABLE_ELEMENT[6])
+                                val desc = rs.getString(TABLE_ELEMENT[7])
+                                val scale = rs.getDouble(TABLE_ELEMENT[8])
+
+                                searchElement = Element(col_ele, row_el, name, desc, scale,
+                                    getMatrix.idMatrix, getMatrix.nameMatrix, getMatrix.descriptionMatrix,
+                                    getMatrix.rowMax, getMatrix.columnMax, User(), getMatrix.project,
+                                    getMatrix.type)
+                                elements.add(searchElement)
+                            }
+                        }
+                        Log.d("seahp_AzureDB", "getAllElementsOnMatrix: $elements")
+                        callback(elements)
+                    }
+                }
+            }
+
+        } catch (ex: SQLException){
+            Log.d("seahp_AzureDB", "getAllElementsOnMatrix SQLException: " + ex.printStackTrace())
+            callback(mutableListOf())
+        } catch (e: Exception) {
+            Log.d("seahp_AzureDB", "getAllElementsOnMatrix Exception: " + e.printStackTrace())
+            callback(mutableListOf())
+        }
+    }
 }
 
 /*
@@ -928,53 +971,7 @@ import com.aem.seahp.code.types.Participant
 class AzureHelper {
     //
 
-    fun getAllAssessElementsOnMatrixAllUsers(matrix: Matrix, project: Project, callback: (List<Element>) -> Unit){
-        //
-        val sql = "SELECT * FROM ${TABLE_ELEMENT[0]} " +
-                "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? "
-        Log.d("DB", sql)
-        val elements = mutableListOf<Element>()
-        try {
-            getMatrixByID(project.idProject, matrix.idMatrix){mat ->
-                getProjectByID(project.idProject){proj ->
-                    getConnection().use { conn ->
-                        conn.prepareStatement(sql).use { statement ->
-                            statement.setLong(1, matrix.idMatrix)
-                            statement.setLong(2, project.idProject)
-                            statement.executeQuery().use { rs ->
-                                var searchElement: Element
-                                while (rs.next()) {
-                                    val id_mat = rs.getLong(TABLE_ELEMENT[1])
-                                    val id_pro = rs.getLong(TABLE_ELEMENT[2])
-                                    val us_us = rs.getString(TABLE_ELEMENT[3])
-                                    val row_el = rs.getInt(TABLE_ELEMENT[4])
-                                    val col_ele = rs.getInt(TABLE_ELEMENT[5])
-                                    val name = rs.getString(TABLE_ELEMENT[6])
-                                    val desc = rs.getString(TABLE_ELEMENT[7])
-                                    val scale = rs.getDouble(TABLE_ELEMENT[8])
 
-                                    getUserByUser(us_us){getUser ->
-                                        //
-                                        searchElement = Element(col_ele, row_el, name, desc, scale,
-                                            mat.idMatrix, mat.nameMatrix, mat.descriptionMatrix,
-                                            mat.rowMax, mat.columnMax, getUser, proj,
-                                            matrix.type)
-                                        elements.add(searchElement)
-                                        Log.d("DB", searchElement.toString())
-                                    }
-                                }
-                            }
-                            callback(elements)
-                        }
-                    }
-                }
-            }
-
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            callback(mutableListOf())
-        }
-    }
 
     fun getRowElementsOnMatrix(matrix: Matrix, project: Project, callback: (List<Element>) -> Unit){
         //

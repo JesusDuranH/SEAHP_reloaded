@@ -92,7 +92,7 @@ class Element(val xElement: Long,
         return evaluate
     }
 
-    fun getElementAllMatrixByUser(
+    fun getAllElementOnMatrixByUser(
         matrix: Matrix,
         project: Project,
         user: User
@@ -101,6 +101,23 @@ class Element(val xElement: Long,
         var dataList = mutableListOf<Element>()
         val threadListElements = Thread{
             AzureHelper().getAllElementsOnMatrixByUser(matrix, project, user){list ->
+                dataList = list.toMutableList()
+            }
+        }.apply {
+            start()
+            join()
+        }
+        return dataList
+    }
+
+    fun getAllElementOnMatrix(
+        matrix: Matrix,
+        project: Project
+    ): List<Element>{
+        //
+        var dataList = mutableListOf<Element>()
+        val threadListAllElements = Thread{
+            AzureHelper().getAllElementsOnMatrix(matrix, project){list ->
                 dataList = list.toMutableList()
             }
         }.apply {

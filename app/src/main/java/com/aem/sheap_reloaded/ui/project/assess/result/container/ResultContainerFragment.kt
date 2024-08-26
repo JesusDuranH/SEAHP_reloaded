@@ -6,8 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
+import com.aem.sheap_reloaded.code.objects.Participant
+import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.databinding.FragmentAssessContainerBinding
+import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ResultContainerFragment: Fragment() {

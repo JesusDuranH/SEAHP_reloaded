@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.ui.project.assess.result.alone.ResultFragment
+import com.aem.sheap_reloaded.ui.project.assess.result.group.GroupResultFragment
 
 private val TAB_TITTLE = arrayOf(
     R.string.menu_result_alone,
@@ -17,7 +18,7 @@ class ResultContainerPagerAdapter (private val context: Context, fm: FragmentMan
     override fun getItem(position: Int): Fragment {
         return when(position){
             0 -> ResultFragment()
-            1 -> ResultFragment()
+            1 -> GroupResultFragment()
             else -> throw IllegalArgumentException ("Invalid Position $position")
         }
     }

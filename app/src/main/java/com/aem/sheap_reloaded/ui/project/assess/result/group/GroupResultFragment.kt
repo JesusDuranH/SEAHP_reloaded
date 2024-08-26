@@ -1,4 +1,4 @@
-package com.aem.sheap_reloaded.ui.project.assess.result.alone
+package com.aem.sheap_reloaded.ui.project.assess.result.group
 
 import android.graphics.Color
 import android.os.Bundle
@@ -18,8 +18,9 @@ import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
 import com.aem.sheap_reloaded.code.things.Maths
 import com.aem.sheap_reloaded.code.things.SEAHP
-import com.aem.sheap_reloaded.databinding.FragmentAssessResultBinding
+import com.aem.sheap_reloaded.databinding.FragmentAssessGroupBinding
 import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
+import com.aem.sheap_reloaded.ui.project.assess.result.alone.Result
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -32,7 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ResultFragment: Fragment() {
+class GroupResultFragment: Fragment() {
     //
     private lateinit var user: User
     private lateinit var matrix: Matrix
@@ -42,9 +43,9 @@ class ResultFragment: Fragment() {
     private lateinit var allElement: MutableList<Element>
     private lateinit var configProject: SEAHP
     private lateinit var participants: MutableList<Participant>
-    private lateinit var cakeIsLie: PieChart
+    private lateinit var cakeIsTrue: PieChart
 
-    private var _binding: FragmentAssessResultBinding? = null
+    private var _binding: FragmentAssessGroupBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -54,8 +55,8 @@ class ResultFragment: Fragment() {
     ): View {
 
         val assessResultViewModel =
-            ViewModelProvider(this)[ResultViewModel::class.java]
-        _binding = FragmentAssessResultBinding.inflate(inflater, container, false)
+            ViewModelProvider(this)[GroupResultViewModel::class.java]
+        _binding = FragmentAssessGroupBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textAssessResult
@@ -79,7 +80,7 @@ class ResultFragment: Fragment() {
         project = Project().get(context)
         configProject = SEAHP()
 
-        cakeIsLie = binding.cakeIsLie
+        cakeIsTrue = binding.cakeIsTrue
     }
 
     private fun getData(): Boolean{
@@ -108,7 +109,7 @@ class ResultFragment: Fragment() {
             val isAdmin = Participant().isAdminInThis(user, project)
             val admin = (isAdmin != Participant())
             Log.d("seahp_ResultFragment", "set admin = $admin")
-            userElement =  Element().getAllElementOnMatrixByUser(matrix, project, user).toMutableList()
+            userElement =  Element().getAllElementOnMatrix(matrix, project).toMutableList()
             /*if (admin){
                 allElement = Element().getAllAssessElementOnMatrixOnline(matrix, project).toMutableList()
                 val element = mutableListOf<Element>()
@@ -131,8 +132,8 @@ class ResultFragment: Fragment() {
                     else  {
                         Maths().consistencyRatio(userElement).text
                     }*/
-                graphic(Maths().consistencyRatio(userElement), cakeIsLie, "Preferencia Individual")
-                cakeIsLie.visibility = View.VISIBLE
+                graphic(Maths().consistencyRatio(userElement), cakeIsTrue, "Preferencia Grupal")
+                cakeIsTrue.visibility = View.VISIBLE
                 /*if (isAdmin) {
                     graphic(Maths().mediaGeometrica(allElement, participants), cakeIsTrue, "Preferencia Grupal")
                     cakeIsTrue.visibility = View.VISIBLE

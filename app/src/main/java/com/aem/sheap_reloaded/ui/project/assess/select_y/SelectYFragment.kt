@@ -34,6 +34,7 @@ class SelectYFragment: Fragment() {
     private lateinit var project: Project
     private lateinit var criteriaList: MutableList<Criteria>
     private lateinit var alternativeList: MutableList<Alternative>
+    private lateinit var elementList: MutableList<Element>
 
     private var _binding: FragmentAssessSelectYBinding? = null
     private val binding get() = _binding!!
@@ -95,6 +96,8 @@ class SelectYFragment: Fragment() {
         Log.d("seahp_SelectYFragment", "set criteriaList initial empty: $criteriaList")
         alternativeList = emptyList<Alternative>().toMutableList()
         Log.d("seahp_SelectYFragment", "set alternativeList initial empty: $alternativeList")
+        elementList = emptyList<Element>().toMutableList()
+        Log.d("seahp_SelectYFragment", "set elementList initial empty: $elementList")
 
         var criteriaX: Criteria
         var alternativeX: Alternative
@@ -103,44 +106,30 @@ class SelectYFragment: Fragment() {
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
         CoroutineScope(Dispatchers.IO).launch {
+            elementList = Element().getAllElementOnMatrixByUser(matrix, project, user).toMutableList()
             when (matrix.idMatrix){
                 1L ->{
                     Log.d("seahp_SelectYFragment", "set 1 alternativeList:")
                     alternativeList = Alternative().listByProject(project).toMutableList()
                     criteriaX = Criteria().getX(requireContext())
-                    for (itemY in alternativeList){
-                        val check = Element().toEvaluate(matrix, project, user, criteriaX.idCriteria, itemY.idAlternative)
-                        listOfValues.add(check)
-                        Log.d("seahp_SelectYFragment", "set 1 check")
-                    }
                     Log.d("seahp_SelectYFragment", "set 1 listOfValues: $listOfValues")
                 }
                 2L ->{
                     Log.d("seahp_SelectYFragment", "set 2 criteriaList:")
                     criteriaList = Criteria().listByProject(project).toMutableList()
                     criteriaX = Criteria().getX(requireContext())
-                    for (itemY in criteriaList){
-                        val check = Element().toEvaluate(matrix, project, user, criteriaX.idCriteria, itemY.idCriteria)
-                        listOfValues.add(check)
-                        Log.d("seahp_SelectYFragment", "set 2 check")
-                    }
                     Log.d("seahp_SelectYFragment", "set 2 listOfValues: $listOfValues")
                 }
                 else ->{
                     Log.d("seahp_SelectYFragment", "set 3 alternativeList:")
                     alternativeList = Alternative().listByProject(project).toMutableList()
                     alternativeX = Alternative().getX(requireContext())
-                    for (itemY in alternativeList){
-                        val check = Element().toEvaluate(matrix, project, user, alternativeX.idAlternative, itemY.idAlternative)
-                        listOfValues.add(check)
-                        Log.d("seahp_SelectYFragment", "set 3 check")
-                    }
                     Log.d("seahp_SelectYFragment", "set 3 listOfValues: $listOfValues")
                 }
             }
             withContext(Dispatchers.Main){
                 //
-                setRecyclerView(criteriaList, alternativeList, listOfValues)
+                setRecyclerView(criteriaList, alternativeList, elementList)
                 loadingDialog.dismiss()
             }
         }

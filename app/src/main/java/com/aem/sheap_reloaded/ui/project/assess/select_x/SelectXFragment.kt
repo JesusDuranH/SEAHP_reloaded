@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
+import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.User
@@ -32,6 +33,7 @@ class SelectXFragment: Fragment() {
     private lateinit var project: Project
     private lateinit var criteriaList: MutableList<Criteria>
     private lateinit var alternativeList: MutableList<Alternative>
+    private lateinit var allElementsByUser: MutableList<Element>
 
     private var _binding: FragmentAssessSelectXBinding? = null
     private val binding get() = _binding!!
@@ -103,10 +105,13 @@ class SelectXFragment: Fragment() {
         Log.d("seahp_SelectXFragment", "set criteriaList initial empty: $criteriaList")
         alternativeList = emptyList<Alternative>().toMutableList()
         Log.d("seahp_SelectXFragment", "set alternativeList initial empty: $alternativeList")
+        allElementsByUser = emptyList<Element>().toMutableList()
+        Log.d("seahp_SelectXFragment", "set AllElementsByUser initial empty: $allElementsByUser")
 
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
         CoroutineScope(Dispatchers.IO).launch {
+            allElementsByUser = Element().getAllElementOnMatrixByUser(matrix, project, user).toMutableList()
             when(matrix.idMatrix){
                 1L -> {
                     Log.d("seahp_SelectXFragment", "set 1 criteriaList:")
@@ -133,7 +138,7 @@ class SelectXFragment: Fragment() {
     private fun setRecyclerView(criteriaList: List<Criteria>, alternativeList: List<Alternative>){
         //
         binding.selectAssessAlternativeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = SelectXRecyclerViewAdapter(criteriaList, alternativeList)
+        val adapter = SelectXRecyclerViewAdapter(criteriaList, alternativeList, allElementsByUser, matrix.idMatrix)
         binding.selectAssessAlternativeRecyclerView.adapter = adapter
     }
 

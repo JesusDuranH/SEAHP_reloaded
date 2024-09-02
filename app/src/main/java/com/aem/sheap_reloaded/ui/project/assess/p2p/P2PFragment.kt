@@ -35,6 +35,7 @@ class P2PFragment: Fragment() {
     private lateinit var criteriaY: Criteria
     private lateinit var alternativeX: Alternative
     private lateinit var alternativeY: Alternative
+    private lateinit var textView: TextView
 
     private var _binding: FragmentAssessP2pBinding? = null
     private val binding get() = _binding!!
@@ -49,13 +50,13 @@ class P2PFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         //
-        val assessThingThingViewModel =
-            ViewModelProvider(this)[P2PViewModel::class.java]
+        /*val assessThingThingViewModel =
+            ViewModelProvider(this)[P2PViewModel::class.java]*/
         _binding = FragmentAssessP2pBinding.inflate(inflater, container, false)
 
         val root: View = binding.root
 
-        val textView: TextView = binding.textAssessThingThing
+        textView = binding.textAssessThingThing
         /*assessThingThingViewModel.text.observe(viewLifecycleOwner){
             textView.text = it
         }*/
@@ -119,26 +120,30 @@ class P2PFragment: Fragment() {
                     1L ->{
                         criteriaX = Criteria().getX(context)
                         alternativeY = Alternative().getY(context)
-                        itExist = Element().toEvaluate(matrix, project, user,
-                            criteriaX.idCriteria, alternativeY.idAlternative)
                         textX = criteriaX.nameCriteria
                         textY = alternativeY.nameAlternative
+                        itExist = Element().toEvaluate(matrix, project, user,
+                            criteriaX.idCriteria, alternativeY.idAlternative)
                     }
                     2L -> {
                         criteriaX = Criteria().getX(context)
                         criteriaY = Criteria().getY(context)
-                        itExist = Element().toEvaluate(matrix, project, user,
-                            criteriaX.idCriteria, criteriaY.idCriteria)
+                        Log.d("seahp_P2PFragment", "get Criteria X: $criteriaX")
+                        Log.d("seahp_P2PFragment", "get Criteria Y: $criteriaY")
                         textX = criteriaX.nameCriteria
                         textY = criteriaY.nameCriteria
+                        itExist = Element().toEvaluate(matrix, project, user,
+                            criteriaX.idCriteria, criteriaY.idCriteria)
                     }
                     else ->{
                         alternativeX = Alternative().getX(context)
                         alternativeY = Alternative().getY(context)
-                        itExist = Element().toEvaluate(matrix, project, user,
-                            alternativeX.idAlternative, alternativeY.idAlternative)
+                        Log.d("seahp_P2PFragment", "get Alternative X: $alternativeX")
+                        Log.d("seahp_P2PFragment", "get Alternative Y: $alternativeY")
                         textX = alternativeX.nameAlternative
                         textY = alternativeY.nameAlternative
+                        itExist = Element().toEvaluate(matrix, project, user,
+                            alternativeX.idAlternative, alternativeY.idAlternative)
                     }
                 }
                 Log.d("seahp_P2PFragment", "set search itExist: $itExist")
@@ -146,23 +151,26 @@ class P2PFragment: Fragment() {
                     loadingDialog.dismiss()
                     if (itExist != Element()) setValue = itExist!!.scaleElement!!
                     Log.d("seahp_P2PFragment", "set setValue: $setValue")
+
                     textOptionA.text = textY
                     textOptionB.text = textX
-                    setSeekBar(textView, textX, textY)
+
+                    setValue = if (setValue < 1) (-1 / setValue) else setValue
+                    Log.d("seahp_P2PFragment", "set setProgess: $setValue")
+
+                    setSeekBar(textView, textX, textY, setValue)
+                    textView.text = setText(setValue.toInt(), textX, textY)
                 }
             }
         }
     }
 
-    private fun setSeekBar(textView: TextView, elementX: String, elementY: String){
+    private fun setSeekBar(textView: TextView, elementX: String, elementY: String, progress: Double){
         //
         val seekBar = binding.seekBarAssess
         val stepValues = listOf(-9, -8, -7, -6, -5, -4, -3, -2, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 
         seekBar.max = stepValues.size - 1
-        val progress = if (setValue < 1) (-1 / setValue)
-        else setValue
-        textView.text = setText(progress.toInt(), elementX, elementY)
         seekBar.progress = stepValues.indexOf(progress.toInt())
         Log.d("seahp_P2PFragment", "setSeekBar progress: ${seekBar.progress}")
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -206,22 +214,12 @@ class P2PFragment: Fragment() {
 
     private fun buttonOperation(){
         binding.assessButtonSaveNExit.setOnClickListener {
-            if (itExist == Element()) {
-                //
-                saveValue(true)
-            } else {
-                //
-                updateVal(true)
-            }
+            if (itExist == Element()) saveValue(true)
+            else updateVal(true)
         }
         binding.assessButtonNext.setOnClickListener {
-            if (itExist == Element()) {
-                //
-                saveValue(false)
-            } else {
-                //
-                updateVal(false)
-            }
+            if (itExist == Element()) saveValue(false)
+            else updateVal(false)
         }
     }
 
@@ -233,8 +231,8 @@ class P2PFragment: Fragment() {
         val mirrorName = "$textX - $textY"
         val mirrorValue = 1 / setValue
 
-        var newElement = Element()
-        var mirrorElement = Element()
+        var newElement: Element
+        var mirrorElement: Element
 
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
@@ -275,8 +273,8 @@ class P2PFragment: Fragment() {
         if (itExist!!.scaleElement != setValue){
             //
             if (setValue < 0) setValue = -1 / setValue
-            var updateValue = Element()
-            var mirrorUpdate = Element()
+            var updateValue: Element
+            var mirrorUpdate: Element
 
             val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
             loadingDialog.show(childFragmentManager, "loadingDialog")
@@ -302,14 +300,44 @@ class P2PFragment: Fragment() {
         }
     }
 
+    private fun next(){
+        //
+        val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
+        loadingDialog.show(childFragmentManager, "loadingDialog")
+        CoroutineScope(Dispatchers.IO).launch {
+            when (matrix.idMatrix){
+                2L -> {
+                    Log.d("seahp_P2PFragment", "next next list:")
+                    val criteriaList = Criteria().listByProject(project)
+                    val max = criteriaList.size - 1
+                    Log.d("seahp_P2PFragment", "next max: $max")
+                    val position = criteriaList.indexOf(criteriaY)
+                    Log.d("seahp_P2PFragment", "next criteria Y: $criteriaY")
+                    Log.d("seahp_P2PFragment", "next position: $position")
+                    if (position != -1){
+                        var nextPosition = if (position == max) 0
+                                            else position + 1
+                        Log.d("seahp_P2PFragment", "next next position: $nextPosition")
+                        Log.d("seahp_P2PFragment", "next next criteria: ${criteriaList[nextPosition]}")
+                        if (criteriaList[nextPosition] == criteriaX) nextPosition++
+                            //
+                            Criteria().setY(criteriaList[nextPosition], requireContext())
+                            withContext(Dispatchers.Main){
+                            loadingDialog.dismiss()
+                            set (textView)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun getOut(saveNExit: Boolean){
         //
         if (saveNExit) findNavController().navigate(R.id.action_nav_project_assess_thing_thing_to_select_assess,
             null,
             NavOptions.Builder().setPopUpTo(R.id.nav_project_select_assess_x, true).build())
-        else findNavController().navigate(R.id.action_nav_project_assess_thing_thing_to_select_assess_2,
-            null,
-            NavOptions.Builder().setPopUpTo(R.id.nav_project_select_assess_y, true).build())
+        else next()
     }
 
     override fun onDestroyView() {

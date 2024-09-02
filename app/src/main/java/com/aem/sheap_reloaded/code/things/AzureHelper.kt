@@ -922,7 +922,7 @@ class AzureHelper {
                 "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? "
         Log.d("seahp_AzureDB", "getAllElementsOnMatrix: $sql")
         val elements = mutableListOf<Element>()
-        var userList = mutableListOf<User>()
+        val userList = mutableListOf<User>()
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->

@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream
 import java.io.Serializable
 import kotlin.random.Random
 
-class Criteria(val idCriteria: Long,
+open class Criteria(val idCriteria: Long,
                val nameCriteria: String,
                val descriptionCriteria: String? = null,
                val subCriteria: Long? = null,
@@ -109,6 +109,32 @@ class Criteria(val idCriteria: Long,
             context.getString(R.string.alias_criteriaY))
         return if (element != null) Criteria().toCriteria(element)
         else Criteria()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Criteria) return false
+
+        if (idCriteria != other.idCriteria) return false
+        if (nameCriteria != other.nameCriteria) return false
+        if (descriptionCriteria != other.descriptionCriteria) return false
+        if (subCriteria != other.subCriteria) return false
+        if (idProject != other.idProject) return false
+        if (nameProject != other.nameProject) return false
+        if (descriptionProject != other.descriptionProject) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = idCriteria.hashCode()
+        result = 29 * result + nameCriteria.hashCode()
+        result = 29 * result + descriptionCriteria.hashCode()
+        result = 29 * result + subCriteria.hashCode()
+        result = 29 * result + idProject.hashCode()
+        result = 29 * result + nameProject.hashCode()
+        result = 29 * result + descriptionProject.hashCode()
+        return result
     }
 
     fun toByteArray(criteria: Criteria): ByteArray {

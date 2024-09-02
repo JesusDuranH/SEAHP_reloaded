@@ -30,17 +30,13 @@ class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
         fun renderCriteria(criteria: Criteria){
             with(binding){
                 //
-                alternativeButtonSelect.text = "${criteria.nameCriteria} (${criteria.idCriteria})"
+                alternativeButtonSelect.text = criteria.nameCriteria
 
                 val x = Criteria().getX(root.context)
                 if (x.idCriteria == criteria.idCriteria) alternativeButtonSelect.isEnabled = false
                 else {
-                    /*val user = User().get(root.context)
-                    val matrix = Matrix().get(root.context)
-                    val project = Project().get(root.context)
-                    val check = Element().toEvaluate(matrix, project, user, x.idCriteria, criteria.idCriteria)*/
-                    val check = list[position]
-                    if (check.scaleElement == 0.0) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    val check = list.find { it.xElement == x.idCriteria && it.yElement == criteria.idCriteria && it.scaleElement != 0.0 && it.scaleElement != null }
+                    if (check == null) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
                     else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
 
                     alternativeButtonSelect.setOnClickListener {
@@ -55,16 +51,12 @@ class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
         fun renderAlternative(alternative: Alternative){
             with(binding){
                 //
-                alternativeButtonSelect.text = "${alternative.nameAlternative} (${alternative.nameAlternative})"
+                alternativeButtonSelect.text = alternative.nameAlternative
                 val x = Alternative().getX(root.context)
                 if (x.idAlternative == alternative.idAlternative) alternativeButtonSelect.isEnabled = false
                 else {
-                    /*val user = User().get(root.context)
-                    val matrix = Matrix().get(root.context)
-                    val project = Project().get(root.context)
-                    val check = Element().toEvaluate(matrix, project, user, x.idAlternative, alternative.idAlternative)*/
-                    val check = list[position]
-                    if (check.scaleElement == 0.0) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    val check = list.find { it.xElement == x.idAlternative && it.yElement == alternative.idAlternative && it.scaleElement != 0.0 && it.scaleElement != null }
+                    if (check == null) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
                     else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
                     alternativeButtonSelect.setOnClickListener {
                         Alternative().setY(alternative, root.context)

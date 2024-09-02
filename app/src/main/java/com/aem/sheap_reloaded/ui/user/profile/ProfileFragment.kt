@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.aem.sheap_reloaded.R
+import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.SEAHP
 import com.aem.sheap_reloaded.databinding.FragmentUserProfileBinding
@@ -66,6 +67,7 @@ class ProfileFragment: Fragment() {
             //
             profileButtonLogout.setOnClickListener {
                 User().set(User(), requireContext())
+                Project().set(Project(), requireContext())
                 Log.d("seahp_ProfileFragment", "setUser: Logout")
                 findNavController().navigate(R.id.action_nav_profile_to_home_logout)
             }

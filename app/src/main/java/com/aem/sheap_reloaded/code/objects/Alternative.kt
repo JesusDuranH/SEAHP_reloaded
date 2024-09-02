@@ -1,6 +1,9 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.content.Context
+import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -16,6 +19,7 @@ class Alternative(val idAlternative: Long,
                   descriptionProject: String? = null
 ) : Project(idProject, nameProject, descriptionProject), Serializable {
     //
+    private val save = Save()
     constructor(): this (0,"","",0,"",null)
     constructor(id: Long, name: String, desc: String?, idProject: Long): this (id, name, desc,
         idProject,"",null)
@@ -34,7 +38,7 @@ class Alternative(val idAlternative: Long,
                 start()
                 join()
             }
-        } while (isFree == Alternative())
+        } while (isFree != Alternative())
         val newAlternative = Alternative(newID, name, desc,
             project.idProject, project.nameProject, project.descriptionProject)
         AzureHelper().insertAlternative(newAlternative)
@@ -57,6 +61,40 @@ class Alternative(val idAlternative: Long,
         return dataList
     }
 
+    fun setX(setX: Alternative, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_AlternativeX),
+            Criteria().toByteArray(setX),
+            context.getString(R.string.alias_alternativeX))
+    }
+
+    fun getX(context: Context): Alternative{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_AlternativeX),
+            context.getString(R.string.alias_alternativeX))
+        return if (element != null) Alternative().toAlternative(element)
+        else Alternative()
+    }
+
+    fun setY(setY: Alternative, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_AlternativeY),
+            Criteria().toByteArray(setY),
+            context.getString(R.string.alias_alternativeY))
+    }
+
+    fun getY(context: Context): Alternative{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_AlternativeY),
+            context.getString(R.string.alias_alternativeY))
+        return if (element != null) Alternative().toAlternative(element)
+        else Alternative()
+    }
+
     fun toByteArray(alternative: Alternative): ByteArray {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val objectOutputStream = ObjectOutputStream(byteArrayOutputStream)
@@ -69,6 +107,6 @@ class Alternative(val idAlternative: Long,
     }
 
     override fun toString(): String {
-        return "Alternative ($idAlternative, \"$nameAlternative\", \"$descriptionAlternative\", $idProject)"
+        return "\nAlternative ($idAlternative, \"$nameAlternative\", \"$descriptionAlternative\", $idProject)"
     }
 }

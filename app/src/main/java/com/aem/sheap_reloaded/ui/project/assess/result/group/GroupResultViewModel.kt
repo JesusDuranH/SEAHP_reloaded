@@ -1,12 +1,13 @@
-package com.aem.sheap_reloaded.ui.project.create.participant
+package com.aem.sheap_reloaded.ui.project.assess.result.group
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ParticipantViewModel: ViewModel() {
+class GroupResultViewModel: ViewModel() {
     private val _text = MutableLiveData<String>().apply {
-        value = "This is Participant Fragment"
+        //value = "This is Result Group Fragment"
+        value = ""
     }
     val text: LiveData<String> = _text
 }

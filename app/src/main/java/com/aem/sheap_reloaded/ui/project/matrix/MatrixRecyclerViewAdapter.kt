@@ -34,8 +34,8 @@ class MatrixRecyclerViewAdapter(private val matrices: List<Matrix>)
                 matrixAssessItem.setOnClickListener {
                     Matrix().set(matrix, root.context)
                     Log.d("seahp_MatrixRecyclerViewAdapter", "set Matrix: $matrix")
-                    /*Navigation.findNavController(view)
-                        .navigate(R.id.action_nav_assess_perform_to_select_assess)*/
+                    Navigation.findNavController(view)
+                        .navigate(R.id.action_nav_assess_perform_to_select_assess)
                 }
             }
         }

@@ -43,7 +43,7 @@ class ProjectListRecyclerViewAdapter (private val participants: List<Participant
 
                 root.setOnClickListener {
                     Project().set(dataProject, root.context)
-                    //Navigation.findNavController(view).navigate(R.id.action_nav_project_list_to_assess)
+                    Navigation.findNavController(view).navigate(R.id.action_nav_project_list_to_matrix_list)
                 }
             }
         }

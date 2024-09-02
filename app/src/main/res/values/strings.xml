@@ -32,6 +32,8 @@
     <string name="menu_account_sign_up">Sign Up</string>
     <string name="menu_account_login">Login</string>
     <string name="menu_account_login_sign_up">Login / Sign Up</string>
+    <string name="menu_result_alone">User</string>
+    <string name="menu_result_group">Group</string>
 
     <string name="menu_project">Project</string>
     <string name="menu_project_list">List</string>
@@ -82,18 +84,27 @@
     <string name="save_project_tittle">Project</string>
     <string name="save_project_edit">Edit</string>
     <string name="save_matrix">Matrix</string>
-    <string name="save_Element">Element</string>
-    <string name="save_ElementB">ElementB</string>
+    <string name="save_CriteriaX">CriteriaX</string>
+    <string name="save_CriteriaY">CriteriaY</string>
+    <string name="save_AlternativeX">AlternativeX</string>
+    <string name="save_AlternativeY">AlternativeY</string>
+    <string name="save_ElementX">Element</string>
+    <string name="save_ElementY">ElementB</string>
 
     <string name="alias_user">Users</string>
     <string name="alias_project">Projects</string>
     <string name="alias_edit">Edits</string>
     <string name="alias_matrix">Matrix</string>
-    <string name="alias_element">Element</string>
-    <string name="alias_elementB">ElementB</string>
+    <string name="alias_criteriaX">CriteriaX</string>
+    <string name="alias_criteriaY">CriteriaY</string>
+    <string name="alias_alternativeX">AlternativeX</string>
+    <string name="alias_alternativeY">AlternativeY</string>
+    <string name="alias_elementX">Element</string>
+    <string name="alias_elementY">ElementB</string>
     <string name="alias_online">connection.ars</string>
 
     <string name="button_save">Save</string>
+    <string name="button_savenexit">Save n Exit</string>
     <string name="button_logout">Logout</string>
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
@@ -145,7 +156,7 @@
     <string name="home_mode_offline">Offline</string>
     <string name="home_mode_connecting">Connecting</string>
     <string name="home_user_welcome_0">Welcome, login or Register -></string>
-    <string name="home_user_welcome_1">Welcome back: </string>
+    <string name="home_user_welcome_1">Welcome: </string>
     <string name="home_last_project_default">Name \nDescription</string>
     <string name="home_last_project_false">Nothing to see</string>
 

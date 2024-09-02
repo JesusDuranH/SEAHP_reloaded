@@ -23,6 +23,10 @@
             android:id="@+id/action_nav_home_to_project_list"
             app:destination="@id/nav_project_list"
             />
+        <action
+            android:id="@+id/action_nav_home_to_nav_matrix_last_project"
+            app:destination="@id/nav_matrix_list"
+            />
     </fragment>
 
     <fragment
@@ -62,6 +66,10 @@
         <action
             android:id="@+id/action_nav_project_list_to_create"
             app:destination="@id/nav_project_create"
+            />
+        <action
+            android:id="@+id/action_nav_project_list_to_matrix_list"
+            app:destination="@id/nav_matrix_list"
             />
     </fragment>
 
@@ -168,5 +176,76 @@
             />
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_matrix_list"
+        android:name="com.aem.sheap_reloaded.ui.project.matrix.MatrixFragment"
+        android:label="@string/menu_assess"
+        tools:layout="@layout/fragment_assess_matrix"
+        >
+        <action
+            android:id="@+id/action_nav_assess_perform_to_select_assess"
+            app:destination="@id/nav_project_select_assess_x"
+            />
+    </fragment>
 
+    <fragment
+        android:id="@+id/nav_project_select_assess_x"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.select_x.SelectXFragment"
+        android:label="@string/project_select_assess"
+        tools:layout="@layout/fragment_assess_select_x"
+        >
+        <action
+            android:id="@+id/action_nav_project_select_assess_to_assess_perform"
+            app:destination="@id/nav_matrix_list"
+            />
+        <action
+            android:id="@+id/action_nav_project_select_assess_to_select_assess_2"
+            app:destination="@id/nav_project_select_assess_y"
+            />
+        <action
+            android:id="@+id/action_nav_project_select_assess_to_result"
+            app:destination="@id/nav_account_result"
+            />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_project_select_assess_y"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.select_y.SelectYFragment"
+        android:label="@string/project_select_assess"
+        tools:layout="@layout/fragment_assess_select_y"
+        >
+        <action
+            android:id="@+id/action_nav_project_select_assess_2_to_assess_thing_thing"
+            app:destination="@id/nav_project_assess_thing_thing"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_assess_thing_thing"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.p2p.P2PFragment"
+        android:label="@string/project_assess_criteria"
+        tools:layout="@layout/fragment_assess_p2p"
+        >
+        <action
+            android:id="@+id/action_nav_project_assess_thing_thing_to_select_assess"
+            app:destination="@id/nav_project_select_assess_x"
+            app:popUpTo="@id/nav_project_assess_thing_thing"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_nav_project_assess_thing_thing_to_select_assess_2"
+            app:destination="@id/nav_project_select_assess_y"
+            app:popUpTo="@id/nav_project_assess_thing_thing"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_account_result"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.result.container.ResultContainerFragment"
+        android:label="@string/menu_assess_result"
+        tools:layout="@layout/fragment_assess_container"
+        >
+    </fragment>
 </navigation>

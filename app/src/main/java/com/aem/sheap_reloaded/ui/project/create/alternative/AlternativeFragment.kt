@@ -133,7 +133,7 @@ class AlternativeFragment: Fragment() {
                 R.id.action_nav_project_create_alternative_to_project_edit,
                 null,
                 NavOptions.Builder().setPopUpTo(R.id.nav_project_edit,true).build())
-            //else findNavController().navigate(R.id.action_nav_project_create_alternative_to_create_users)
+            else findNavController().navigate(R.id.action_nav_project_create_alternative_to_create_users)
         }
         val add = binding.projectCreateAlternativeButtonAdd
         add.setOnClickListener {

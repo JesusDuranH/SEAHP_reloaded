@@ -1,21 +1,27 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.content.Context
+import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.code.things.Save
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.io.Serializable
 import kotlin.random.Random
 
-class Criteria(val idCriteria: Long,
+open class Criteria(val idCriteria: Long,
                val nameCriteria: String,
                val descriptionCriteria: String? = null,
                val subCriteria: Long? = null,
                idProject: Long,
                nameProject: String,
                descriptionProject: String? = null
-) : Project (idProject, nameProject, descriptionProject) {
+) : Project (idProject, nameProject, descriptionProject), Serializable {
     //
+    private val save = Save()
+
     constructor(): this (0, "", null, null, 0,
         "", null)
     constructor(idCriteria: Long, nameCriteria: String, descriptionCriteria: String?,
@@ -36,7 +42,7 @@ class Criteria(val idCriteria: Long,
                 start()
                 join()
             }
-        } while (isFree == Criteria())
+        } while (isFree != Criteria())
         val newCriteria = Criteria(newID, name, desc, idSub,
             project.idProject, project.nameProject, project.descriptionProject)
         AzureHelper().insertCriteria(newCriteria)
@@ -71,6 +77,66 @@ class Criteria(val idCriteria: Long,
         return dataList
     }
 
+    fun setX(setX: Criteria, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaX),
+            Criteria().toByteArray(setX),
+            context.getString(R.string.alias_criteriaX))
+    }
+
+    fun getX(context: Context): Criteria{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaX),
+            context.getString(R.string.alias_criteriaX))
+        return if (element != null) Criteria().toCriteria(element)
+        else Criteria()
+    }
+
+    fun setY(setY: Criteria, context: Context){
+        save.saveOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaY),
+            Criteria().toByteArray(setY),
+            context.getString(R.string.alias_criteriaY))
+    }
+
+    fun getY(context: Context): Criteria{
+        val element = save.readOnFile(context,
+            context.getString(R.string.save_folder),
+            context.getString(R.string.save_CriteriaY),
+            context.getString(R.string.alias_criteriaY))
+        return if (element != null) Criteria().toCriteria(element)
+        else Criteria()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Criteria) return false
+
+        if (idCriteria != other.idCriteria) return false
+        if (nameCriteria != other.nameCriteria) return false
+        if (descriptionCriteria != other.descriptionCriteria) return false
+        if (subCriteria != other.subCriteria) return false
+        if (idProject != other.idProject) return false
+        if (nameProject != other.nameProject) return false
+        if (descriptionProject != other.descriptionProject) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = idCriteria.hashCode()
+        result = 29 * result + nameCriteria.hashCode()
+        result = 29 * result + descriptionCriteria.hashCode()
+        result = 29 * result + subCriteria.hashCode()
+        result = 29 * result + idProject.hashCode()
+        result = 29 * result + nameProject.hashCode()
+        result = 29 * result + descriptionProject.hashCode()
+        return result
+    }
+
     fun toByteArray(criteria: Criteria): ByteArray {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val objectOutputStream = ObjectOutputStream(byteArrayOutputStream)
@@ -83,6 +149,6 @@ class Criteria(val idCriteria: Long,
     }
 
     override fun toString(): String {
-        return "Criteria ($idCriteria, \"$nameCriteria\", \"$descriptionCriteria\", $subCriteria, $idProject)"
+        return "\nCriteria ($idCriteria, \"$nameCriteria\", \"$descriptionCriteria\", $subCriteria, $idProject)"
     }
 }

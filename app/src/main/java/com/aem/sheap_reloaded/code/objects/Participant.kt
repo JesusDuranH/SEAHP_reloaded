@@ -90,6 +90,6 @@ open class Participant(val user: User,
     }
 
     override fun toString(): String {
-        return "Participant(\n $user, \n$project, \n$type)"
+        return "\nParticipant($user, $project, $type)"
     }
 }

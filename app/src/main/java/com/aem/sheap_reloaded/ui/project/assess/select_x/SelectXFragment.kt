@@ -120,6 +120,7 @@ class SelectXFragment: Fragment() {
                 2L -> {
                     Log.d("seahp_SelectXFragment", "set 2 criteriaList:")
                     criteriaList = Criteria().listByProject(project).toMutableList()
+                    checkValuesCriteriaCriteria()
                 }
                 else -> {
                     Log.d("seahp_SelectXFragment", "set 3 alternativeList:")
@@ -132,6 +133,23 @@ class SelectXFragment: Fragment() {
                 loadingDialog.dismiss()
                 setRecyclerView(criteriaList, alternativeList)
             }
+        }
+    }
+
+    private fun checkValuesCriteriaCriteria(){
+        //
+        val newItems = emptyList<Criteria>().toMutableList()
+        Log.d("seahp_SelectXFragment", "checkValuesCriteriaCriteria criteriaList: $criteriaList")
+        for (item in criteriaList){
+            val check = allElementsByUser.find { it.xElement == item.idCriteria && it.yElement == item.idCriteria }
+            if (check == null) newItems.add(item)
+        }
+        Log.d("seahp_SelectXFragment", "checkValuesCriteriaCriteria newItems: $newItems")
+        if (newItems.isNotEmpty()){
+            val mat = Matrix(matrix.idMatrix, matrix.nameMatrix, matrix.descriptionMatrix,
+                criteriaList.size, criteriaList.size, user, project, 2)
+            Matrix().setDefaultScaleCriteriaCriteria(mat, newItems, user)
+            allElementsByUser = Element().getAllElementOnMatrixByUser(matrix, project, user).toMutableList()
         }
     }
 

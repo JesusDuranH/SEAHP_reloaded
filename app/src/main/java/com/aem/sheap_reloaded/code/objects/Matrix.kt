@@ -120,12 +120,12 @@ open class Matrix(val idMatrix: Long,
         val scale = 1.0
         val desc = "Matriz : ${matrix.nameMatrix} | Proyecto: ${matrix.project.nameProject}"
 
-        for (i in 0 until matrix.rowMax){
-            name = "${rowElement[i].nameCriteria} - ${rowElement[i].nameCriteria}"
+        for (item in rowElement){
+            name = "${item.nameCriteria} - ${item.nameCriteria}"
             val threadElement = Thread {
                 //
-                Element().create(rowElement[i].idCriteria,rowElement[i].idCriteria,
-                                    name, desc, scale, matrix, matrix.project, user)
+                Element().create(item.idCriteria,item.idCriteria,
+                    name, desc, scale, matrix, matrix.project, user)
             }.apply {
                 start()
                 join()

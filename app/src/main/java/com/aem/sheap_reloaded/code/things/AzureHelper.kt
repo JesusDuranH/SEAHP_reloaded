@@ -967,11 +967,11 @@ class AzureHelper {
         }
     }
 
-    fun getRowElementsOnMatrix(matrix: Matrix, project: Project, callback: (List<Element>) -> Unit){
+    /*fun getRowElementsOnMatrix(matrix: Matrix, project: Project, callback: (List<Element>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_ELEMENT[0]} " +
                 "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? AND ${TABLE_ELEMENT[5]} = 0 AND ${TABLE_ELEMENT[4]} != 0"
-        Log.d("DB", sql)
+        Log.d("seahp_AzureDB", "getRowElementsOnMatrix: $sql")
         val elements = mutableListOf<Element>()
         try {
             connection().use { conn ->
@@ -1010,13 +1010,13 @@ class AzureHelper {
             Log.d("seahp_AzureDB", "getRowElementsOnMatrix Exception: " + e.printStackTrace())
             callback(mutableListOf())
         }
-    }
+    }*/
 
-    fun getAlternativeRow(matrix: Matrix, project: Project, user: User, criteria: Criteria, callback: (List<Element>) -> Unit){
+    fun getAlternativeColumn(matrix: Matrix, project: Project, user: User, criteria: Criteria, callback: (List<Element>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_ELEMENT[0]} " +
-                "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? AND ${TABLE_ELEMENT[3]} = ? AND ${TABLE_ELEMENT[4]} = ${criteria.idCriteria}"
-        Log.d("DB", sql)
+                "WHERE ${TABLE_ELEMENT[1]} = ? AND ${TABLE_ELEMENT[2]} = ? AND ${TABLE_ELEMENT[3]} = ? AND ${TABLE_ELEMENT[5]} = ${criteria.idCriteria}"
+        Log.d("seahp_AzureDB", "getAlternativeRow: $sql")
         val elements = mutableListOf<Element>()
         try {
             connection().use { conn ->
@@ -1044,7 +1044,7 @@ class AzureHelper {
                                         getMatrix.type)
                                     elements.add(searchElement)
                                 }
-                                Log.d("seahp_AzureDB", "getRowElementsEvaluationOnMatrix: $elements")
+                                Log.d("seahp_AzureDB", "getAlternativeRow: $elements")
                                 callback(elements)
                             }
                         }
@@ -1052,10 +1052,10 @@ class AzureHelper {
                 }
             }
         } catch (ex: SQLException){
-            Log.d("seahp_AzureDB", "getRowElementsEvaluationOnMatrix SQLException: " + ex.printStackTrace())
+            Log.d("seahp_AzureDB", "getAlternativeRow SQLException: " + ex.printStackTrace())
             callback(mutableListOf())
         } catch (e: Exception) {
-            Log.d("seahp_AzureDB", "getRowElementsEvaluationOnMatrix Exception: " + e.printStackTrace())
+            Log.d("seahp_AzureDB", "getAlternativeRow Exception: " + e.printStackTrace())
             callback(mutableListOf())
         }
     }

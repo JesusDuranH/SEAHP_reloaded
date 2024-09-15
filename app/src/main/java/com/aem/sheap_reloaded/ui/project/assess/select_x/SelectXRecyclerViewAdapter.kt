@@ -37,8 +37,15 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                 for (item in db){
                     if (item.idMatrix == id && item.xElement == criteria.idCriteria) count++
                 }
-                if (maxCriteria > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
-                else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                if (data.idMatrix == 1L) {
+                    if (maxAlternative > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                }
+                if (data.idMatrix == 2L) {
+                    if (maxCriteria > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                }
+
                 alternativeButtonSelect.setOnClickListener {
                     Criteria().setX(criteria, root.context)
                     if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)

@@ -40,6 +40,10 @@ class Element(val xElement: Long,
         0, "", null, 0, 0, User(), Project(), 0
     )
 
+    constructor(xElement: Long, yElement: Long, scale: Double): this (xElement, yElement, "", "", scale,
+        0, "", null, 0, 0, User(), Project(), 0
+    )
+
     fun create(x: Long, y:Long, name: String, desc: String?, scale: Double? = null,
                             matrix: Matrix, project: Project, user: User, type: Int = matrix.type): Element{
         //
@@ -127,7 +131,7 @@ class Element(val xElement: Long,
         return dataList
     }
 
-    fun getAlternativeRow(
+    fun getAlternativeColumn(
         matrix: Matrix,
         project: Project,
         user: User,
@@ -136,7 +140,7 @@ class Element(val xElement: Long,
         //
         var dataList = mutableListOf<Element>()
         val threadListElements = Thread{
-            AzureHelper().getAlternativeRow(matrix, project, user, criteria){list ->
+            AzureHelper().getAlternativeColumn(matrix, project, user, criteria){list ->
                 dataList = list.toMutableList()
             }
         }.apply {

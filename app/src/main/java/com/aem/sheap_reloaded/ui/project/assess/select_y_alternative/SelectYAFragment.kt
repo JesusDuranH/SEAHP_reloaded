@@ -108,14 +108,14 @@ class SelectYAFragment: Fragment() {
             Log.d("seahp_SelectYAFragment", "set 1 alternativeList:")
             elementsYList = Alternative().listByProject(project).toMutableList()
 
-            val listOfValues = Element().getAlternativeRow(matrix, project, user, criteriaX).toMutableList()
-            Log.d("seahp_SelectYAFragment", "set 1 listOfValues: $listOfValues")
+            Log.d("seahp_SelectYAFragment", "set 1 listOfValues:")
+            val listOfValues = Element().getAlternativeColumn(matrix, project, user, criteriaX).toMutableList()
 
             withContext(Dispatchers.Main){
                 //
                 loadingDialog.dismiss()
                 setRecyclerView(elementsYList, criteriaX, listOfValues)
-                //buttonOperation(elementsXList, criteriaX, listOfValues)
+                buttonOperation(elementsYList, criteriaX, listOfValues)
             }
         }
     }
@@ -127,93 +127,73 @@ class SelectYAFragment: Fragment() {
         binding.assessAlternativeRecyclerView.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-}
-
-/*
-    private fun buttonOperation(columnList: List<Element>, elementA: Element, allList: List<Element>){
+    private fun buttonOperation(columnList: List<Alternative>, criteriaX: Criteria, allList: List<Element>){
         with(binding){
             assessAlternativeButtonSave.setOnClickListener {
                 //
-                val elementList = mutableListOf<String>()
+                val elementList = mutableListOf<Element>()
 
-                for (i in 0 until AssessCriteriaRecyclerViewAdapter(columnList, elementA, allList, dbHelper).itemCount) {
-                    val viewHolder = binding.assessCriteriaRecyclerView.findViewHolderForAdapterPosition(i)
-                            as? AssessCriteriaRecyclerViewAdapter.AssessCriteriaHolder
-                    Log.d("EditTextValue", "ViewHolder $i - $viewHolder ")
+                for (i in 0 until SelectYARecyclerVIewAdapter(columnList, criteriaX, allList).itemCount) {
+                    val viewHolder = binding.assessAlternativeRecyclerView.findViewHolderForAdapterPosition(i)
+                            as? SelectYARecyclerVIewAdapter.AssessAlternativeHolder
+                    Log.d("seahp_SelectYAFragment", "buttonOperation ViewHolder $i - $viewHolder ")
                     viewHolder?.let {
-                        val editTextContent = it.binding.projectItemTextinputEdittextValue.text.toString()
-                        val text = it.binding.projectItemTextinputLayoutValue.hint
-                        elementList.add(editTextContent)
-                        //Log.d("EditTextValue", "Item add $i - $text ")
-                        //Log.d("EditTextValue", "Item value $editTextContent")
+                        val scale = it.binding.projectItemTextinputEdittextValue.text.toString().toDouble()
+                        val y = it.binding.projectItemTextAlternativeId.text.toString().toLong()
+                        val newElement = Element(criteriaX.idCriteria, y, scale)
+                        elementList.add(newElement)
                     }
-                    //Log.d("EditTextValue", "Item Size ${AssessCriteriaRecyclerViewAdapter(columnList, elementA, allList, dbHelper).itemCount}")
                 }
+                Log.d("seahp_SelectYAFragment", "buttonOperation elementList $elementList ")
 
+                val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
                 loadingDialog.show(childFragmentManager, "loadingDialog")
                 CoroutineScope(Dispatchers.IO).launch {
                     //
-                    for ((index, value) in elementList.withIndex()) {
-
-                        Log.d("EditTextValue", "Item $index: $value")
+                    for (item in elementList){
                         var scale = 0.0
-                        if (value != "") scale = value.toDouble()
-                        val mat = configProject.getMatrix(requireContext())
-                        //Log.d("EditTextValue", "Matrix: $mat")
-                        //Log.d("EditTextValue", "Matrix Project: ${mat.project}")
+                        Log.d("seahp_SelectYAFragment", "buttonOperation Item $item")
 
-                        val itExist = allList.find { it.xElement == (index + 1) && it.yElement == elementA.yElement }
-                        Log.d("EditTextValue", "Exist: $itExist")
+                        if (item.scaleElement != null) scale = item.scaleElement
+                        Log.d("seahp_SelectYAFragment", "buttonOperation scale $scale")
+                        val alternativeY = Alternative().getByID(item.yElement, project)
+
+                        val itExist = allList.find { it.xElement == criteriaX.idCriteria && it.yElement == alternativeY.idAlternative }
+                        Log.d("seahp_SelectYAFragment", "buttonOperation Exist: $itExist")
                         if (itExist == null) {
                             //
                             if (scale != 0.0) {
-                                val name = "Element ${elementA.nameElement} - ${columnList[index].nameElement}"
-                                var newElement = Element()
-                                if (isOnline){
+                                val name = "Element ${criteriaX.nameCriteria} - ${alternativeY.nameAlternative}"
+                                val threadElement = Thread {
                                     //
-                                    val threadElement = Thread {
-                                        //
-                                        newElement = Element().createElementOnline((index + 1),
-                                            elementA.yElement, name, null, scale, mat, project, user, 2)
-                                    }.apply {
-                                        start()
-                                        join()
-                                    }
-                                } else newElement = Element().createElementOffline((index + 1),
-                                    elementA.yElement, name, null, scale, mat, project, user, dbHelper, 2)
-
-                                Log.d("EditTextValue", "New: $newElement")
+                                    val newElement = Element().create(criteriaX.idCriteria, alternativeY.idAlternative,
+                                        name, null, scale, matrix, project, user, 2)
+                                }.apply {
+                                    start()
+                                    join()
+                                }
                             }
                         } else {
                             //
                             if (itExist.scaleElement != scale){
                                 //
                                 var updateValue = Element()
-                                if (isOnline){
+                                val threadElement = Thread {
                                     //
-                                    val threadElement = Thread {
-                                        //
-                                        updateValue = Element().updateScaleElementOnline(itExist, scale, false)
-                                    }.apply {
-                                        start()
-                                        join()
-                                    }
-                                } else updateValue = Element().updateScaleElementOffline(itExist, scale, dbHelper, false)
-
-                                Log.d("EditTextValue", "Update: $updateValue")
+                                    updateValue = Element().updateScale(itExist, scale, false)
+                                }.apply {
+                                    start()
+                                    join()
+                                }
                             }
                         }
                     }
                     withContext(Dispatchers.Main){
                         //
                         loadingDialog.dismiss()
-                        findNavController().navigate(R.id.nav_project_select_assess,
+                        findNavController().navigate(R.id.action_nav_project_assess_criteria_alternative_to_select_assess,
                             null,
-                            NavOptions.Builder().setPopUpTo(R.id.nav_project_select_assess, true).build())
+                            NavOptions.Builder().setPopUpTo(R.id.nav_project_select_assess_x, true).build())
                     }
                 }
             }
@@ -221,5 +201,8 @@ class SelectYAFragment: Fragment() {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
-* */

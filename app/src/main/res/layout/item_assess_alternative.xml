@@ -9,11 +9,19 @@
     >
 
     <TextView
-        android:id="@+id/project_item_text_criteria_name"
+        android:id="@+id/project_item_text_alternative_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="17sp"
         android:text="@string/alternative_name"
+        />
+
+    <TextView
+        android:id="@+id/project_item_text_alternative_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:text="Alternative ID"
         />
 
     <com.google.android.material.textfield.TextInputLayout

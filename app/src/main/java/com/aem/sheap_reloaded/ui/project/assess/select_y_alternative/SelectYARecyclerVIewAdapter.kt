@@ -15,7 +15,7 @@ import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.databinding.ItemAssessAlternativeBinding
 
 class SelectYARecyclerVIewAdapter(private val elements: List<Alternative>,
-                                  private val crieriaX: Criteria,
+                                  private val criteriaX: Criteria,
                                   private val all: List<Element>,
 ): RecyclerView.Adapter<SelectYARecyclerVIewAdapter.AssessAlternativeHolder>() {
     //
@@ -26,8 +26,9 @@ class SelectYARecyclerVIewAdapter(private val elements: List<Alternative>,
         fun render(element: Alternative){
             with(binding){
                 //
-                projectItemTextCriteriaName.text = "${element.nameAlternative} (${crieriaX.idCriteria} , ${element.idAlternative})"
-                projectItemTextinputLayoutValue.hint = "${crieriaX.nameCriteria} - ${element.nameAlternative} Value:"
+                projectItemTextAlternativeName.text = "${element.nameAlternative} (${criteriaX.idCriteria} , ${element.idAlternative})"
+                projectItemTextAlternativeId.text = element.idAlternative.toString()
+                projectItemTextinputLayoutValue.hint = "${criteriaX.nameCriteria} - ${element.nameAlternative} Value:"
                 val text = all.find { it.yElement == element.idAlternative }?.scaleElement?.toString() ?: ""
                 projectItemTextinputEdittextValue.setText(text)
                 //val text = "(${position + 1}, ${rowElement.yElement})"

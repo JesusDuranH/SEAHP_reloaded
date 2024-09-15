@@ -116,6 +116,7 @@ class SelectXFragment: Fragment() {
                 1L -> {
                     Log.d("seahp_SelectXFragment", "set 1 criteriaList:")
                     criteriaList = Criteria().listByProject(project).toMutableList()
+                    alternativeList = Alternative().listByProject(project).toMutableList()
                 }
                 2L -> {
                     Log.d("seahp_SelectXFragment", "set 2 criteriaList:")

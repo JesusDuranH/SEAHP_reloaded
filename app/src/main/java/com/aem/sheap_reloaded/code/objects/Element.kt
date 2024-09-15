@@ -40,6 +40,10 @@ class Element(val xElement: Long,
         0, "", null, 0, 0, User(), Project(), 0
     )
 
+    constructor(xElement: Long, yElement: Long, scale: Double): this (xElement, yElement, "", "", scale,
+        0, "", null, 0, 0, User(), Project(), 0
+    )
+
     fun create(x: Long, y:Long, name: String, desc: String?, scale: Double? = null,
                             matrix: Matrix, project: Project, user: User, type: Int = matrix.type): Element{
         //
@@ -118,6 +122,25 @@ class Element(val xElement: Long,
         var dataList = mutableListOf<Element>()
         val threadListAllElements = Thread{
             AzureHelper().getAllElementsOnMatrix(matrix, project){list ->
+                dataList = list.toMutableList()
+            }
+        }.apply {
+            start()
+            join()
+        }
+        return dataList
+    }
+
+    fun getAlternativeColumn(
+        matrix: Matrix,
+        project: Project,
+        user: User,
+        criteria: Criteria
+    ): List<Element>{
+        //
+        var dataList = mutableListOf<Element>()
+        val threadListElements = Thread{
+            AzureHelper().getAlternativeColumn(matrix, project, user, criteria){list ->
                 dataList = list.toMutableList()
             }
         }.apply {
@@ -288,24 +311,7 @@ class Element(){
         return dataList
     }
 
-    fun getElementRowEvaluationMatrixOnline(
-        matrix: Matrix,
-        project: Project,
-        user: User,
-        element: Element
-    ): List<Element>{
-        //
-        var dataList = mutableListOf<Element>()
-        val threadListElements = Thread{
-            AzureHelper().getRowElementsEvaluationOnMatrix(matrix, project, user, element){list ->
-                dataList = list.toMutableList()
-            }
-        }.apply {
-            start()
-            join()
-        }
-        return dataList
-    }
+
 
     fun getElementColumnMatrixOnline(
         matrix: Matrix,

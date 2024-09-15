@@ -101,7 +101,6 @@ class SelectYFragment: Fragment() {
 
         var criteriaX: Criteria
         var alternativeX: Alternative
-        val listOfValues = mutableListOf<Element>()
 
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
@@ -112,19 +111,16 @@ class SelectYFragment: Fragment() {
                     Log.d("seahp_SelectYFragment", "set 1 alternativeList:")
                     alternativeList = Alternative().listByProject(project).toMutableList()
                     criteriaX = Criteria().getX(requireContext())
-                    Log.d("seahp_SelectYFragment", "set 1 listOfValues: $listOfValues")
                 }
                 2L ->{
                     Log.d("seahp_SelectYFragment", "set 2 criteriaList:")
                     criteriaList = Criteria().listByProject(project).toMutableList()
                     criteriaX = Criteria().getX(requireContext())
-                    Log.d("seahp_SelectYFragment", "set 2 listOfValues: $listOfValues")
                 }
                 else ->{
                     Log.d("seahp_SelectYFragment", "set 3 alternativeList:")
                     alternativeList = Alternative().listByProject(project).toMutableList()
                     alternativeX = Alternative().getX(requireContext())
-                    Log.d("seahp_SelectYFragment", "set 3 listOfValues: $listOfValues")
                 }
             }
             withContext(Dispatchers.Main){

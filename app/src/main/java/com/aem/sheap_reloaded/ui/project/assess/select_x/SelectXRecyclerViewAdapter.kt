@@ -37,12 +37,19 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                 for (item in db){
                     if (item.idMatrix == id && item.xElement == criteria.idCriteria) count++
                 }
-                if (maxCriteria > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
-                else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                if (data.idMatrix == 1L) {
+                    if (maxAlternative > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                }
+                if (data.idMatrix == 2L) {
+                    if (maxCriteria > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
+                    else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
+                }
+
                 alternativeButtonSelect.setOnClickListener {
                     Criteria().setX(criteria, root.context)
-                    //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    /*else */Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
+                    if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
+                    else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
                 }
                 root.setOnClickListener {
                     Toast.makeText(root.context,
@@ -64,8 +71,7 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                 else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
                 alternativeButtonSelect.setOnClickListener {
                     Alternative().setX(alternative, root.context)
-                    //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    /*else*/ Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
+                    Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
                 }
                 root.setOnClickListener {
                     Toast.makeText(root.context,
@@ -87,14 +93,13 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
     }
 
     override fun getItemCount(): Int {
-        var size = 0
-        if (criteriaList == emptyList<Criteria>()) size = alternativeList.size
-        if (alternativeList == emptyList<Alternative>()) size = criteriaList.size
+        val size = if (id == 1L || id == 2L) criteriaList.size
+                    else alternativeList.size
         return size
     }
 
     override fun onBindViewHolder(holder: SelectXHolder, position: Int) {
-        if (criteriaList == emptyList<Criteria>()) holder.renderAlternative(alternativeList[position])
-        if (alternativeList == emptyList<Alternative>()) holder.renderCriteria(criteriaList[position])
+        if (id == 1L || id == 2L) holder.renderCriteria(criteriaList[position])
+        else holder.renderAlternative(alternativeList[position])
     }
 }

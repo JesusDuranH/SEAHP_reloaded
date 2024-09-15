@@ -14,6 +14,10 @@
     <string name="menu_home">Home</string>
     <string name="menu_loading">Loading, please wait…</string>
 
+    <string name="element">Element</string>
+    <string name="element_x">Element X</string>
+    <string name="element_y">Element Y</string>
+
     <string name="fundamental_scale_1">Equally Preferred</string>
     <string name="fundamental_scale_2">Equally to Moderately Preferred</string>
     <string name="fundamental_scale_3">Moderately Preferred</string>
@@ -138,6 +142,7 @@
 
     <string name="alternative_name">Alternative Name</string>
     <string name="alternative_desc">Alternative Description (Optional)</string>
+    <string name="alternative_value">Alternative Value</string>
 
     <string name="user_id">ID User</string>
     <string name="user_user">User</string>

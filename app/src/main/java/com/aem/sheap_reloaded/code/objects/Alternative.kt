@@ -45,6 +45,20 @@ class Alternative(val idAlternative: Long,
         return newAlternative
     }
 
+    fun getByID(id: Long, project: Project): Alternative{
+        //
+        var alternative = Alternative()
+        val threadAlternative = Thread {
+            AzureHelper().getAlternativeByID(id, project.idProject) { data ->
+                alternative = data
+            }
+        }.apply {
+            start()
+            join()
+        }
+        return alternative
+    }
+
     fun listByProject(project: Project): List<Alternative>{
         //
         var dataList = mutableListOf<Alternative>()
@@ -93,6 +107,30 @@ class Alternative(val idAlternative: Long,
             context.getString(R.string.alias_alternativeY))
         return if (element != null) Alternative().toAlternative(element)
         else Alternative()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Alternative) return false
+
+        if (idAlternative != other.idAlternative) return false
+        if (nameAlternative != other.nameAlternative) return false
+        if (descriptionAlternative != other.descriptionAlternative) return false
+        if (idProject != other.idProject) return false
+        if (nameProject != other.nameProject) return false
+        if (descriptionProject != other.descriptionProject) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = idAlternative.hashCode()
+        result = 29 * result + nameAlternative.hashCode()
+        result = 29 * result + descriptionAlternative.hashCode()
+        result = 29 * result + idProject.hashCode()
+        result = 29 * result + nameProject.hashCode()
+        result = 29 * result + descriptionProject.hashCode()
+        return result
     }
 
     fun toByteArray(alternative: Alternative): ByteArray {

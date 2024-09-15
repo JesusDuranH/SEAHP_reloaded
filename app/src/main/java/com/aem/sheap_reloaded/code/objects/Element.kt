@@ -127,6 +127,25 @@ class Element(val xElement: Long,
         return dataList
     }
 
+    fun getAlternativeRow(
+        matrix: Matrix,
+        project: Project,
+        user: User,
+        criteria: Criteria
+    ): List<Element>{
+        //
+        var dataList = mutableListOf<Element>()
+        val threadListElements = Thread{
+            AzureHelper().getAlternativeRow(matrix, project, user, criteria){list ->
+                dataList = list.toMutableList()
+            }
+        }.apply {
+            start()
+            join()
+        }
+        return dataList
+    }
+
     fun setX(setElement: Element, context: Context){
         save.saveOnFile(context,
             context.getString(R.string.save_folder),
@@ -288,24 +307,7 @@ class Element(){
         return dataList
     }
 
-    fun getElementRowEvaluationMatrixOnline(
-        matrix: Matrix,
-        project: Project,
-        user: User,
-        element: Element
-    ): List<Element>{
-        //
-        var dataList = mutableListOf<Element>()
-        val threadListElements = Thread{
-            AzureHelper().getRowElementsEvaluationOnMatrix(matrix, project, user, element){list ->
-                dataList = list.toMutableList()
-            }
-        }.apply {
-            start()
-            join()
-        }
-        return dataList
-    }
+
 
     fun getElementColumnMatrixOnline(
         matrix: Matrix,

@@ -119,16 +119,16 @@ class MatrixFragment: Fragment() {
         var isChange = false
         val type = Participant().isAdminInThis(user, project).type
 
-        //val mat_1 = matrixList.find { it.idMatrix.toInt() == 1 }
+        val mat_1 = matrixList.find { it.idMatrix.toInt() == 1 }
         val mat_2 = matrixList.find { it.idMatrix.toInt() == 2 }
         //val mat_3 = matrixList.find { it.idMatrix.toInt() == 3 }
 
         if (type == 2){
-            /*if (mat_1 == null){
+            if (mat_1 == null){
                 Log.d("seahp_MatrixFragment", "setMatrix: Create Matrix & Values 1")
                 createValues(createMatrix(1))
                 isChange = true
-            }*/
+            }
             if (mat_2 == null){
                 Log.d("seahp_MatrixFragment", "setMatrix: Create Matrix & Values 2")
                 createValues(createMatrix(2))

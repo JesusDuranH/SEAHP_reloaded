@@ -50,16 +50,11 @@ class P2PFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         //
-        /*val assessThingThingViewModel =
-            ViewModelProvider(this)[P2PViewModel::class.java]*/
         _binding = FragmentAssessP2pBinding.inflate(inflater, container, false)
 
         val root: View = binding.root
 
         textView = binding.textAssessThingThing
-        /*assessThingThingViewModel.text.observe(viewLifecycleOwner){
-            textView.text = it
-        }*/
 
         setVar()
         if (!getData()) return root
@@ -117,14 +112,6 @@ class P2PFragment: Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 //
                 when (matrix.idMatrix){
-                    1L ->{
-                        criteriaX = Criteria().getX(context)
-                        alternativeY = Alternative().getY(context)
-                        textX = criteriaX.nameCriteria
-                        textY = alternativeY.nameAlternative
-                        itExist = Element().toEvaluate(matrix, project, user,
-                            criteriaX.idCriteria, alternativeY.idAlternative)
-                    }
                     2L -> {
                         criteriaX = Criteria().getX(context)
                         criteriaY = Criteria().getY(context)
@@ -149,7 +136,8 @@ class P2PFragment: Fragment() {
                 Log.d("seahp_P2PFragment", "set search itExist: $itExist")
                 withContext(Dispatchers.Main){
                     loadingDialog.dismiss()
-                    if (itExist != Element()) setValue = itExist!!.scaleElement!!
+                    setValue = if (itExist != Element()) itExist!!.scaleElement!!
+                                else 1.0
                     Log.d("seahp_P2PFragment", "set setValue: $setValue")
 
                     textOptionA.text = textY
@@ -239,12 +227,6 @@ class P2PFragment: Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             //
             when (matrix.idMatrix){
-                1L ->{
-                    newElement = Element().create(criteriaX.idCriteria, alternativeY.idAlternative,
-                        name, null, setValue, matrix, project, user, 2)
-                    mirrorElement = Element().create(alternativeY.idAlternative, criteriaX.idCriteria,
-                        mirrorName, null, mirrorValue, matrix, project, user, 2)
-                }
                 2L -> {
                     newElement = Element().create(criteriaX.idCriteria, criteriaY.idCriteria,
                         name, null, setValue, matrix, project, user, 2)
@@ -307,24 +289,48 @@ class P2PFragment: Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             when (matrix.idMatrix){
                 2L -> {
-                    Log.d("seahp_P2PFragment", "next next list:")
+                    Log.d("seahp_P2PFragment", "N next list:")
                     val criteriaList = Criteria().listByProject(project)
+
                     val max = criteriaList.size - 1
-                    Log.d("seahp_P2PFragment", "next max: $max")
-                    val position = criteriaList.indexOf(criteriaY)
-                    Log.d("seahp_P2PFragment", "next criteria Y: $criteriaY")
-                    Log.d("seahp_P2PFragment", "next position: $position")
-                    if (position != -1){
-                        var nextPosition = if (position == max) 0
-                                            else position + 1
-                        Log.d("seahp_P2PFragment", "next next position: $nextPosition")
-                        Log.d("seahp_P2PFragment", "next next criteria: ${criteriaList[nextPosition]}")
-                        if (criteriaList[nextPosition] == criteriaX) nextPosition++
-                            //
-                            Criteria().setY(criteriaList[nextPosition], requireContext())
+                    Log.d("seahp_P2PFragment", "N max: $max")
+
+                    Log.d("seahp_P2PFragment", "N criteriaX: $criteriaX")
+                    val positionX = criteriaList.indexOf(criteriaX)
+                    Log.d("seahp_P2PFragment", "N criteriaY: $criteriaY")
+                    val positionY = criteriaList.indexOf(criteriaY)
+                    Log.d("seahp_P2PFragment", "N position: ($positionX, $positionY)")
+
+                    if (positionY != -1){
+                        //
+                        var nextPositionX = positionX
+                        var nextPositionY = positionY
+
+                        if (nextPositionY == max) {
+                            nextPositionX++
+                            nextPositionY = nextPositionX + 1
+                        }
+                        else nextPositionY++
+
+                        if (criteriaList[nextPositionY] == criteriaList[nextPositionX]) nextPositionY++
+                        Log.d("seahp_P2PFragment", "N next position: ($nextPositionX, $nextPositionY)")
+
+                        if (nextPositionX == max && nextPositionY == (max + 1)) {
                             withContext(Dispatchers.Main){
-                            loadingDialog.dismiss()
-                            set (textView)
+                                Log.d("seahp_P2PFragment", "N End Evaluation")
+                                loadingDialog.dismiss()
+                                getOut(true)
+                            }
+                        } else {
+                            Log.d("seahp_P2PFragment", "N next criteriaX: ${criteriaList[nextPositionX]}")
+                            Log.d("seahp_P2PFragment", "N next criteriaY: ${criteriaList[nextPositionY]}")
+                            Criteria().setY(criteriaList[nextPositionY], requireContext())
+                            Criteria().setX(criteriaList[nextPositionX], requireContext())
+
+                            withContext(Dispatchers.Main){
+                                loadingDialog.dismiss()
+                                set(textView)
+                            }
                         }
                     }
                 }

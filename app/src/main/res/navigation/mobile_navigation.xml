@@ -184,7 +184,7 @@
         >
         <action
             android:id="@+id/action_nav_assess_perform_to_select_assess"
-            app:destination="@id/nav_project_select_assess_x"
+            app:destination="@id/nav_project_select_assess_xy"
             />
     </fragment>
 
@@ -210,6 +210,14 @@
             android:id="@+id/action_nav_project_select_assess_to_assess_criteria_alternative"
             app:destination="@id/nav_project_assess_criteria_alternative"
             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_project_select_assess_xy"
+        android:name="com.aem.sheap_reloaded.ui.project.assess.select_xy.FragmentSelectXY"
+        android:label="@string/menu_assess"
+        tools:layout="@layout/fragment_assess_select_xy"
+        >
     </fragment>
 
 

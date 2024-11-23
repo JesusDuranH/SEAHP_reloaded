@@ -41,8 +41,8 @@ class FragmentSelectXY: Fragment() {
 
     private lateinit var adapterLeft: LeftAdapter
     private lateinit var adapterRight: RightAdapter
-    private var positionLeft: Long = -1
-    private var positionRight: Long = -1
+    private var positionLeft: Long? = -1
+    private var positionRight: Long? = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +71,7 @@ class FragmentSelectXY: Fragment() {
     private fun setVar(){
         //
         val context = requireContext()
+
         user = User().get(context)
         matrix = Matrix().get(context)
         project = Project().get(context)
@@ -163,19 +164,20 @@ class FragmentSelectXY: Fragment() {
         binding.rvLeft.layoutManager = LinearLayoutManager(requireContext())
         adapterLeft = LeftAdapter(criteriaList, alternativeList, allElementsByUser, matrix.idMatrix){ position ->
             positionLeft = position
-            recyclerViewRight()
+            recyclerViewRight(criteriaList, alternativeList, allElementsByUser)
             Log.d("WeaChange", "$positionLeft - L")
         }
         binding.rvLeft.adapter = adapterLeft
     }
 
-    fun recyclerViewRight(){
-        /*binding.rvRight.layoutManager = LinearLayoutManager(requireContext())
-        adapterRight = RightAdapter(list, positionLeft){ position ->
+    fun recyclerViewRight(criteriaList: List<Criteria>, alternativeList: List<Alternative>,
+                          listOfValues: List<Element>){
+        binding.rvRight.layoutManager = LinearLayoutManager(requireContext())
+        adapterRight = RightAdapter(criteriaList, alternativeList, listOfValues, positionLeft){ position ->
             positionRight = position
             Log.d("WeaChange", "$positionRight - R")
         }
-        binding.rvRight.adapter = adapterRight*/
+        binding.rvRight.adapter = adapterRight
     }
 
     private fun buttonOperation(){
@@ -202,71 +204,3 @@ class FragmentSelectXY: Fragment() {
     }
 
 }
-
-/*
-class NotificationsFragment : Fragment() {
-
-    private var _binding: FragmentNotificationsBinding? = null
-    private lateinit var adapterLeft: LeftAdapter
-    private lateinit var adapterRight: RightAdapter
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-    private var positionLeft: Int = -1
-    private var positionRight: Int = -1
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this)[NotificationsViewModel::class.java]
-
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-
-        things()
-
-        return root
-    }
-
-    fun things(){
-        //
-        val list = mutableListOf("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")
-        recyclerViewLeft(list)
-        binding.buttonChoice.setOnClickListener(){
-            Toast.makeText(requireContext() , "($positionLeft, $positionRight)", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun recyclerViewLeft(list: List<String>){
-        binding.rvLeft.layoutManager = LinearLayoutManager(requireContext())
-        adapterLeft = LeftAdapter(list){ position ->
-            positionLeft = position
-            recyclerViewRight(list)
-            Log.d("WeaChange", "$positionLeft - L")
-        }
-        binding.rvLeft.adapter = adapterLeft
-    }
-
-    fun recyclerViewRight(list: List<String>){
-        binding.rvRight.layoutManager = LinearLayoutManager(requireContext())
-        adapterRight = RightAdapter(list, positionLeft){ position ->
-            positionRight = position
-            Log.d("WeaChange", "$positionRight - R")
-        }
-        binding.rvRight.adapter = adapterRight
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-}
-* */

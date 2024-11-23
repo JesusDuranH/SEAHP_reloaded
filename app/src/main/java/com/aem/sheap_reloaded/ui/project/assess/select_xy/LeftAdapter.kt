@@ -15,7 +15,7 @@ class LeftAdapter(private val criteriaList: List<Criteria>,
                   private val alternativeList: List<Alternative>,
                   allElement: List<Element>,
                   idMatrix: Long,
-                  private val onSelectionChange: (Long) -> Unit
+                  private val onSelectionChange: (Long?) -> Unit
 ): RecyclerView.Adapter<LeftAdapter.LeftHolder>() {
     //
     private var selectedPosition: Int = -1
@@ -55,7 +55,7 @@ class LeftAdapter(private val criteriaList: List<Criteria>,
                         notifyItemChanged(selectedPosition)
                         selectedPosition = -1
 
-                        onSelectionChange(selectedPosition.toLong())
+                        onSelectionChange(null)
                     }
                 }
             }
@@ -84,59 +84,3 @@ class LeftAdapter(private val criteriaList: List<Criteria>,
         else holder.renderAlternative(alternativeList[position], position)
     }
 }
-
-/*
-class LeftAdapter(private val list: List<String>,
-                    private val onSelectionChange: (Int) -> Unit
-    ): RecyclerView.Adapter<LeftAdapter.LeftHolder>(){
-    //
-    private var selectedPosition: Int = -1
-
-    inner class LeftHolder (val view: View): RecyclerView.ViewHolder(view){
-        //
-        private val binding = ItemChoice2Binding.bind(view)
-
-        fun render (item: String, position: Int){
-            with(binding.buttonPanel){
-                text = "$item - $position"
-                textOn = "$item - On"
-                textOff = "$item - Off"
-
-                isChecked = position == selectedPosition
-                setTextColor(
-                    if (isChecked) Color.BLUE
-                    else Color.LTGRAY
-                )
-
-                setOnClickListener {
-                    if (selectedPosition != position){
-                        val previousPosition = selectedPosition
-                        selectedPosition = position
-
-                        notifyItemChanged(previousPosition)
-                        notifyItemChanged(selectedPosition)
-                    } else {
-                        notifyItemChanged(selectedPosition)
-                        selectedPosition = -1
-                    }
-                    onSelectionChange(selectedPosition)
-                }
-            }
-            //
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeftHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        return LeftHolder(layoutInflater.inflate(
-            R.layout.item_choice_2, parent, false
-        ))
-    }
-
-    override fun getItemCount(): Int = list.size
-
-    override fun onBindViewHolder(holder: LeftHolder, position: Int) {
-        holder.render(list[position], position)
-    }
-}
-*/

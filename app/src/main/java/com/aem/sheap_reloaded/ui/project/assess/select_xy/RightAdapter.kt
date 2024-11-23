@@ -1,48 +1,45 @@
 package com.aem.sheap_reloaded.ui.project.assess.select_xy
 
-class RightAdapter {
-}
-
-/*
-package com.jsus.tests.ui.notifications
-
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.jsus.tests.R
-import com.jsus.tests.databinding.ItemChoice2Binding
+import com.aem.sheap_reloaded.R
+import com.aem.sheap_reloaded.code.objects.Alternative
+import com.aem.sheap_reloaded.code.objects.Criteria
+import com.aem.sheap_reloaded.code.objects.Element
+import com.aem.sheap_reloaded.databinding.ItemChoiceBinding
 
-class RightAdapter(private val list: List<String>,
-                   private val leftPosition: Int,
-                   private val onSelectionChange: (Int) -> Unit
-): RecyclerView.Adapter<RightAdapter.RightHolder>(){
+class RightAdapter(private val criteriaList: List<Criteria>,
+                   private val alternativeList: List<Alternative>,
+                   private val elementList: List<Element>,
+                   private val leftPosition: Long?,
+                   private val onSelectionChange: (Long?) -> Unit
+): RecyclerView.Adapter<RightAdapter.RightHolder>() {
     //
     private var selectedPosition: Int = -1
 
     inner class RightHolder (private val view: View): RecyclerView.ViewHolder(view){
         //
-        private val binding = ItemChoice2Binding.bind(view)
+        private val binding = ItemChoiceBinding.bind(view)
 
-        fun render (item: String, position: Int){
+        fun renderCriteria (criteria: Criteria, position: Int){
             with(binding.buttonPanel){
-                text = "$item - $position"
-                textOn = "$item - On"
-                textOff = "$item - Off"
+                text = criteria.nameCriteria
+                textOn = criteria.idCriteria.toString()
+                textOff = criteria.nameCriteria
 
-                if (leftPosition == -1 || leftPosition == position) {
+                if (leftPosition == null || leftPosition == criteria.idCriteria) {
                     isEnabled = false
                     isChecked = false
                     selectedPosition = -1
-                    onSelectionChange(selectedPosition)
+                    onSelectionChange(null)
                 } else {
                     //
                     isChecked = position == selectedPosition
                     setTextColor(
-                        if (isChecked) Color.BLUE
+                        if (isChecked) R.color.option_b3.dec()
                         else Color.DKGRAY
                     )
 
@@ -53,28 +50,40 @@ class RightAdapter(private val list: List<String>,
 
                             notifyItemChanged(previousPosition)
                             notifyItemChanged(selectedPosition)
+
+                            onSelectionChange(criteria.idCriteria)
                         } else {
                             notifyItemChanged(selectedPosition)
                             selectedPosition = -1
+
+                            onSelectionChange(null)
                         }
-                        onSelectionChange(selectedPosition)
                     }
                 }
-                }
+            }
+        }
+
+        fun renderAlternative(alternative: Alternative, position: Int){
+            //
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RightHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return RightHolder(layoutInflater.inflate(
-            R.layout.item_choice_2, parent, false
+            R.layout.item_choice, parent, false
         ))
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int {
+        var size = 0
+        if (criteriaList == emptyList<Criteria>()) size = alternativeList.size
+        if (alternativeList == emptyList<Alternative>()) size = criteriaList.size
+        return size
+    }
 
     override fun onBindViewHolder(holder: RightHolder, position: Int) {
-        holder.render(list[position], position)
+        if (criteriaList == emptyList<Criteria>()) holder.renderAlternative(alternativeList[position], position)
+        if (alternativeList == emptyList<Alternative>()) holder.renderCriteria(criteriaList[position], position)
     }
 }
-*/

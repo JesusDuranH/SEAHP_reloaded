@@ -14,4 +14,11 @@
 
     <color name="option_a">#696969</color>
     <color name="option_b">#4682B4</color>
+
+    <color name="option_a1">#0000FA</color>
+    <color name="option_a2">#2323CF</color>
+    <color name="option_a3">#3737A6</color>
+    <color name="option_b1">#3D3D7A</color>
+    <color name="option_b2">#35354F</color>
+    <color name="option_b3">#2B2B33</color>
 </resources>

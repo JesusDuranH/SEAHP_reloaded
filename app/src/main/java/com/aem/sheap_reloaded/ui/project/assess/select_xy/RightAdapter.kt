@@ -39,8 +39,8 @@ class RightAdapter(private val criteriaList: List<Criteria>,
                     //
                     isChecked = position == selectedPosition
                     setTextColor(
-                        if (isChecked) R.color.option_b3.dec()
-                        else Color.DKGRAY
+                        if (isChecked) resources.getColor(R.color.option_a1)
+                        else resources.getColor(R.color.option_b1)
                     )
 
                     setOnClickListener {

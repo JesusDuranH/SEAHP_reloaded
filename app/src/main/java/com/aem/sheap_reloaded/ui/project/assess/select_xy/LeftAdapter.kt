@@ -1,5 +1,6 @@
 package com.aem.sheap_reloaded.ui.project.assess.select_xy
 
+import android.content.res.Resources.Theme
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -35,12 +36,21 @@ class LeftAdapter(private val criteriaList: List<Criteria>,
                 text = criteria.nameCriteria
                 textOn = criteria.idCriteria.toString()
                 textOff = criteria.nameCriteria
+                isChecked = (position == selectedPosition)
 
-                isChecked = position == selectedPosition
-                setTextColor(
-                    if (isChecked) R.color.option_a1.dec()
-                    else Color.LTGRAY
-                )
+                binding.progressIndicator.progress = 50
+
+                if (isChecked){
+                    //
+                    setTextColor(resources.getColor(R.color.option_a1))
+                    setButtonDrawable(R.drawable.ic_check_box_on)
+                    binding.progressIndicator.setIndicatorColor(resources.getColor(R.color.option_c1))
+                } else {
+                    //
+                    setTextColor(resources.getColor(R.color.option_b1))
+                    setButtonDrawable(R.drawable.ic_check_box_off)
+                    binding.progressIndicator.setIndicatorColor(resources.getColor(R.color.option_a1))
+                }
 
                 setOnClickListener {
                     if (selectedPosition != position){

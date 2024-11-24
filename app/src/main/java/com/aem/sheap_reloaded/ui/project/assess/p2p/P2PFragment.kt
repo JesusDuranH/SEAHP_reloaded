@@ -340,7 +340,7 @@ class P2PFragment: Fragment() {
 
     private fun getOut(saveNExit: Boolean){
         //
-        if (saveNExit) findNavController().navigate(R.id.action_nav_project_assess_thing_thing_to_select_assess,
+        if (saveNExit) findNavController().navigate(R.id.action_nav_project_assess_thing_thing_to_select_xy,
             null,
             NavOptions.Builder().setPopUpTo(R.id.nav_project_select_assess_x, true).build())
         else next()

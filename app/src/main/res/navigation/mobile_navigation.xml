@@ -183,9 +183,12 @@
         tools:layout="@layout/fragment_assess_matrix"
         >
         <action
-            android:id="@+id/action_nav_assess_perform_to_select_assess"
+            android:id="@+id/action_nav_assess_perform_to_select_assess_criteria"
             app:destination="@id/nav_project_select_assess_xy"
             />
+        <action
+            android:id="@+id/action_nav_assess_perform_to_select_assess_alternative"
+            app:destination="@id/nav_project_select_assess_x" />
     </fragment>
 
     <fragment
@@ -202,10 +205,7 @@
             android:id="@+id/action_nav_project_select_assess_to_select_assess_2"
             app:destination="@id/nav_project_select_assess_y"
             />
-        <action
-            android:id="@+id/action_nav_project_select_assess_to_result"
-            app:destination="@id/nav_account_result"
-            />
+
         <action
             android:id="@+id/action_nav_project_select_assess_to_assess_criteria_alternative"
             app:destination="@id/nav_project_assess_criteria_alternative"
@@ -218,6 +218,18 @@
         android:label="@string/menu_assess"
         tools:layout="@layout/fragment_assess_select_xy"
         >
+        <action
+            android:id="@+id/action_nav_project_select_xy_to_assess_perform"
+            app:destination="@id/nav_matrix_list"
+            />
+        <action
+            android:id="@+id/action_nav_project_select_xy_to_assess_thing_thing"
+            app:destination="@id/nav_project_assess_thing_thing"
+            />
+        <action
+            android:id="@+id/action_nav_project_select_xy_to_result"
+            app:destination="@id/nav_account_result"
+            />
     </fragment>
 
 
@@ -240,14 +252,8 @@
         tools:layout="@layout/fragment_assess_p2p"
         >
         <action
-            android:id="@+id/action_nav_project_assess_thing_thing_to_select_assess"
-            app:destination="@id/nav_project_select_assess_x"
-            app:popUpTo="@id/nav_project_assess_thing_thing"
-            app:popUpToInclusive="true"
-            />
-        <action
-            android:id="@+id/action_nav_project_assess_thing_thing_to_select_assess_2"
-            app:destination="@id/nav_project_select_assess_y"
+            android:id="@+id/action_nav_project_assess_thing_thing_to_select_xy"
+            app:destination="@id/nav_project_select_assess_xy"
             app:popUpTo="@id/nav_project_assess_thing_thing"
             app:popUpToInclusive="true"
             />

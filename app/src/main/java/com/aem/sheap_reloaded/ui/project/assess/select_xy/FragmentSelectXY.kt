@@ -9,6 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aem.sheap_reloaded.R
@@ -41,8 +43,8 @@ class FragmentSelectXY: Fragment() {
 
     private lateinit var adapterLeft: LeftAdapter
     private lateinit var adapterRight: RightAdapter
-    private var positionLeft: Long? = -1
-    private var positionRight: Long? = -1
+    private var positionLeft: Criteria = Criteria()
+    private var positionRight: Criteria = Criteria()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -160,7 +162,7 @@ class FragmentSelectXY: Fragment() {
         }
     }
 
-    fun recyclerViewLeft(criteriaList: List<Criteria>, alternativeList: List<Alternative>){
+    private fun recyclerViewLeft(criteriaList: List<Criteria>, alternativeList: List<Alternative>){
         binding.rvLeft.layoutManager = LinearLayoutManager(requireContext())
         adapterLeft = LeftAdapter(criteriaList, alternativeList, allElementsByUser, matrix.idMatrix){ position ->
             positionLeft = position
@@ -170,8 +172,8 @@ class FragmentSelectXY: Fragment() {
         binding.rvLeft.adapter = adapterLeft
     }
 
-    fun recyclerViewRight(criteriaList: List<Criteria>, alternativeList: List<Alternative>,
-                          listOfValues: List<Element>){
+    private fun recyclerViewRight(criteriaList: List<Criteria>, alternativeList: List<Alternative>,
+                                  listOfValues: List<Element>){
         binding.rvRight.layoutManager = LinearLayoutManager(requireContext())
         adapterRight = RightAdapter(criteriaList, alternativeList, listOfValues, positionLeft){ position ->
             positionRight = position
@@ -193,7 +195,14 @@ class FragmentSelectXY: Fragment() {
             }
 
             buttonChoice.setOnClickListener(){
-                Toast.makeText(requireContext() , "($positionLeft, $positionRight)", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext() , "(${positionLeft.nameCriteria}, ${positionRight.nameCriteria})", Toast.LENGTH_SHORT).show()
+                if (positionLeft == Criteria() || positionRight == Criteria())
+                    Toast.makeText(requireContext() , "Selecciona ambos Criterios", Toast.LENGTH_SHORT).show()
+                else{
+                    Criteria().setX(positionLeft, requireContext())
+                    Criteria().setY(positionRight, requireContext())
+                    findNavController().navigate(R.id.action_nav_project_select_xy_to_assess_thing_thing)
+                }
             }
         }
     }

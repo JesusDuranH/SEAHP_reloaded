@@ -4,18 +4,21 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
+import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.databinding.ItemChoiceBinding
 
 class RightAdapter(private val criteriaList: List<Criteria>,
                    private val alternativeList: List<Alternative>,
                    private val elementList: List<Element>,
-                   private val leftPosition: Long?,
-                   private val onSelectionChange: (Long?) -> Unit
+                   private val leftPosition: Criteria,
+                   private val onSelectionChange: (Criteria) -> Unit
 ): RecyclerView.Adapter<RightAdapter.RightHolder>() {
     //
     private var selectedPosition: Int = -1
@@ -27,21 +30,33 @@ class RightAdapter(private val criteriaList: List<Criteria>,
         fun renderCriteria (criteria: Criteria, position: Int){
             with(binding.buttonPanel){
                 text = criteria.nameCriteria
-                textOn = criteria.idCriteria.toString()
+                textOn = criteria.nameCriteria
                 textOff = criteria.nameCriteria
+                binding.progressIndicator.progress = 100
 
-                if (leftPosition == null || leftPosition == criteria.idCriteria) {
+                if (leftPosition == Criteria() || leftPosition == criteria) {
                     isEnabled = false
                     isChecked = false
                     selectedPosition = -1
-                    onSelectionChange(null)
+                    onSelectionChange(Criteria())
+                    binding.progressIndicator.setIndicatorColor(resources.getColor(R.color.option_b6))
                 } else {
                     //
                     isChecked = position == selectedPosition
-                    setTextColor(
-                        if (isChecked) resources.getColor(R.color.option_a1)
-                        else resources.getColor(R.color.option_b1)
-                    )
+
+                    if (isChecked){
+                        //
+                        setTextColor(resources.getColor(R.color.option_a1))
+                        setButtonDrawable(R.drawable.ic_check_box_on)
+                    } else {
+                        //
+                        setTextColor(resources.getColor(R.color.option_b1))
+                        setButtonDrawable(R.drawable.ic_check_box_off)
+                    }
+
+                    val check = elementList.find { it.xElement == leftPosition.idCriteria && it.yElement == criteria.idCriteria && it.scaleElement != 0.0 && it.scaleElement != null }
+                    if (check == null) binding.progressIndicator.setIndicatorColor(resources.getColor(R.color.option_c1))
+                    else binding.progressIndicator.setIndicatorColor(resources.getColor(R.color.green))
 
                     setOnClickListener {
                         if (selectedPosition != position){
@@ -51,12 +66,12 @@ class RightAdapter(private val criteriaList: List<Criteria>,
                             notifyItemChanged(previousPosition)
                             notifyItemChanged(selectedPosition)
 
-                            onSelectionChange(criteria.idCriteria)
+                            onSelectionChange(criteria)
                         } else {
                             notifyItemChanged(selectedPosition)
                             selectedPosition = -1
 
-                            onSelectionChange(null)
+                            onSelectionChange(Criteria())
                         }
                     }
                 }

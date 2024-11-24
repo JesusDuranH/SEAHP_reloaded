@@ -34,8 +34,18 @@ class MatrixRecyclerViewAdapter(private val matrices: List<Matrix>)
                 matrixAssessItem.setOnClickListener {
                     Matrix().set(matrix, root.context)
                     Log.d("seahp_MatrixRecyclerViewAdapter", "set Matrix: $matrix")
-                    Navigation.findNavController(view)
-                        .navigate(R.id.action_nav_assess_perform_to_select_assess)
+
+                    when (matrix.idMatrix){
+                        1L -> Navigation.findNavController(view)
+                            .navigate(R.id.action_nav_assess_perform_to_select_assess_alternative)
+                        2L -> Navigation.findNavController(view)
+                            .navigate(R.id.action_nav_assess_perform_to_select_assess_criteria)
+                        else -> Toast.makeText(
+                            root.context,
+                            "Error de seleccion",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }

@@ -170,7 +170,7 @@ class SelectXFragment: Fragment() {
             }
             if (matrix.idMatrix.toInt() == 1) selectAssessButtonMaths.isEnabled = false
             selectAssessButtonMaths.setOnClickListener {
-                findNavController().navigate(R.id.action_nav_project_select_assess_to_result)
+                //findNavController().navigate(R.id.action_nav_project_select_assess_to_result)
             }
         }
     }

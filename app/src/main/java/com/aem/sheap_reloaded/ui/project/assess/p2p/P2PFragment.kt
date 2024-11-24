@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.aem.sheap_reloaded.R
@@ -165,6 +164,7 @@ class P2PFragment: Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val selectedStepValue = stepValues[progress]
                 setValue = selectedStepValue.toDouble()
+                setIcons(selectedStepValue)
                 textView.text = setText(selectedStepValue, elementX, elementY)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -176,26 +176,216 @@ class P2PFragment: Fragment() {
         })
     }
 
+    fun setIcons(op: Int){
+        //
+        with(binding){
+            when (op){
+                -9 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_add)
+                    optionA3.setImageResource(R.drawable.ic_add)
+                    optionA4.setImageResource(R.drawable.ic_add)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_less)
+                    optionB3.setImageResource(R.drawable.ic_less)
+                    optionB4.setImageResource(R.drawable.ic_less)
+                }
+                -8 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_add)
+                    optionA3.setImageResource(R.drawable.ic_add)
+                    optionA4.setImageResource(R.drawable.ic_add)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_less)
+                    optionB3.setImageResource(R.drawable.ic_less)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                -7 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_add)
+                    optionA3.setImageResource(R.drawable.ic_add)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_less)
+                    optionB3.setImageResource(R.drawable.ic_less)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                -6 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_add)
+                    optionA3.setImageResource(R.drawable.ic_add)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_less)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                -5 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_add)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_less)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                -4 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_add)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                -3 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_less)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                -2 -> {
+                    optionA1.setImageResource(R.drawable.ic_add)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_empty)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                1 -> {
+                    optionA1.setImageResource(R.drawable.ic_empty)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_empty)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                2 -> {
+                    optionA1.setImageResource(R.drawable.ic_empty)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                3 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                4 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_add)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                5 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_less)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_add)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                6 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_less)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_add)
+                    optionB3.setImageResource(R.drawable.ic_add)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                7 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_less)
+                    optionA3.setImageResource(R.drawable.ic_less)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_add)
+                    optionB3.setImageResource(R.drawable.ic_add)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+                8 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_less)
+                    optionA3.setImageResource(R.drawable.ic_less)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_add)
+                    optionB3.setImageResource(R.drawable.ic_add)
+                    optionB4.setImageResource(R.drawable.ic_add)
+                }
+                9 -> {
+                    optionA1.setImageResource(R.drawable.ic_less)
+                    optionA2.setImageResource(R.drawable.ic_less)
+                    optionA3.setImageResource(R.drawable.ic_less)
+                    optionA4.setImageResource(R.drawable.ic_less)
+                    optionB1.setImageResource(R.drawable.ic_add)
+                    optionB2.setImageResource(R.drawable.ic_add)
+                    optionB3.setImageResource(R.drawable.ic_add)
+                    optionB4.setImageResource(R.drawable.ic_add)
+                }
+                else -> {
+                    optionA1.setImageResource(R.drawable.ic_empty)
+                    optionA2.setImageResource(R.drawable.ic_empty)
+                    optionA3.setImageResource(R.drawable.ic_empty)
+                    optionA4.setImageResource(R.drawable.ic_empty)
+                    optionB1.setImageResource(R.drawable.ic_empty)
+                    optionB2.setImageResource(R.drawable.ic_empty)
+                    optionB3.setImageResource(R.drawable.ic_empty)
+                    optionB4.setImageResource(R.drawable.ic_empty)
+                }
+            }
+        }
+    }
+
     private fun setText (op: Int, elementX: String, elementY: String): String{
         val context = requireContext()
         return when (op){
-            -9 -> context.getString(R.string.fundamental_scale_9) + " $elementX = $setValue"
-            -8 -> context.getString(R.string.fundamental_scale_8) + " $elementX = $setValue"
-            -7 -> context.getString(R.string.fundamental_scale_7) + " $elementX = $setValue"
-            -6 -> context.getString(R.string.fundamental_scale_6) + " $elementX = $setValue"
-            -5 -> context.getString(R.string.fundamental_scale_5) + " $elementX = $setValue"
-            -4 -> context.getString(R.string.fundamental_scale_4) + " $elementX = $setValue"
-            -3 -> context.getString(R.string.fundamental_scale_3) + " $elementX = $setValue"
-            -2 -> context.getString(R.string.fundamental_scale_2) + " $elementX = $setValue"
-            1 -> context.getString(R.string.fundamental_scale_1) + " $setValue"
-            2 -> context.getString(R.string.fundamental_scale_2) + " $elementY = $setValue"
-            3 -> context.getString(R.string.fundamental_scale_3) + " $elementY = $setValue"
-            4 -> context.getString(R.string.fundamental_scale_4) + " $elementY = $setValue"
-            5 -> context.getString(R.string.fundamental_scale_5) + " $elementY = $setValue"
-            6 -> context.getString(R.string.fundamental_scale_6) + " $elementY = $setValue"
-            7 -> context.getString(R.string.fundamental_scale_7) + " $elementY = $setValue"
-            8 -> context.getString(R.string.fundamental_scale_8) + " $elementY = $setValue"
-            9 -> context.getString(R.string.fundamental_scale_9) + " $elementY = $setValue"
+            -9 -> context.getString(R.string.fundamental_scale_9) + " $elementX"
+            -8 -> context.getString(R.string.fundamental_scale_8) + " $elementX"
+            -7 -> context.getString(R.string.fundamental_scale_7) + " $elementX"
+            -6 -> context.getString(R.string.fundamental_scale_6) + " $elementX"
+            -5 -> context.getString(R.string.fundamental_scale_5) + " $elementX"
+            -4 -> context.getString(R.string.fundamental_scale_4) + " $elementX"
+            -3 -> context.getString(R.string.fundamental_scale_3) + " $elementX"
+            -2 -> context.getString(R.string.fundamental_scale_2) + " $elementX"
+
+            1 -> context.getString(R.string.fundamental_scale_1)
+
+            2 -> context.getString(R.string.fundamental_scale_2) + " $elementY"
+            3 -> context.getString(R.string.fundamental_scale_3) + " $elementY"
+            4 -> context.getString(R.string.fundamental_scale_4) + " $elementY"
+            5 -> context.getString(R.string.fundamental_scale_5) + " $elementY"
+            6 -> context.getString(R.string.fundamental_scale_6) + " $elementY"
+            7 -> context.getString(R.string.fundamental_scale_7) + " $elementY"
+            8 -> context.getString(R.string.fundamental_scale_8) + " $elementY"
+            9 -> context.getString(R.string.fundamental_scale_9) + " $elementY"
             else -> context.getString(R.string.error)
         }
     }

@@ -49,33 +49,10 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                 alternativeButtonSelect.setOnClickListener {
                     Criteria().setX(criteria, root.context)
                     if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                    else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
                 }
                 root.setOnClickListener {
                     Toast.makeText(root.context,
                         "Haz seleccionado a $criteria",
-                        Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        //Sin Terminar
-        fun renderAlternative(alternative: Alternative){
-            with(binding){
-                //
-                alternativeButtonSelect.text = alternative.nameAlternative
-                var count = 0
-                for (item in db){
-                    if (item.idMatrix == id && item.xElement == alternative.idAlternative) count++
-                }
-                if (maxAlternative > count) alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.yellow))
-                else alternativeButtonSelect.setBackgroundColor(ContextCompat.getColor(root.context, R.color.green))
-                alternativeButtonSelect.setOnClickListener {
-                    Alternative().setX(alternative, root.context)
-                    Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_select_assess_2)
-                }
-                root.setOnClickListener {
-                    Toast.makeText(root.context,
-                        "Haz seleccionado a $alternative",
                         Toast.LENGTH_SHORT).show()
                 }
             }
@@ -93,13 +70,10 @@ class SelectXRecyclerViewAdapter (private val criteriaList: List<Criteria>,
     }
 
     override fun getItemCount(): Int {
-        val size = if (id == 1L || id == 2L) criteriaList.size
-                    else alternativeList.size
-        return size
+        return criteriaList.size
     }
 
     override fun onBindViewHolder(holder: SelectXHolder, position: Int) {
-        if (id == 1L || id == 2L) holder.renderCriteria(criteriaList[position])
-        else holder.renderAlternative(alternativeList[position])
+        holder.renderCriteria(criteriaList[position])
     }
 }

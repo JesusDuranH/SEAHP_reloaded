@@ -42,7 +42,7 @@ class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                     alternativeButtonSelect.setOnClickListener {
                         Criteria().setY(criteria, root.context)
                         //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                        /*else*/ Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
+                        //else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
                     }
                 }
             }
@@ -61,7 +61,7 @@ class SelectYRecyclerViewAdapter (private val criteriaList: List<Criteria>,
                     alternativeButtonSelect.setOnClickListener {
                         Alternative().setY(alternative, root.context)
                         //if (data.idMatrix.toInt() == 1) Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_to_assess_criteria_alternative)
-                        /*else*/ Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
+                        //else Navigation.findNavController(view).navigate(R.id.action_nav_project_select_assess_2_to_assess_thing_thing)
                     }
                 }
             }

@@ -179,7 +179,6 @@ class SelectYAFragment: Fragment() {
                                 //
                                 var updateValue = Element()
                                 val threadElement = Thread {
-                                    //
                                     updateValue = Element().updateScale(itExist, scale, false)
                                 }.apply {
                                     start()

@@ -201,10 +201,6 @@
             android:id="@+id/action_nav_project_select_assess_to_assess_perform"
             app:destination="@id/nav_matrix_list"
             />
-        <action
-            android:id="@+id/action_nav_project_select_assess_to_select_assess_2"
-            app:destination="@id/nav_project_select_assess_y"
-            />
 
         <action
             android:id="@+id/action_nav_project_select_assess_to_assess_criteria_alternative"
@@ -229,19 +225,6 @@
         <action
             android:id="@+id/action_nav_project_select_xy_to_result"
             app:destination="@id/nav_account_result"
-            />
-    </fragment>
-
-
-    <fragment
-        android:id="@+id/nav_project_select_assess_y"
-        android:name="com.aem.sheap_reloaded.ui.project.assess.select_y.SelectYFragment"
-        android:label="@string/project_select_assess"
-        tools:layout="@layout/fragment_assess_select_y"
-        >
-        <action
-            android:id="@+id/action_nav_project_select_assess_2_to_assess_thing_thing"
-            app:destination="@id/nav_project_assess_thing_thing"
             />
     </fragment>
 

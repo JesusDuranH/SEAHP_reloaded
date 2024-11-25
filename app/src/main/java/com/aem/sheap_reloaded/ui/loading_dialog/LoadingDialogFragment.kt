@@ -39,8 +39,8 @@ class LoadingDialogFragment: DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
         )
         dialog?.setCancelable(false)
     }

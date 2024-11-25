@@ -115,9 +115,12 @@ class HomeFragment : Fragment() {
                 Project()
             }
             withContext(Dispatchers.Main){
-                if (login) binding.textHomeUser.text = getString(R.string.home_user_welcome_1) + user.user // Resultado
+                if (!login) findNavController().navigate(R.id.action_nav_home_to_login_sign_up)
+                else{
+                    binding.textHomeUser.text = getString(R.string.home_user_welcome_1) + user.user // Resultado
+                    buttonOperation()
+                }
                 loading.dismiss() //Termina Loading
-                buttonOperation()
             }
         }
     }

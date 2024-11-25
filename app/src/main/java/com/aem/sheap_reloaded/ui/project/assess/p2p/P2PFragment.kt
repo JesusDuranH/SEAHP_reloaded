@@ -16,6 +16,7 @@ import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
 import com.aem.sheap_reloaded.databinding.FragmentAssessP2pBinding
@@ -42,6 +43,7 @@ class P2PFragment: Fragment() {
     private var setValue: Double = 1.0
     private var textX = ""
     private var textY = ""
+    private var getProgress = Result()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,6 +112,9 @@ class P2PFragment: Fragment() {
             loadingDialog.show(childFragmentManager, "loadingDialog")
             CoroutineScope(Dispatchers.IO).launch {
                 //
+                getProgress = Result().byUsersNID(0, user)
+                Log.d("seahp_P2PFragment", "set getProgress: $getProgress")
+
                 when (matrix.idMatrix){
                     2L -> {
                         criteriaX = Criteria().getX(context)
@@ -138,6 +143,9 @@ class P2PFragment: Fragment() {
                     setValue = if (itExist != Element()) itExist!!.scaleElement!!
                                 else 1.0
                     Log.d("seahp_P2PFragment", "set setValue: $setValue")
+
+                    textProject.text = project.nameProject
+                    binding.progressIndicator.progress = getProgress.result.toInt()
 
                     textOptionA.text = textY
                     textOptionB.text = textX
@@ -179,188 +187,53 @@ class P2PFragment: Fragment() {
     fun setIcons(op: Int){
         //
         with(binding){
-            when (op){
-                -9 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_add)
-                    optionA3.setImageResource(R.drawable.ic_add)
-                    optionA4.setImageResource(R.drawable.ic_add)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_less)
-                    optionB3.setImageResource(R.drawable.ic_less)
-                    optionB4.setImageResource(R.drawable.ic_less)
-                }
-                -8 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_add)
-                    optionA3.setImageResource(R.drawable.ic_add)
-                    optionA4.setImageResource(R.drawable.ic_add)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_less)
-                    optionB3.setImageResource(R.drawable.ic_less)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                -7 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_add)
-                    optionA3.setImageResource(R.drawable.ic_add)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_less)
-                    optionB3.setImageResource(R.drawable.ic_less)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                -6 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_add)
-                    optionA3.setImageResource(R.drawable.ic_add)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_less)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                -5 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_add)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_less)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                -4 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_add)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                -3 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_less)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                -2 -> {
-                    optionA1.setImageResource(R.drawable.ic_add)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_empty)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                1 -> {
-                    optionA1.setImageResource(R.drawable.ic_empty)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_empty)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                2 -> {
-                    optionA1.setImageResource(R.drawable.ic_empty)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                3 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                4 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_add)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                5 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_less)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_add)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                6 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_less)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_add)
-                    optionB3.setImageResource(R.drawable.ic_add)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                7 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_less)
-                    optionA3.setImageResource(R.drawable.ic_less)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_add)
-                    optionB3.setImageResource(R.drawable.ic_add)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-                8 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_less)
-                    optionA3.setImageResource(R.drawable.ic_less)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_add)
-                    optionB3.setImageResource(R.drawable.ic_add)
-                    optionB4.setImageResource(R.drawable.ic_add)
-                }
-                9 -> {
-                    optionA1.setImageResource(R.drawable.ic_less)
-                    optionA2.setImageResource(R.drawable.ic_less)
-                    optionA3.setImageResource(R.drawable.ic_less)
-                    optionA4.setImageResource(R.drawable.ic_less)
-                    optionB1.setImageResource(R.drawable.ic_add)
-                    optionB2.setImageResource(R.drawable.ic_add)
-                    optionB3.setImageResource(R.drawable.ic_add)
-                    optionB4.setImageResource(R.drawable.ic_add)
-                }
-                else -> {
-                    optionA1.setImageResource(R.drawable.ic_empty)
-                    optionA2.setImageResource(R.drawable.ic_empty)
-                    optionA3.setImageResource(R.drawable.ic_empty)
-                    optionA4.setImageResource(R.drawable.ic_empty)
-                    optionB1.setImageResource(R.drawable.ic_empty)
-                    optionB2.setImageResource(R.drawable.ic_empty)
-                    optionB3.setImageResource(R.drawable.ic_empty)
-                    optionB4.setImageResource(R.drawable.ic_empty)
-                }
-            }
+            optionA1.setImageResource(
+                if (op < 0) R.drawable.ic_add
+                else if (op > 2) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionA2.setImageResource(
+                if (op < -3) R.drawable.ic_add
+                else if (op > 4) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionA3.setImageResource(
+                if (op < -5) R.drawable.ic_add
+                else if (op > 6) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionA4.setImageResource(
+                if (op < -7) R.drawable.ic_add
+                else if (op > 8) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionB1.setImageResource(
+                if (op < -2) R.drawable.ic_less
+                else if (op > 1) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+
+            optionB2.setImageResource(
+                if (op < -4) R.drawable.ic_less
+                else if (op > 3) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+
+            optionB3.setImageResource(
+                if (op < -6) R.drawable.ic_less
+                else if (op > 5) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+
+            optionB4.setImageResource(
+                if (op < -8) R.drawable.ic_less
+                else if (op > 7) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
         }
     }
 
@@ -481,6 +354,16 @@ class P2PFragment: Fragment() {
                 2L -> {
                     Log.d("seahp_P2PFragment", "N next list:")
                     val criteriaList = Criteria().listByProject(project)
+
+                    //Se agrega 1 deitem que usa para detectar que se creo la matriz
+                    val total = criteriaList.size * criteriaList.size + 1
+                    Log.d("seahp_P2PFragment", "next total: $total")
+
+                    val add = (2.0/total.toDouble()) * 100.0
+
+                    val progress = getProgress.result + add
+                    Log.d("seahp_P2PFragment", "next newProgress: $progress")
+                    Result().update(0, "Progess Matrix ${matrix.nameMatrix}", user, progress)
 
                     val max = criteriaList.size - 1
                     Log.d("seahp_P2PFragment", "N max: $max")

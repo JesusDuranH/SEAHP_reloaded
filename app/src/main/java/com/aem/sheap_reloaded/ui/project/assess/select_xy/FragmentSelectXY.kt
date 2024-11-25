@@ -19,6 +19,7 @@ import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
 import com.aem.sheap_reloaded.databinding.FragmentAssessSelectXyBinding
@@ -45,6 +46,7 @@ class FragmentSelectXY: Fragment() {
     private lateinit var adapterRight: RightAdapter
     private var positionLeft: Criteria = Criteria()
     private var positionRight: Criteria = Criteria()
+    private var progress: Double = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,6 +118,8 @@ class FragmentSelectXY: Fragment() {
         allElementsByUser = emptyList<Element>().toMutableList()
         Log.d("seahp_SelectXFragment", "set AllElementsByUser initial empty: $allElementsByUser")
 
+        binding.textProject.text = project.nameProject
+
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
         CoroutineScope(Dispatchers.IO).launch {
@@ -129,6 +133,23 @@ class FragmentSelectXY: Fragment() {
                 2L -> {
                     Log.d("seahp_SelectXFragment", "set 2 criteriaList:")
                     criteriaList = Criteria().listByProject(project).toMutableList()
+
+                    //Se agrega 1 deitem que usa para detectar que se creo la matriz
+                    val total = criteriaList.size * criteriaList.size + 1
+                    Log.d("seahp_SelectXFragment", "set 2 total: $total")
+
+                    progress = (allElementsByUser.size.toDouble() / total.toDouble()) * 100
+                    val getProgress = Result().byUsersNID(0, user)
+                    Log.d("seahp_SelectXFragment", "set 2 getProgress: $getProgress")
+
+                    if (getProgress == Result()){
+                        Result().create(0, "Progess Matrix ${matrix.idMatrix}", user, progress)
+                    } else if (getProgress.result != progress) {
+                        Result().update(0, "Progess Matrix ${matrix.nameMatrix}", user, progress)
+                    }
+
+                    Log.d("seahp_SelectXFragment", "set 2 progress: $progress")
+
                     checkValuesCriteriaCriteria()
                 }
                 else -> {
@@ -140,6 +161,7 @@ class FragmentSelectXY: Fragment() {
             withContext(Dispatchers.Main){
                 //
                 loadingDialog.dismiss()
+                binding.progressIndicator.progress = progress.toInt()
                 recyclerViewLeft(criteriaList, alternativeList)
             }
         }

@@ -197,10 +197,6 @@
         android:label="@string/project_select_assess"
         tools:layout="@layout/fragment_assess_select_x"
         >
-        <action
-            android:id="@+id/action_nav_project_select_assess_to_assess_perform"
-            app:destination="@id/nav_matrix_list"
-            />
 
         <action
             android:id="@+id/action_nav_project_select_assess_to_assess_criteria_alternative"

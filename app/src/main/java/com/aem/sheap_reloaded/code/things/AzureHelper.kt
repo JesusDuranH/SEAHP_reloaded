@@ -7,6 +7,7 @@ import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import java.sql.Connection
 import java.sql.DriverManager
@@ -65,6 +66,12 @@ class AzureHelper {
         "name_ele",     //6
         "description_ele",  //7
         "scale_ele")        //8
+    private val TABLE_RESULT = arrayOf(
+        "resultado",    //0
+        "rs_id",        //1
+        "name_rs",      //2
+        "us_user",      //3
+        "result_rs")    //4
 
     fun getConnection(): Boolean{
         var connect: Boolean = false
@@ -1057,6 +1064,87 @@ class AzureHelper {
         } catch (e: Exception) {
             Log.d("seahp_AzureDB", "getAlternativeRow Exception: " + e.printStackTrace())
             callback(mutableListOf())
+        }
+    }
+
+    fun insertResult(result: Result){
+        //
+        val sql = "INSERT INTO ${TABLE_RESULT[0]} (${TABLE_RESULT[1]},${TABLE_RESULT[2]},${TABLE_RESULT[3]},${TABLE_RESULT[4]}) " +
+                "VALUES (?, ?, ?, ?)"
+        Log.d("seahp_AzureDB", "insertResult: $sql")
+        try {
+            val conn = connection()
+            val statement: PreparedStatement = conn.prepareStatement(sql)
+            statement.setLong(1, result.id)
+            statement.setString(2, result.name)
+            statement.setString(3, result.user.user)
+            statement.setDouble(4, result.result)
+            statement.executeUpdate()
+            statement.close()
+            Log.d("seahp_AzureDB", "insertResult: $result")
+        } catch (ex: SQLException){
+            Log.d("seahp_AzureDB", "insertResult SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            Log.d("seahp_AzureDB", "insertResult Exception: " + e.printStackTrace())
+        }
+    }
+
+    fun getResultByIDnUser(id: Long, user: User, callback: (Result) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_RESULT[0]} WHERE ${TABLE_RESULT[1]} = ?" +
+                " AND ${TABLE_RESULT[3]} = ?"
+        Log.d("seahp_AzureDB", "getResultByIDnUser: $sql")
+        try {
+            connection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getUserByID(user.user){getUser ->
+
+                        statement.setLong(1, id)
+                        statement.setString(2, user.user)
+                        statement.executeQuery().use { rs ->
+                            var searchResult = Result()
+                            while (rs.next()) {
+                                val id = rs.getLong(TABLE_RESULT[1])
+                                val name = rs.getString(TABLE_RESULT[2])
+                                val result = rs.getDouble(TABLE_RESULT[4])
+
+                                searchResult = Result(id, name, getUser, result)
+                                Log.d("seahp_AzureDB", "getResultByIDnUser $searchResult")
+                                callback(searchResult)
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("seahp_AzureDB", "getResultByIDnUser SQLException: " + ex.printStackTrace())
+            callback(Result())
+        } catch (e: Exception) {
+            Log.d("seahp_AzureDB", "getResultByIDnUser Exception: " + e.printStackTrace())
+            callback(Result())
+        }
+    }
+
+    fun updateResultByIDnUser(result: Result){
+        //
+        val sql = "UPDATE ${TABLE_RESULT[0]} SET ${TABLE_RESULT[4]} = ? " +
+                "WHERE ${TABLE_RESULT[1]} = ? AND ${TABLE_RESULT[3]} = ?"
+        Log.d("seahp_AzureDB", "updateResultByIDnUser: $sql")
+        try {
+            connection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    statement.setDouble(1, result.result)
+                    statement.setLong(2, result.id)
+                    statement.setString(3, result.user.user)
+                    val i = statement.executeUpdate()
+                    Log.d("seahp_AzureDB", "updateResultByIDnUser Row: $i")
+                    Log.d("seahp_AzureDB", "updateResultByIDnUser: $result")
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("seahp_AzureDB", "updateResultByIDnUser SQLException: " + ex.printStackTrace())
+        } catch (e: Exception) {
+            Log.d("seahp_AzureDB", "updateResultByIDnUser Exception: " + e.printStackTrace())
         }
     }
 }

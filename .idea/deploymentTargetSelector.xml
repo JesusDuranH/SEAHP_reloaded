@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="SHEAP_reloaded.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-24T09:46:44.612426539Z">
+        <DropdownSelection timestamp="2024-11-25T08:31:33.494766085Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/home/jesus/.var/app/com.google.AndroidStudio/config/.android/avd/Small_Phone_API_31.avd" />

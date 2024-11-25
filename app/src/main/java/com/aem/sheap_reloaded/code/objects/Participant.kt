@@ -89,6 +89,25 @@ open class Participant(val user: User,
         return dataList
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Participant) return false
+
+        if (user != other.user) return false
+        if (project != other.project) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = user.hashCode()
+        result = 29 * result + user.hashCode()
+        result = 29 * result + project.hashCode()
+        result = 29 * result + type.hashCode()
+        return result
+    }
+
     override fun toString(): String {
         return "\nParticipant($user, $project, $type)"
     }

@@ -67,6 +67,7 @@ class SelectXFragment: Fragment() {
         //
         val context = requireContext()
         user = User().get(context)
+        config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
     }

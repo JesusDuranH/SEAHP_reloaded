@@ -17,24 +17,31 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical"
             >
 
             <TextView
                 android:id="@+id/text_project"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
                 android:textColor="@color/option_a"
                 android:text="@string/project_name"
                 android:textSize="20sp"
                 android:gravity="center"
+                android:textStyle="bold"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMaxTextSize="20sp"
                 />
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/progress_indicator"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+
                 />
 
         </LinearLayout>
@@ -42,15 +49,15 @@
         <LinearLayout
             android:id="@+id/layout_seekbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".15"
+            android:layout_height="0dp"
+            android:layout_weight="13"
             android:orientation="vertical"
             android:gravity="center"
             >
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 >
@@ -64,6 +71,10 @@
                     android:text="@string/fundamental_scale_option_a"
                     android:textSize="20sp"
                     android:gravity="center"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:textStyle="italic"
+                    android:textAllCaps="true"
                     />
 
                 <LinearLayout
@@ -113,8 +124,8 @@
             <SeekBar
                 android:id="@+id/seek_bar_assess"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_height="0dp"
+                android:layout_weight="10"
                 android:rotation="90"
                 android:progress="4"
                 android:thumb="@drawable/seekbar_thumb"
@@ -123,7 +134,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 >
@@ -138,6 +149,10 @@
                     android:text="@string/fundamental_scale_option_b"
                     android:textSize="20sp"
                     android:padding="2dp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:textStyle="italic"
+                    android:textAllCaps="true"
                     />
 
                 <LinearLayout
@@ -188,9 +203,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             >
 
             <Button
@@ -227,6 +242,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:textStyle="italic"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
+import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
@@ -68,6 +69,7 @@ class P2PFragment: Fragment() {
         //
         val context = requireContext()
         user = User().get(context)
+        config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
 
@@ -112,7 +114,7 @@ class P2PFragment: Fragment() {
             loadingDialog.show(childFragmentManager, "loadingDialog")
             CoroutineScope(Dispatchers.IO).launch {
                 //
-                getProgress = Result().byUsersNID(0, user)
+                getProgress = Result().byUsersNID(0, Participant(user, project))
                 Log.d("seahp_P2PFragment", "set getProgress: $getProgress")
 
                 when (matrix.idMatrix){
@@ -144,7 +146,7 @@ class P2PFragment: Fragment() {
                                 else 1.0
                     Log.d("seahp_P2PFragment", "set setValue: $setValue")
 
-                    textProject.text = project.nameProject
+                    textProject.text = matrix.nameMatrix
                     binding.progressIndicator.progress = getProgress.result.toInt()
 
                     textOptionA.text = textY
@@ -363,7 +365,7 @@ class P2PFragment: Fragment() {
 
                     val progress = getProgress.result + add
                     Log.d("seahp_P2PFragment", "next newProgress: $progress")
-                    Result().update(0, "Progess Matrix ${matrix.nameMatrix}", user, progress)
+                    Result().update(0, "Progess Matrix ${matrix.nameMatrix}", Participant(user, project), progress)
 
                     val max = criteriaList.size - 1
                     Log.d("seahp_P2PFragment", "N max: $max")

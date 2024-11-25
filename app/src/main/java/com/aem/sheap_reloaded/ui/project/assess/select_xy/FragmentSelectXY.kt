@@ -18,10 +18,12 @@ import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
+import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
+import com.aem.sheap_reloaded.code.things.SEAHP
 import com.aem.sheap_reloaded.databinding.FragmentAssessSelectXyBinding
 import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +79,7 @@ class FragmentSelectXY: Fragment() {
         val context = requireContext()
 
         user = User().get(context)
+        config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
     }
@@ -118,7 +121,7 @@ class FragmentSelectXY: Fragment() {
         allElementsByUser = emptyList<Element>().toMutableList()
         Log.d("seahp_SelectXFragment", "set AllElementsByUser initial empty: $allElementsByUser")
 
-        binding.textProject.text = project.nameProject
+        binding.textProject.text = matrix.nameMatrix
 
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
@@ -139,13 +142,13 @@ class FragmentSelectXY: Fragment() {
                     Log.d("seahp_SelectXFragment", "set 2 total: $total")
 
                     progress = (allElementsByUser.size.toDouble() / total.toDouble()) * 100
-                    val getProgress = Result().byUsersNID(0, user)
+                    val getProgress = Result().byUsersNID(0, Participant(user, project))
                     Log.d("seahp_SelectXFragment", "set 2 getProgress: $getProgress")
 
                     if (getProgress == Result()){
-                        Result().create(0, "Progess Matrix ${matrix.idMatrix}", user, progress)
+                        Result().create(0, "Progess Matrix ${matrix.idMatrix}", Participant(user, project), progress)
                     } else if (getProgress.result != progress) {
-                        Result().update(0, "Progess Matrix ${matrix.nameMatrix}", user, progress)
+                        Result().update(0, "Progess Matrix ${matrix.nameMatrix}", Participant(user, project), progress)
                     }
 
                     Log.d("seahp_SelectXFragment", "set 2 progress: $progress")
@@ -209,11 +212,11 @@ class FragmentSelectXY: Fragment() {
         with(binding){
             //
             selectAssessButtonSave.setOnClickListener {
-                //findNavController().navigate(R.id.action_nav_project_select_assess_to_assess_perform)
+                findNavController().navigate(R.id.action_nav_project_select_xy_to_assess_perform)
             }
             if (matrix.idMatrix.toInt() == 1) selectAssessButtonMaths.isEnabled = false
             selectAssessButtonMaths.setOnClickListener {
-                //findNavController().navigate(R.id.action_nav_project_select_assess_to_result)
+                findNavController().navigate(R.id.action_nav_project_select_xy_to_result)
             }
 
             buttonChoice.setOnClickListener(){

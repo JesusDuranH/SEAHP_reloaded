@@ -71,7 +71,8 @@ class AzureHelper {
         "rs_id",        //1
         "name_rs",      //2
         "us_user",      //3
-        "result_rs")    //4
+        "id_project",   //4
+        "result_rs")    //5
 
     fun getConnection(): Boolean{
         var connect: Boolean = false
@@ -1069,16 +1070,17 @@ class AzureHelper {
 
     fun insertResult(result: Result){
         //
-        val sql = "INSERT INTO ${TABLE_RESULT[0]} (${TABLE_RESULT[1]},${TABLE_RESULT[2]},${TABLE_RESULT[3]},${TABLE_RESULT[4]}) " +
-                "VALUES (?, ?, ?, ?)"
+        val sql = "INSERT INTO ${TABLE_RESULT[0]} (${TABLE_RESULT[1]},${TABLE_RESULT[2]},${TABLE_RESULT[3]},${TABLE_RESULT[4]},${TABLE_RESULT[5]}) " +
+                "VALUES (?, ?, ?, ?, ?)"
         Log.d("seahp_AzureDB", "insertResult: $sql")
         try {
             val conn = connection()
             val statement: PreparedStatement = conn.prepareStatement(sql)
             statement.setLong(1, result.id)
             statement.setString(2, result.name)
-            statement.setString(3, result.user.user)
-            statement.setDouble(4, result.result)
+            statement.setString(3, result.participant.user.user)
+            statement.setLong(4, result.participant.project.idProject)
+            statement.setDouble(5, result.result)
             statement.executeUpdate()
             statement.close()
             Log.d("seahp_AzureDB", "insertResult: $result")
@@ -1089,18 +1091,20 @@ class AzureHelper {
         }
     }
 
-    fun getResultByIDnUser(id: Long, user: User, callback: (Result) -> Unit){
+    fun getResult(id: Long, project: Project, user: User, callback: (Result) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_RESULT[0]} WHERE ${TABLE_RESULT[1]} = ?" +
-                " AND ${TABLE_RESULT[3]} = ?"
+                " AND ${TABLE_RESULT[3]} = ? AND ${TABLE_RESULT[4]} = ?"
         Log.d("seahp_AzureDB", "getResultByIDnUser: $sql")
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
-                    getUserByID(user.user){getUser ->
+                    getParticipantIsAdminInThis(project, user){getParticipant ->
+                    //getUserByID(user.user){getUser ->
 
                         statement.setLong(1, id)
-                        statement.setString(2, user.user)
+                        statement.setString(2, getParticipant.user.user)
+                        statement.setLong(3, getParticipant.project.idProject)
                         statement.executeQuery().use { rs ->
                             var searchResult = Result()
                             while (rs.next()) {
@@ -1108,7 +1112,7 @@ class AzureHelper {
                                 val name = rs.getString(TABLE_RESULT[2])
                                 val result = rs.getDouble(TABLE_RESULT[4])
 
-                                searchResult = Result(id, name, getUser, result)
+                                searchResult = Result(id, name, getParticipant, result)
                                 Log.d("seahp_AzureDB", "getResultByIDnUser $searchResult")
                                 callback(searchResult)
                             }
@@ -1127,15 +1131,16 @@ class AzureHelper {
 
     fun updateResultByIDnUser(result: Result){
         //
-        val sql = "UPDATE ${TABLE_RESULT[0]} SET ${TABLE_RESULT[4]} = ? " +
-                "WHERE ${TABLE_RESULT[1]} = ? AND ${TABLE_RESULT[3]} = ?"
+        val sql = "UPDATE ${TABLE_RESULT[0]} SET ${TABLE_RESULT[5]} = ? " +
+                "WHERE ${TABLE_RESULT[1]} = ? AND ${TABLE_RESULT[3]} = ? AND ${TABLE_RESULT[4]} = ?"
         Log.d("seahp_AzureDB", "updateResultByIDnUser: $sql")
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
                     statement.setDouble(1, result.result)
                     statement.setLong(2, result.id)
-                    statement.setString(3, result.user.user)
+                    statement.setString(3, result.participant.user.user)
+                    statement.setLong(4, result.participant.project.idProject)
                     val i = statement.executeUpdate()
                     Log.d("seahp_AzureDB", "updateResultByIDnUser Row: $i")
                     Log.d("seahp_AzureDB", "updateResultByIDnUser: $result")

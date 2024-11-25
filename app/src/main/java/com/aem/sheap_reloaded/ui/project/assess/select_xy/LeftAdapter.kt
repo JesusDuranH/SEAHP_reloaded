@@ -1,7 +1,5 @@
 package com.aem.sheap_reloaded.ui.project.assess.select_xy
 
-import android.content.res.Resources.Theme
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View

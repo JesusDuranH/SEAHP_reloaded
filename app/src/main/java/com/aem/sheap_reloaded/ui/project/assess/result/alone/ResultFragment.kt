@@ -39,7 +39,6 @@ class ResultFragment: Fragment() {
     private lateinit var config: Cipher
     private lateinit var project: Project
     private lateinit var userElement: MutableList<Element>
-    private lateinit var configProject: SEAHP
     private lateinit var cakeIsLie: PieChart
 
     private var _binding: FragmentAssessResultBinding? = null
@@ -75,7 +74,6 @@ class ResultFragment: Fragment() {
         config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
-        configProject = SEAHP()
 
         cakeIsLie = binding.cakeIsLie
     }

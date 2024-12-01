@@ -10,14 +10,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
 import com.aem.sheap_reloaded.code.things.SEAHP
 import com.aem.sheap_reloaded.databinding.FragmentAssessProgressBinding
+import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProgressFragment: Fragment() {
     //
-
     private lateinit var user: User
     private lateinit var matrix: Matrix
     private lateinit var config: Cipher
@@ -79,6 +84,15 @@ class ProgressFragment: Fragment() {
 
     fun set(){
         //
+        val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
+        loadingDialog.show(childFragmentManager, "loadingDialog")
+        CoroutineScope(Dispatchers.IO).launch {
+            Result().groupByProject(project)
+            withContext(Dispatchers.Main){
+                //
+                loadingDialog.dismiss()
+            }
+        }
     }
 
 }

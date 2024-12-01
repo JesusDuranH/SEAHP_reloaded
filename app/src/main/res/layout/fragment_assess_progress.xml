@@ -20,8 +20,8 @@
         >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_left"
-            tools:listitem="@layout/item_choice"
+            android:id="@+id/rv_progress"
+            tools:listitem="@layout/item_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />

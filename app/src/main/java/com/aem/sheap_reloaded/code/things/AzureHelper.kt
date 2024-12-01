@@ -447,6 +447,36 @@ class AzureHelper {
         }
     }
 
+    fun getParticipantByUserNProject(project: Project, user: User, callback: (Participant) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} " +
+                "WHERE ${TABLE_PARTICIPANT[1]} = ? AND ${TABLE_PARTICIPANT[2]} = ?"
+        Log.d("seahp_AzureDB", "getParticipantByUserNProject: $sql")
+        var participant = Participant()
+        try {
+            connection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    statement.setLong(1, project.idProject)
+                    statement.setString(2, user.user)
+                    statement.executeQuery().use { rs ->
+                        if (rs.next()) {
+                            val type = rs.getInt(TABLE_PARTICIPANT[3])
+                            participant = Participant(user, project, type)
+                            Log.d("seahp_AzureDB", "getParticipantByUserNProject: $participant")
+                        }
+                        callback(participant)
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("seahp_AzureDB", "getParticipantByUserNProject SQLException: " + ex.printStackTrace())
+            callback(Participant())
+        } catch (e: Exception) {
+            Log.d("seahp_AzureDB", "getParticipantByUserNProject Exception: " + e.printStackTrace())
+            callback(Participant())
+        }
+    }
+
     fun getParticipantsByProject(project: Long, callback: (List<Participant>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_PARTICIPANT[0]} WHERE ${TABLE_PARTICIPANT[1]} = ?"
@@ -1099,20 +1129,18 @@ class AzureHelper {
         try {
             connection().use { conn ->
                 conn.prepareStatement(sql).use { statement ->
-                    getParticipantIsAdminInThis(project, user){getParticipant ->
-                    //getUserByID(user.user){getUser ->
-
+                    getParticipantByUserNProject(project, user){getParticipant ->
                         statement.setLong(1, id)
                         statement.setString(2, getParticipant.user.user)
                         statement.setLong(3, getParticipant.project.idProject)
                         statement.executeQuery().use { rs ->
                             var searchResult = Result()
                             while (rs.next()) {
-                                val id = rs.getLong(TABLE_RESULT[1])
+                                val id_res = rs.getLong(TABLE_RESULT[1])
                                 val name = rs.getString(TABLE_RESULT[2])
-                                val result = rs.getDouble(TABLE_RESULT[4])
+                                val result = rs.getDouble(TABLE_RESULT[5])
 
-                                searchResult = Result(id, name, getParticipant, result)
+                                searchResult = Result(id_res, name, getParticipant, result)
                                 Log.d("seahp_AzureDB", "getResultByIDnUser $searchResult")
                                 callback(searchResult)
                             }
@@ -1126,6 +1154,56 @@ class AzureHelper {
         } catch (e: Exception) {
             Log.d("seahp_AzureDB", "getResultByIDnUser Exception: " + e.printStackTrace())
             callback(Result())
+        }
+    }
+
+    fun getAllResultByProject(project: Project, callback: (List<Result>) -> Unit){
+        //
+        val sql = "SELECT * FROM ${TABLE_RESULT[0]} WHERE ${TABLE_RESULT[4]} = ?"
+        Log.d("seahp_AzureDB", "getAllResult: $sql")
+        val results = mutableListOf<Result>()
+        var getProject = Project()
+        val userList = mutableListOf<User>()
+        try {
+            connection().use { conn ->
+                conn.prepareStatement(sql).use { statement ->
+                    getProjectByID(project.idProject){ get ->
+                        getProject = get
+                    }
+                    statement.setLong(1, getProject.idProject)
+                    statement.executeQuery().use { rs ->
+                        var searchResult = Result()
+                        while (rs.next()) {
+                            val id = rs.getLong(TABLE_RESULT[1])
+                            val name = rs.getString(TABLE_RESULT[2])
+                            val user = rs.getString(TABLE_RESULT[3])
+                            val result = rs.getDouble(TABLE_RESULT[5])
+
+                            val userExist = userList.find { it.user == user }
+                            if (userExist == null){
+                                getUserByID(user) { getUser ->
+                                    userList.add(getUser)
+                                    searchResult = Result(id, name,
+                                        Participant(getUser, getProject), result)
+                                }
+                            } else {
+                                searchResult = Result(id, name,
+                                    Participant(userExist, getProject), result)
+                            }
+                            results.add(searchResult)
+
+                        }
+                        Log.d("seahp_AzureDB", "getAllResult $results")
+                        callback(results)
+                    }
+                }
+            }
+        } catch (ex: SQLException){
+            Log.d("seahp_AzureDB", "getAllResult SQLException: " + ex.printStackTrace())
+            callback(emptyList())
+        } catch (e: Exception) {
+            Log.d("seahp_AzureDB", "getAllResult Exception: " + e.printStackTrace())
+            callback(emptyList())
         }
     }
 

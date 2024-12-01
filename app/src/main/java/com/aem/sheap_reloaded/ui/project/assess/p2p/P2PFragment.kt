@@ -361,7 +361,12 @@ class P2PFragment: Fragment() {
                     val total = criteriaList.size * criteriaList.size + 1
                     Log.d("seahp_P2PFragment", "next total: $total")
 
-                    val add = (2.0/total.toDouble()) * 100.0
+                    val add =
+                    if (itExist == Element()){
+                        (2.0/total.toDouble()) * 100.0
+                    } else {
+                        0.0
+                    }
 
                     val progress = getProgress.result + add
                     Log.d("seahp_P2PFragment", "next newProgress: $progress")

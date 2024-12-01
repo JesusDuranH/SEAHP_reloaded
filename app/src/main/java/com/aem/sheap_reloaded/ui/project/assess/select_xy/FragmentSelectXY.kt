@@ -146,9 +146,9 @@ class FragmentSelectXY: Fragment() {
                     Log.d("seahp_SelectXFragment", "set 2 getProgress: $getProgress")
 
                     if (getProgress == Result()){
-                        Result().create(0, "Progess Matrix ${matrix.idMatrix}", Participant(user, project), progress)
+                        Result().create(0, "Progess Matrix 2 ${project.nameProject}", Participant(user, project), progress)
                     } else if (getProgress.result != progress) {
-                        Result().update(0, "Progess Matrix ${matrix.nameMatrix}", Participant(user, project), progress)
+                        Result().update(0, "Progess Matrix 2 ${project.nameProject}", Participant(user, project), progress)
                     }
 
                     Log.d("seahp_SelectXFragment", "set 2 progress: $progress")

@@ -14,10 +14,10 @@ import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
 import com.aem.sheap_reloaded.code.things.Maths
-import com.aem.sheap_reloaded.code.things.SEAHP
 import com.aem.sheap_reloaded.databinding.FragmentAssessResultBinding
 import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
 import com.github.mikephil.charting.animation.Easing
@@ -31,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class ResultFragment: Fragment() {
     //
@@ -108,13 +110,25 @@ class ResultFragment: Fragment() {
             withContext(Dispatchers.Main){
                 //
                 loadingDialog.dismiss()
-                graphic(Maths().consistencyRatio(userElement), cakeIsLie, "Preferencia Individual")
+                val ci = Maths().consistencyRatio(userElement)
+
+
+                val getParticipant = Participant(user, project)
+                val getCR = Result().byUsersNID(1, getParticipant)
+                if (getCR == Result()){
+                    Result()
+                        .create(1, "CR ${project.nameProject}", getParticipant, ci.rs)
+                } else {
+                    Result().update(1, "CR ${project.nameProject}", getParticipant, ci.rs)
+                }
+
+                graphic( ci, cakeIsLie, "Preferencia Individual")
                 cakeIsLie.visibility = View.VISIBLE
             }
         }
     }
 
-    fun graphic(result: Result, cake: PieChart, text: String){
+    fun graphic(resultPai: ResultPai, cake: PieChart, text: String){
 
         val entries = listOf(
             PieEntry(40f, "A"),
@@ -123,8 +137,8 @@ class ResultFragment: Fragment() {
             PieEntry(10f, "D")
         )
         // Configuración del conjunto de datos
-        val dataSet = PieDataSet(result.items, text)
-        dataSet.colors = generateColors(result.items.size)
+        val dataSet = PieDataSet(resultPai.items, text)
+        dataSet.colors = generateColors(resultPai.items.size)
         dataSet.sliceSpace = 3f
         dataSet.selectionShift = 5f
 
@@ -149,7 +163,14 @@ class ResultFragment: Fragment() {
         cake.isHighlightPerTapEnabled = true
         cake.animateY(1400, Easing.EaseInOutQuad)
 
-        cake.centerText = result.text
+        cake.centerText = if (resultPai.rs < 0) {
+            "Datos Insuficientes"
+        } else {
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.HALF_UP
+            "Inconsistencia: ${df.format(resultPai.rs)}%\n"
+        }
+
         cake.setCenterTextSize(20f)
         cake.setCenterTextColor(Color.BLACK)
 

@@ -1,6 +1,8 @@
 package com.aem.sheap_reloaded.code.objects
 
+import android.util.Log
 import com.aem.sheap_reloaded.code.things.AzureHelper
+import com.aem.sheap_reloaded.ui.project.assess.result.progress.ResultGroup
 
 class Result (val id: Long,
               val name: String,
@@ -47,6 +49,25 @@ class Result (val id: Long,
         }
 
         return data
+    }
+
+    fun groupByProject(project: Project): List<ResultGroup>{
+        //
+        var results = emptyList<Result>()
+        val threadUserList = Thread {
+            AzureHelper().getAllResultByProject(project) { getResult ->
+                results = getResult
+            }
+        }.apply {
+            start()
+            join()
+        }
+        val groups =  mutableListOf<ResultGroup>()
+        for (item in results){
+            //
+            Log.d("Result", "group item: $results")
+        }
+        return groups
     }
 
     override fun equals(other: Any?): Boolean {

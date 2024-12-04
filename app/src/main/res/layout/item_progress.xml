@@ -18,11 +18,13 @@
             android:id="@+id/text_progress_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="2.5"
             android:padding="8dp"
             android:textAlignment="center"
             android:textSize="20sp"
             android:text="@string/user_name"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="20sp"
             style="@style/TextAppearance.AppCompat.Widget.Button"
             />
 
@@ -35,6 +37,8 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:text="%n"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="20sp"
             style="@style/TextAppearance.AppCompat.Widget.Button"
             />
 

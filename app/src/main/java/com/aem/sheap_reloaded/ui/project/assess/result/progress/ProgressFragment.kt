@@ -1,12 +1,14 @@
 package com.aem.sheap_reloaded.ui.project.assess.result.progress
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aem.sheap_reloaded.R
 import com.aem.sheap_reloaded.code.objects.Matrix
 import com.aem.sheap_reloaded.code.objects.Project
@@ -31,6 +33,8 @@ class ProgressFragment: Fragment() {
 
     private var _binding: FragmentAssessProgressBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var adapter: ProgressAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,12 +91,21 @@ class ProgressFragment: Fragment() {
         val loadingDialog = LoadingDialogFragment.newInstance("Cargando...")
         loadingDialog.show(childFragmentManager, "loadingDialog")
         CoroutineScope(Dispatchers.IO).launch {
-            Result().groupByProject(project)
+            val group = Result().groupByProject(project)
             withContext(Dispatchers.Main){
                 //
+                Log.d("seahp_ProgressFragment", "group item: $group")
+                recyclerView(group)
                 loadingDialog.dismiss()
             }
         }
+    }
+
+    fun recyclerView(resultList: List<ResultGroup>){
+        //
+        binding.rvProgress.layoutManager = LinearLayoutManager(requireContext())
+        adapter = ProgressAdapter(resultList)
+        binding.rvProgress.adapter = adapter
     }
 
 }

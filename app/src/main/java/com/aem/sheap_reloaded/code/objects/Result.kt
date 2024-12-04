@@ -54,18 +54,21 @@ class Result (val id: Long,
     fun groupByProject(project: Project): List<ResultGroup>{
         //
         var results = emptyList<Result>()
+        var groups = emptyList<ResultGroup>()
         val threadUserList = Thread {
             AzureHelper().getAllResultByProject(project) { getResult ->
                 results = getResult
+
+                groups =  results.groupBy { it.participant }.map { entry ->
+                    ResultGroup(
+                        participant = entry.key,
+                        results = entry.value
+                    )
+                }
             }
         }.apply {
             start()
             join()
-        }
-        val groups =  mutableListOf<ResultGroup>()
-        for (item in results){
-            //
-            Log.d("Result", "group item: $results")
         }
         return groups
     }

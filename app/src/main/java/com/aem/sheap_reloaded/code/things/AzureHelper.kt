@@ -1160,7 +1160,7 @@ class AzureHelper {
     fun getAllResultByProject(project: Project, callback: (List<Result>) -> Unit){
         //
         val sql = "SELECT * FROM ${TABLE_RESULT[0]} WHERE ${TABLE_RESULT[4]} = ?"
-        Log.d("seahp_AzureDB", "getAllResult: $sql")
+        Log.d("seahp_AzureDB", "getAllResultByProject: $sql")
         val results = mutableListOf<Result>()
         var getProject = Project()
         val userList = mutableListOf<User>()
@@ -1193,16 +1193,16 @@ class AzureHelper {
                             results.add(searchResult)
 
                         }
-                        Log.d("seahp_AzureDB", "getAllResult $results")
+                        Log.d("seahp_AzureDB", "getAllResultByProject $results")
                         callback(results)
                     }
                 }
             }
         } catch (ex: SQLException){
-            Log.d("seahp_AzureDB", "getAllResult SQLException: " + ex.printStackTrace())
+            Log.d("seahp_AzureDB", "getAllResultByProject SQLException: " + ex.printStackTrace())
             callback(emptyList())
         } catch (e: Exception) {
-            Log.d("seahp_AzureDB", "getAllResult Exception: " + e.printStackTrace())
+            Log.d("seahp_AzureDB", "getAllResultByProject Exception: " + e.printStackTrace())
             callback(emptyList())
         }
     }

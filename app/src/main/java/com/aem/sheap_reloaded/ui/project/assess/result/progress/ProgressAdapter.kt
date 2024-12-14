@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aem.sheap_reloaded.R
-import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.databinding.ItemProgressBinding
 import java.math.RoundingMode
 import java.text.DecimalFormat

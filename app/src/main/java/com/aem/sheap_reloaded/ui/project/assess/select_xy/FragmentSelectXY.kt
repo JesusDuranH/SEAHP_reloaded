@@ -23,7 +23,6 @@ import com.aem.sheap_reloaded.code.objects.Project
 import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
-import com.aem.sheap_reloaded.code.things.SEAHP
 import com.aem.sheap_reloaded.databinding.FragmentAssessSelectXyBinding
 import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
 import kotlinx.coroutines.CoroutineScope
@@ -192,7 +191,7 @@ class FragmentSelectXY: Fragment() {
         adapterLeft = LeftAdapter(criteriaList, alternativeList, allElementsByUser, matrix.idMatrix){ position ->
             positionLeft = position
             recyclerViewRight(criteriaList, alternativeList, allElementsByUser)
-            Log.d("WeaChange", "$positionLeft - L")
+            Log.d("seahp_SelectXFragment", "recyclerViewLeft $positionLeft")
         }
         binding.rvLeft.adapter = adapterLeft
     }
@@ -202,7 +201,7 @@ class FragmentSelectXY: Fragment() {
         binding.rvRight.layoutManager = LinearLayoutManager(requireContext())
         adapterRight = RightAdapter(criteriaList, alternativeList, listOfValues, positionLeft){ position ->
             positionRight = position
-            Log.d("WeaChange", "$positionRight - R")
+            Log.d("seahp_SelectXFragment", "recyclerViewRight $positionRight")
         }
         binding.rvRight.adapter = adapterRight
     }

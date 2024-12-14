@@ -4,7 +4,7 @@ import android.util.Log
 import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Participant
-import com.aem.sheap_reloaded.ui.project.assess.result.alone.Result
+import com.aem.sheap_reloaded.ui.project.assess.result.alone.ResultPai
 import com.github.mikephil.charting.data.PieEntry
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -35,7 +35,7 @@ class Maths {
 
     val items = mutableListOf<PieEntry>()
 
-    fun consistencyRatio(allElements: List<Element>): Result {
+    fun consistencyRatio(allElements: List<Element>): ResultPai {
         //
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.HALF_UP
@@ -67,7 +67,7 @@ class Maths {
         r = df.format(percent)
         Log.d("seahp_Maths", "consistencyRatio: CR Table = $crT")
         //text += "Razon de consistencia por Tabla = $r%\n"
-        return Result(text, items)
+        return ResultPai(percent, items)
     }
 
     fun matrixWithAverageVector(allElements: List<Element>): Double{
@@ -159,7 +159,7 @@ class Maths {
     }
 
     fun mediaGeometrica(allElements: List<Element>, participant: List<Participant>,
-                        criteriaList: List<Criteria>): Result {
+                        criteriaList: List<Criteria>): ResultPai {
         //
         val nMax = allElements[0].rowMax - 1
         val nParticipant = participant.size

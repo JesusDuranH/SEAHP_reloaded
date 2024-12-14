@@ -9,6 +9,171 @@
     tools:context=".ui.user.sign_up.SignUpFragment"
     >
 
+    <ScrollView
+        android:id="@+id/data_sv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sign_up_button_enter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sign_up_textinput_layout_user"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nextFocusDown="@id/sign_up_textinput_edittext_name"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:helperText="@string/sing_up_user_helper">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sign_up_textinput_edittext_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="no"
+                    android:hint="@string/user_user"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sign_up_textinput_layout_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nextFocusDown="@id/sign_up_textinput_edittext_email"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:helperText="@string/sing_up_name_helper"
+                app:helperTextEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sign_up_textinput_edittext_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="no"
+                    android:hint="@string/user_name"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sign_up_textinput_layout_email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nextFocusDown="@id/sign_up_textinput_edittext_pass"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:helperText="@string/sing_up_mail_helper">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sign_up_textinput_edittext_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="no"
+                    android:hint="@string/user_email"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sign_up_textinput_layout_pass"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:nextFocusDown="@id/sign_up_textinput_edittext_pass_confirm"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:helperText="@string/sing_up_pass_helper">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sign_up_textinput_edittext_pass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="no"
+                        android:hint="@string/user_pass"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.aem.sheap_reloaded.code.things.ShowPass
+                    android:id="@+id/sign_up_on_off_pass"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="0.25"
+                    android:contentDescription="@string/button_off"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_toggle_off"
+                    app:tint="@color/color_state_list" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sign_up_textinput_layout_pass_confirm"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:helperText="@string/sing_up_pass_2_helper">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sign_up_textinput_edittext_pass_confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:autofillHints="no"
+                        android:hint="@string/user_confirm_pass"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.aem.sheap_reloaded.code.things.ShowPass
+                    android:id="@+id/sign_up_on_off_pass_confirm"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="0.25"
+                    android:contentDescription="@string/button_off"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_toggle_off"
+                    app:tint="@color/color_state_list" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/sign_up_button_enter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/menu_account_sign_up"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
     <TextView
         android:id="@+id/text_sing_up"
         android:layout_width="match_parent"
@@ -24,164 +189,5 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_textinput_layout_user"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:nextFocusDown="@id/sign_up_textinput_edittext_name"
-            app:helperText="@string/sing_up_user_helper"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/sign_up_textinput_edittext_user"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autofillHints="no"
-                android:hint="@string/user_user"
-                android:inputType="text"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/sign_up_textinput_layout_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nextFocusDown="@id/sign_up_textinput_edittext_email"
-            app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:errorEnabled="true"
-            app:helperTextEnabled="true"
-            app:helperText="@string/sing_up_name_helper"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/sign_up_textinput_edittext_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autofillHints="no"
-                android:hint="@string/user_name"
-                android:inputType="textPersonName"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/sign_up_textinput_layout_email"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:nextFocusDown="@id/sign_up_textinput_edittext_pass"
-            app:helperText="@string/sing_up_mail_helper"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/sign_up_textinput_edittext_email"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autofillHints="no"
-                android:hint="@string/user_email"
-                android:inputType="textEmailAddress"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sign_up_textinput_layout_pass"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:errorEnabled="true"
-                app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:nextFocusDown="@id/sign_up_textinput_edittext_pass_confirm"
-                app:helperText="@string/sing_up_pass_helper"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sign_up_textinput_edittext_pass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="no"
-                    android:hint="@string/user_pass"
-                    android:inputType="textPassword"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.aem.sheap_reloaded.code.things.ShowPass
-                android:id="@+id/sign_up_on_off_pass"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="0.25"
-                android:contentDescription="@string/button_off"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_toggle_off"
-                app:tint="@color/color_state_list"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sign_up_textinput_layout_pass_confirm"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:errorEnabled="true"
-                app:errorTextAppearance="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:helperText="@string/sing_up_pass_2_helper"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sign_up_textinput_edittext_pass_confirm"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autofillHints="no"
-                    android:hint="@string/user_confirm_pass"
-                    android:inputType="textPassword"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.aem.sheap_reloaded.code.things.ShowPass
-                android:id="@+id/sign_up_on_off_pass_confirm"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_toggle_off"
-                android:contentDescription="@string/button_off"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:tint="@color/color_state_list"
-                android:scaleType="fitCenter"
-                />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/sign_up_button_enter"
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_account_sign_up"
-            />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -67,6 +67,7 @@ class SelectXFragment: Fragment() {
         //
         val context = requireContext()
         user = User().get(context)
+        config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
     }
@@ -75,28 +76,17 @@ class SelectXFragment: Fragment() {
         //
         if (user == User()){
             config.showMe(requireContext(), requireContext().getString(R.string.error_user))
-            disable()
             return false
         }
         if (project == Project()){
             config.showMe(requireContext(), requireContext().getString(R.string.error_project))
-            disable()
             return false
         }
         if (matrix == Matrix()){
             config.showMe(requireContext(), requireContext().getString(R.string.error_matrix))
-            disable()
             return false
         }
         return true
-    }
-
-    private fun disable(){
-        //
-        with(binding){
-            selectAssessButtonMaths.isEnabled = false
-            selectAssessButtonSave.isEnabled = false
-        }
     }
 
     private fun set(){
@@ -163,16 +153,6 @@ class SelectXFragment: Fragment() {
 
     private fun buttonOperation(){
         //
-        with(binding){
-            //
-            selectAssessButtonSave.setOnClickListener {
-                findNavController().navigate(R.id.action_nav_project_select_assess_to_assess_perform)
-            }
-            if (matrix.idMatrix.toInt() == 1) selectAssessButtonMaths.isEnabled = false
-            selectAssessButtonMaths.setOnClickListener {
-                findNavController().navigate(R.id.action_nav_project_select_assess_to_result)
-            }
-        }
     }
 
     override fun onDestroyView() {

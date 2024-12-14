@@ -21,7 +21,7 @@ import com.aem.sheap_reloaded.code.things.Maths
 import com.aem.sheap_reloaded.code.things.SEAHP
 import com.aem.sheap_reloaded.databinding.FragmentAssessGroupBinding
 import com.aem.sheap_reloaded.ui.loading_dialog.LoadingDialogFragment
-import com.aem.sheap_reloaded.ui.project.assess.result.alone.Result
+import com.aem.sheap_reloaded.ui.project.assess.result.alone.ResultPai
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -33,6 +33,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class GroupResultFragment: Fragment() {
     //
@@ -122,7 +124,7 @@ class GroupResultFragment: Fragment() {
         }
     }
 
-    fun graphic(result: Result, cake: PieChart, text: String){
+    fun graphic(resultPai: ResultPai, cake: PieChart, text: String){
 
         val entries = listOf(
             PieEntry(40f, "A"),
@@ -131,8 +133,8 @@ class GroupResultFragment: Fragment() {
             PieEntry(10f, "D")
         )
         // Configuración del conjunto de datos
-        val dataSet = PieDataSet(result.items, text)
-        dataSet.colors = generateColors(result.items.size)
+        val dataSet = PieDataSet(resultPai.items, text)
+        dataSet.colors = generateColors(resultPai.items.size)
         dataSet.sliceSpace = 3f
         dataSet.selectionShift = 5f
 
@@ -157,7 +159,14 @@ class GroupResultFragment: Fragment() {
         cake.isHighlightPerTapEnabled = true
         cake.animateY(1400, Easing.EaseInOutQuad)
 
-        cake.centerText = result.text
+        cake.centerText = if (resultPai.rs < 0) {
+            "Datos Insuficientes"
+        } else {
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.HALF_UP
+            "Inconsistencia: ${df.format(resultPai.rs)}%\n"
+        }
+
         cake.setCenterTextSize(20f)
         cake.setCenterTextColor(Color.BLACK)
 

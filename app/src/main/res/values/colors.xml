@@ -14,4 +14,33 @@
 
     <color name="option_a">#696969</color>
     <color name="option_b">#4682B4</color>
+
+    <color name="option_a1">#3737A6</color>
+    <color name="option_a2">#2323CF</color>
+    <color name="option_a3">#0000FA</color>
+    <color name="option_a4">#3D3D7A</color>
+    <color name="option_a5">#35354F</color>
+    <color name="option_a6">#2B2B33</color>
+
+    <color name="option_b1">#004FFA</color>
+    <color name="option_b2">#5200FA</color>
+    <color name="option_b3">#0000FA</color>
+    <color name="option_b4">#009EFA</color>
+    <color name="option_b5">#A400FA</color>
+    <color name="option_b6">#7071F0</color>}
+
+    <color name="option_r1">#CF2334</color>
+    <color name="option_r2">#A53742</color>
+    <color name="option_r3">#FA001A</color>
+    <color name="option_r4">#7A3D43</color>
+    <color name="option_r5">#503538</color>
+    <color name="option_r6">#332B2B</color>
+
+    <color name="option_c1">#FACD00</color>
+    <color name="option_c2">#2F2FBA</color>
+    <color name="option_c3">#0000FA</color>
+    <color name="option_c4">#A59137</color>
+    <color name="option_c5">#3D3D7A</color>
+    <color name="option_c6">#504B35</color>
+
 </resources>

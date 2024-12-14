@@ -161,6 +161,35 @@ open class Matrix(val idMatrix: Long,
         return ObjectInputStream(ByteArrayInputStream(byteArray)).readObject() as Matrix
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Matrix) return false
+
+        if (idMatrix != other.idMatrix) return false
+        if (nameMatrix != other.nameMatrix) return false
+        if (descriptionMatrix != other.descriptionMatrix) return false
+        if (rowMax != other.rowMax) return false
+        if (columnMax != other.columnMax) return false
+        if (user != other.user) return false
+        if (project != other.project) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = idMatrix.hashCode()
+        result = 29 * result + idMatrix.hashCode()
+        result = 29 * result + nameMatrix.hashCode()
+        result = 29 * result + descriptionMatrix.hashCode()
+        result = 29 * result + rowMax.hashCode()
+        result = 29 * result + columnMax.hashCode()
+        result = 29 * result + user.hashCode()
+        result = 29 * result + project.hashCode()
+        result = 29 * result + type.hashCode()
+        return result
+    }
+
     override fun toString(): String {
         return "\nMatrix($idMatrix, \"$nameMatrix\", \"$descriptionMatrix\", $rowMax, $columnMax, " +
                 "${project.idProject}, \"${project.nameProject}\", \"${project.descriptionProject}\")"

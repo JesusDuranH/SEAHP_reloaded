@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.aem.sheap_reloaded.R
@@ -16,7 +15,9 @@ import com.aem.sheap_reloaded.code.objects.Alternative
 import com.aem.sheap_reloaded.code.objects.Criteria
 import com.aem.sheap_reloaded.code.objects.Element
 import com.aem.sheap_reloaded.code.objects.Matrix
+import com.aem.sheap_reloaded.code.objects.Participant
 import com.aem.sheap_reloaded.code.objects.Project
+import com.aem.sheap_reloaded.code.objects.Result
 import com.aem.sheap_reloaded.code.objects.User
 import com.aem.sheap_reloaded.code.things.Cipher
 import com.aem.sheap_reloaded.databinding.FragmentAssessP2pBinding
@@ -43,6 +44,7 @@ class P2PFragment: Fragment() {
     private var setValue: Double = 1.0
     private var textX = ""
     private var textY = ""
+    private var getProgress = Result()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +69,7 @@ class P2PFragment: Fragment() {
         //
         val context = requireContext()
         user = User().get(context)
+        config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
 
@@ -111,6 +114,9 @@ class P2PFragment: Fragment() {
             loadingDialog.show(childFragmentManager, "loadingDialog")
             CoroutineScope(Dispatchers.IO).launch {
                 //
+                getProgress = Result().byUsersNID(0, Participant(user, project))
+                Log.d("seahp_P2PFragment", "set getProgress: $getProgress")
+
                 when (matrix.idMatrix){
                     2L -> {
                         criteriaX = Criteria().getX(context)
@@ -140,6 +146,9 @@ class P2PFragment: Fragment() {
                                 else 1.0
                     Log.d("seahp_P2PFragment", "set setValue: $setValue")
 
+                    textProject.text = matrix.nameMatrix
+                    binding.progressIndicator.progress = getProgress.result.toInt()
+
                     textOptionA.text = textY
                     textOptionB.text = textX
 
@@ -165,6 +174,7 @@ class P2PFragment: Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val selectedStepValue = stepValues[progress]
                 setValue = selectedStepValue.toDouble()
+                setIcons(selectedStepValue)
                 textView.text = setText(selectedStepValue, elementX, elementY)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -176,26 +186,81 @@ class P2PFragment: Fragment() {
         })
     }
 
+    fun setIcons(op: Int){
+        //
+        with(binding){
+            optionA1.setImageResource(
+                if (op < 0) R.drawable.ic_add
+                else if (op > 2) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionA2.setImageResource(
+                if (op < -3) R.drawable.ic_add
+                else if (op > 4) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionA3.setImageResource(
+                if (op < -5) R.drawable.ic_add
+                else if (op > 6) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionA4.setImageResource(
+                if (op < -7) R.drawable.ic_add
+                else if (op > 8) R.drawable.ic_less
+                else R.drawable.ic_empty
+            )
+
+            optionB1.setImageResource(
+                if (op < -2) R.drawable.ic_less
+                else if (op > 1) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+
+            optionB2.setImageResource(
+                if (op < -4) R.drawable.ic_less
+                else if (op > 3) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+
+            optionB3.setImageResource(
+                if (op < -6) R.drawable.ic_less
+                else if (op > 5) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+
+            optionB4.setImageResource(
+                if (op < -8) R.drawable.ic_less
+                else if (op > 7) R.drawable.ic_add
+                else R.drawable.ic_empty
+            )
+        }
+    }
+
     private fun setText (op: Int, elementX: String, elementY: String): String{
         val context = requireContext()
         return when (op){
-            -9 -> context.getString(R.string.fundamental_scale_9) + " $elementX = $setValue"
-            -8 -> context.getString(R.string.fundamental_scale_8) + " $elementX = $setValue"
-            -7 -> context.getString(R.string.fundamental_scale_7) + " $elementX = $setValue"
-            -6 -> context.getString(R.string.fundamental_scale_6) + " $elementX = $setValue"
-            -5 -> context.getString(R.string.fundamental_scale_5) + " $elementX = $setValue"
-            -4 -> context.getString(R.string.fundamental_scale_4) + " $elementX = $setValue"
-            -3 -> context.getString(R.string.fundamental_scale_3) + " $elementX = $setValue"
-            -2 -> context.getString(R.string.fundamental_scale_2) + " $elementX = $setValue"
-            1 -> context.getString(R.string.fundamental_scale_1) + " $setValue"
-            2 -> context.getString(R.string.fundamental_scale_2) + " $elementY = $setValue"
-            3 -> context.getString(R.string.fundamental_scale_3) + " $elementY = $setValue"
-            4 -> context.getString(R.string.fundamental_scale_4) + " $elementY = $setValue"
-            5 -> context.getString(R.string.fundamental_scale_5) + " $elementY = $setValue"
-            6 -> context.getString(R.string.fundamental_scale_6) + " $elementY = $setValue"
-            7 -> context.getString(R.string.fundamental_scale_7) + " $elementY = $setValue"
-            8 -> context.getString(R.string.fundamental_scale_8) + " $elementY = $setValue"
-            9 -> context.getString(R.string.fundamental_scale_9) + " $elementY = $setValue"
+            -9 -> context.getString(R.string.fundamental_scale_9) + " $elementX"
+            -8 -> context.getString(R.string.fundamental_scale_8) + " $elementX"
+            -7 -> context.getString(R.string.fundamental_scale_7) + " $elementX"
+            -6 -> context.getString(R.string.fundamental_scale_6) + " $elementX"
+            -5 -> context.getString(R.string.fundamental_scale_5) + " $elementX"
+            -4 -> context.getString(R.string.fundamental_scale_4) + " $elementX"
+            -3 -> context.getString(R.string.fundamental_scale_3) + " $elementX"
+            -2 -> context.getString(R.string.fundamental_scale_2) + " $elementX"
+
+            1 -> context.getString(R.string.fundamental_scale_1)
+
+            2 -> context.getString(R.string.fundamental_scale_2) + " $elementY"
+            3 -> context.getString(R.string.fundamental_scale_3) + " $elementY"
+            4 -> context.getString(R.string.fundamental_scale_4) + " $elementY"
+            5 -> context.getString(R.string.fundamental_scale_5) + " $elementY"
+            6 -> context.getString(R.string.fundamental_scale_6) + " $elementY"
+            7 -> context.getString(R.string.fundamental_scale_7) + " $elementY"
+            8 -> context.getString(R.string.fundamental_scale_8) + " $elementY"
+            9 -> context.getString(R.string.fundamental_scale_9) + " $elementY"
             else -> context.getString(R.string.error)
         }
     }
@@ -292,6 +357,21 @@ class P2PFragment: Fragment() {
                     Log.d("seahp_P2PFragment", "N next list:")
                     val criteriaList = Criteria().listByProject(project)
 
+                    //Se agrega 1 deitem que usa para detectar que se creo la matriz
+                    val total = criteriaList.size * criteriaList.size + 1
+                    Log.d("seahp_P2PFragment", "next total: $total")
+
+                    val add =
+                    if (itExist == Element()){
+                        (2.0/total.toDouble()) * 100.0
+                    } else {
+                        0.0
+                    }
+
+                    val progress = getProgress.result + add
+                    Log.d("seahp_P2PFragment", "next newProgress: $progress")
+                    Result().update(0, "Progess Matrix ${matrix.nameMatrix}", Participant(user, project), progress)
+
                     val max = criteriaList.size - 1
                     Log.d("seahp_P2PFragment", "N max: $max")
 
@@ -340,7 +420,7 @@ class P2PFragment: Fragment() {
 
     private fun getOut(saveNExit: Boolean){
         //
-        if (saveNExit) findNavController().navigate(R.id.action_nav_project_assess_thing_thing_to_select_assess,
+        if (saveNExit) findNavController().navigate(R.id.action_nav_project_assess_thing_thing_to_select_xy,
             null,
             NavOptions.Builder().setPopUpTo(R.id.nav_project_select_assess_x, true).build())
         else next()

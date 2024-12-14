@@ -67,6 +67,7 @@ class SelectYAFragment: Fragment() {
         val context = requireContext()
 
         user = User().get(context)
+        config = Cipher()
         matrix = Matrix().get(context)
         project = Project().get(context)
     }
@@ -179,7 +180,6 @@ class SelectYAFragment: Fragment() {
                                 //
                                 var updateValue = Element()
                                 val threadElement = Thread {
-                                    //
                                     updateValue = Element().updateScale(itExist, scale, false)
                                 }.apply {
                                     start()
